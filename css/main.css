@@ -55,3 +55,72 @@ span.skill{
 textarea{
 	width:90%;
 }
+
+/* 増減ボタン（20×20・中央揃え） */
+.stepbtn {
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	margin-left: 2px;
+	font-size: 70%;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+/* HP/MP/SP平均値表示 */
+.avgval {
+	margin-left: 4px;
+	color: #666666;
+	font-size: 90%;
+}
+
+/* 取得魔法チェックボックス（火炎・冷凍・援護・聖）を大きく表示 */
+input[type="checkbox"][name="fire"],
+input[type="checkbox"][name="ice"],
+input[type="checkbox"][name="magical"],
+input[type="checkbox"][name="holy"],
+input[type="checkbox"][name="warrior"],
+input[type="checkbox"][name="gladiator"] {
+	width: 14px;
+	height: 14px;
+	margin: 0 2px 0 0;
+	vertical-align: middle;
+}
+
+/* スキルアイコン（16×16）・スキルLvセレクト（37×20）を中央揃え */
+span.skill {
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	margin-left: 14px;	/* スキルブロック間の間隔 */
+}
+/* 行頭のスキル（hr直後・br直後）は間隔を適用しない */
+hr + span.skill,
+br + span.skill {
+	margin-left: 0;
+}
+span.skill img {
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+}
+select[name^="skill"] {
+	width: 37px;
+}
+
+/* 全セレクトボックスの高さを20pxに統一・中央揃え */
+select {
+	height: 20px;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+/* 取得魔法アイコンもチェックボックスと縦位置を揃える */
+img[src*="/fire"],
+img[src*="/ice"],
+img[src*="/magical"],
+img[src*="/holy"],
+img[src*="/skill_"] {
+	vertical-align: middle;
+	margin-right: 12px;
+}

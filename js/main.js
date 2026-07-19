@@ -1,6 +1,7 @@
 //	キャラ診断関数メイン
+//	引数	：	Silent	true時はエラーアラートを出さず、フォームへの書き戻しも行わない（リアルタイム更新用）
 //	戻り値：なし
-function CharaMain()
+function CharaMain( Silent )
 {
 	//	変数宣言
 	var ParaUseTama = 0;		//	パラメータに使用した力の玉
@@ -46,7 +47,6 @@ function CharaMain()
 	var Skill8 = document.chara.skill8.value;
 	var Skill9 = document.chara.skill9.value;
 	var Skill10 = document.chara.skill10.value;
-	var Skill11 = document.chara.skill11.value;
 	var Balance = document.chara.balance.value;
 
 	//	取得魔法の設定
@@ -57,20 +57,28 @@ function CharaMain()
 
 	//	入力項目検査
 	//	１．空欄チェック
-	Err = CheckInputItemBlank( Lv, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, Balance );
+	Err = CheckInputItemBlank( Lv, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Balance );
 
 	//	エラー表示
 	if( Err != "" ) {
+		if( Silent ) {
+			document.chara.result.value = Err + "を入力してください。";
+			return;
+		}
 		Err += "を入力してください。";
 		alert( Err );
 		return;
 	}
 
 	//	２．数値チェック
-	Err = CheckInputItemNaN( Lv, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, Balance );
+	Err = CheckInputItemNaN( Lv, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Balance );
 
 	//	エラー表示
 	if( Err != "" ) {
+		if( Silent ) {
+			document.chara.result.value = Err + "を確認してください。";
+			return;
+		}
 		Err += "を確認してください。";
 		alert( Err );
 		return;
@@ -80,15 +88,21 @@ function CharaMain()
 	//	職業ごとの平均値を設定する
 	if( Hp == "" ) {
 		Hp = GetAverageHp( Job, Lv );
-		document.chara.hp.value = Hp;
+		if( !Silent ) {
+			document.chara.hp.value = Hp;
+		}
 	}
 	if( Mp == "" ) {
 		Mp = GetAverageMp( Job, Lv );
-		document.chara.mp.value = Mp;
+		if( !Silent ) {
+			document.chara.mp.value = Mp;
+		}
 	}
 	if( Sp == "" ) {
 		Sp = GetAverageSp( Job, Lv );
-		document.chara.sp.value = Sp;
+		if( !Silent ) {
+			document.chara.sp.value = Sp;
+		}
 	}
 
 	//	HP、MP、SP上昇率の設定
@@ -125,19 +139,8 @@ function CharaMain()
 	//	現在のLvまでに獲得した力の玉を取得
 	Result_TotalTama = GetTotalTama(Lv);
 
-	//	初期化の際に取得できる力の玉
-	//	戦士、聖職者、魔法使いの場合
-	if( Job == "戦" || Job == "聖" || Job == "魔" ) {
-		Result_FormatTama = 26 + Result_TotalTama;
-
-	//	剣闘士の場合
-	} else if( Job == "剣" ) {
-		Result_FormatTama = 24 + Result_TotalTama;
-
-	//	盗賊の場合
-	} else {
-		Result_FormatTama = 36 + Result_TotalTama;
-	}
+	//	初期化の際に取得できる力の玉（全職業共通）
+	Result_FormatTama = INITIAL_TAMA + Result_TotalTama;
 
 	//	パラメータに使用した力の玉を算出
 	ParaUseTama = GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama );
@@ -176,30 +179,39 @@ function CharaMain()
 		}
 	}
 
-	//	魔法に使用した力の玉を設定
-	MagicUseTama = FireTama + IceTama + MagicalTama + HolyTama;
-
-	//	スキルに使用した力の玉を設定（パラに使用した玉－魔法に使用した玉－余りの玉＋職業ごとのボーナス値）
-
-	//	戦士、聖職者、魔法使いの場合
-	if( Job == "戦" || Job == "聖" || Job == "魔" ) {
-		SkillUseTama = Result_TotalTama - ParaUseTama - MagicUseTama - Balance + 26;
-
-	//	剣闘士の場合
-	} else if( Job == "剣" ) {
-		SkillUseTama = Result_TotalTama - ParaUseTama - MagicUseTama - Balance + 24;
-
-	//	盗賊の場合
-	} else {
-		SkillUseTama = Result_TotalTama - ParaUseTama - MagicUseTama - Balance + 36;
+	//	戦士の場合、戦士スキルに使用した玉を設定
+	var JobSkillTama = 0;
+	if( Job == "戦" ){
+		var aWarrior = ToElementArray( document.chara.warrior );
+		for( i = 0; i < aWarrior.length; i++ ) {
+			if( aWarrior[i].checked ) {
+				JobSkillTama += Number( aWarrior[i].value );
+			}
+		}
 	}
+
+	//	剣闘士の場合、剣闘士スキルに使用した玉を設定
+	if( Job == "剣" ){
+		var aGladiator = ToElementArray( document.chara.gladiator );
+		for( i = 0; i < aGladiator.length; i++ ) {
+			if( aGladiator[i].checked ) {
+				JobSkillTama += Number( aGladiator[i].value );
+			}
+		}
+	}
+
+	//	魔法に使用した力の玉を設定
+	MagicUseTama = FireTama + IceTama + MagicalTama + HolyTama + JobSkillTama;
+
+	//	スキルに使用した力の玉を設定（パラに使用した玉－魔法に使用した玉－余りの玉＋初期ボーナス）
+	SkillUseTama = Result_TotalTama - ParaUseTama - MagicUseTama - Balance + INITIAL_TAMA;
 
 	//	所持スキル数設定
 	SkillNum = GetSkillNum( Job, SideJob );
 
 	//	スキル成功率の設定
 	if( SkillUseTama > 0 ){
-		SkillSuccess = ( ( Number( Skill1 ) + Number( Skill2 ) + Number( Skill3 ) + Number( Skill4 )+ Number( Skill5 ) + Number( Skill6 ) + Number( Skill7 ) + Number( Skill8 ) + Number( Skill9 ) + Number( Skill10 ) + Number( Skill11 ) - SkillNum ) / SkillUseTama * 100 ).toFixed( 5 );
+		SkillSuccess = ( ( Number( Skill1 ) + Number( Skill2 ) + Number( Skill3 ) + Number( Skill4 )+ Number( Skill5 ) + Number( Skill6 ) + Number( Skill7 ) + Number( Skill8 ) + Number( Skill9 ) + Number( Skill10 ) - SkillNum ) / SkillUseTama * 100 ).toFixed( 5 );
 	}
 	//	スキルに玉を使っていない場合、スキル成功率を０％とする
 	else{
@@ -207,8 +219,8 @@ function CharaMain()
 	}
 
 	//	力の玉損得勘定
-	//	スキル１から４４までの固定スキルアップに必要な力の玉
-	var aSkillBase = new Array(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 21, 24, 27, 30, 33, 38, 43, 48, 53, 58, 68, 78, 88, 98, 108, 123, 138, 153, 168, 183, 203, 223, 243, 263, 283, 303, 323, 343, 363, 383, 403, 423, 443, 463);
+	//	スキル１から３０までの固定スキルアップに必要な力の玉（const.js）
+	var aSkillBase = SKILL_BASE_TAMA;
 
 	SkillBaseTama += aSkillBase[ ( Skill1 - 1 ) ];
 	SkillBaseTama += aSkillBase[ ( Skill2 - 1 ) ];
@@ -220,12 +232,22 @@ function CharaMain()
 	SkillBaseTama += aSkillBase[ ( Skill8 - 1 ) ];
 	SkillBaseTama += aSkillBase[ ( Skill9 - 1 ) ];
 	SkillBaseTama += aSkillBase[ ( Skill10 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill11 - 1 ) ];
 
-	//	本人消費量＋２６－基準消費量
-	//	全固定スキル20・20(116個) - スキル20・20機能使用(90個) = 26個となるが、
-	//	スキル20・20が使用できないLv60未満の場合、26を減算すべきではないと思われる。
-	SonToku = SkillUseTama + 26 - SkillBaseTama;
+	//	スキル必要玉数（併用方式：レベル17まで確率(期待値)・18以降固定）
+	var SkillHybridTama = 0;
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill1 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill2 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill3 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill4 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill5 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill6 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill7 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill8 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill9 - 1 ) ];
+	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill10 - 1 ) ];
+
+	//	本人消費量－基準消費量（スキル20・20機能廃止に伴い補正なし）
+	SonToku = SkillUseTama - SkillBaseTama;
 
 	//	損得判定
 	//	損
@@ -246,49 +268,39 @@ function CharaMain()
 	CharaResultMsg = GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTama, Result_FormatTama, ParaUseTama, MagicUseTama, SkillUseTama, SkillSuccess, InitSontoku, Lv );
 	document.chara.result.value = CharaResultMsg;
 
+	//	最大スキルLv（無効スキルは1のため影響しない）
+	var MaxSkill = Math.max( Number( Skill1 ), Number( Skill2 ), Number( Skill3 ), Number( Skill4 ), Number( Skill5 ),
+		Number( Skill6 ), Number( Skill7 ), Number( Skill8 ), Number( Skill9 ), Number( Skill10 ) );
+
 	//	キャラ情報メッセージ出力
-	CharaDataMsg = GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, Balance, SkillNum );
+	CharaDataMsg = GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Balance, SkillNum );
 	document.chara.result.value += CharaDataMsg;
 
 	//	おまけ情報取得処理
 	GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men );
 }
 
+//	初期化ボーナス玉数取得処理（全職業共通）
+//	戻り値：初期化時に加算される玉数
+function GetJobBonusTama( Job )
+{
+	return INITIAL_TAMA;
+}
+
+
+
 //	職業別パラメータ使用玉数取得処理
 //	戻り値：使用玉数
 function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 {
-	//	職業別初期パラメータ
-	//	STR,INT,AGR,DEX,VIT,MEN
-	var aSen = new Array( 12,6,6,10,6,6 )	//	戦士
-	var aKen = new Array( 12,6,6,6,12,6 )	//	剣闘士
-	var aSei = new Array( 6,10,6,6,6,12 )	//	聖職者
-	var aTou = new Array( 6,6,6,6,6,6 )		//	盗賊
-	var aMa = new Array( 6,12,6,6,6,10 )	//	魔法使い
-
-	//	ループ初期値設定
-	var FirstStr = 6;
-	var FirstInt = 6;
-	var FirstAgr = 6;
-	var FirstDex = 6;
-	var FirstVit = 6;
-	var FirstMen = 6;
-
-	//	該当する職業の初期パラメータを設定する
-	//	盗賊は処理しない
-	if( Job == "戦" ) {
-		FirstStr = aSen[0];		//	STR
-		FirstDex = aSen[3];		//	DEX
-	} else if( Job == "剣" ) {
-		FirstStr = aKen[0];		//	STR
-		FirstVit = aKen[4];		//	VIT
-	} else if( Job == "聖" ) {
-		FirstInt = aSei[1];		//	INT
-		FirstMen = aSei[5];		//	MEN
-	} else if( Job == "魔" ) {
-		FirstInt = aMa[1];		//	INT
-		FirstMen = aMa[5];		//	MEN
-	}
+	//	職業別初期パラメータ取得（const.js）
+	var InitStats = GetInitialStats( Job );
+	var FirstStr = InitStats.str;
+	var FirstInt = InitStats.int;
+	var FirstAgr = InitStats.agr;
+	var FirstDex = InitStats.dex;
+	var FirstVit = InitStats.vit;
+	var FirstMen = InitStats.men;
 
 	//	パラメータ使用玉数取得処理
 	//	STR
@@ -401,7 +413,7 @@ function GetSkillNum( Job, SideJob )
 	GetSkillTable( SkillTable );
 
 	//	職業分ループ
-	for( var i = 0; i <= 29; ++i ){
+	for( var i = 0; i < SkillTable.length; ++i ){
 
 		//	テーブルと一致する場合
 		if( JobPair == SkillTable[i][0] ){
@@ -424,12 +436,12 @@ function GetSkillNum( Job, SideJob )
 //					スキル取得は所持スキル数分行う
 //	パラメータ	：	Job					主職業
 //				：	SideJob				副業
-//				：	Skill1～Skill11		スキル1～スキル11
+//				：	Skill1～Skill10		スキル1～スキル10
 //				：	SkillNum			スキル数
 //	戻り値		：	キャラ情報スキルメッセージ
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, SkillNum )
+function GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, SkillNum )
 {
 	var Message = "";
 	var StrInner = "";
@@ -441,7 +453,7 @@ function GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4,
 	GetSkillTable( SkillTable );
 
 	//	職業分ループ
-	for( var i = 0; i <= 29; ++i ){
+	for( var i = 0; i < SkillTable.length; ++i ){
 
 		//	テーブルと一致する場合
 		if( JobPair == SkillTable[i][0] ){
@@ -485,7 +497,6 @@ function ChangeSkillMenuByDisabled()
 	var Skill8  = document.chara.skill8;
 	var Skill9  = document.chara.skill9;
 	var Skill10 = document.chara.skill10;
-	var Skill11 = document.chara.skill11;
 
 	if( Skill1.disabled == true ){
 		Skill1.value = 1;
@@ -517,9 +528,6 @@ function ChangeSkillMenuByDisabled()
 	if( Skill10.disabled == true ){
 		Skill10.value = 1;
 	}
-	if( Skill11.disabled == true ){
-		Skill11.value = 1;
-	}
 }
 //------------------------------------------------------------------------------
 //	関数名		：	キャラ情報出力メッセージ作成処理
@@ -534,13 +542,13 @@ function ChangeSkillMenuByDisabled()
 //	戻り値		：	キャラ情報出力メッセージ
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, Balance, SkillNum )
+function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Balance, SkillNum )
 {
 	var CharaDataMsg = "";			//	キャラ情報出力メッセージ
 	var JobPair = Job + SideJob;	//	主職業／副業
 
 	//	キャラ情報スキルメッセージ作成処理
-	var CharaDataSkillMsg = GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, Skill11, SkillNum )
+	var CharaDataSkillMsg = GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, SkillNum )
 
 	CharaDataMsg = 
 		"Lv" + Lv + "　" +
@@ -580,29 +588,8 @@ function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 function GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTama, Result_FormatTama, ParaUseTama, MagicUseTama, SkillUseTama, SkillSuccess, InitSontoku, Lv )
 {
 	var CharaResultMessage = "";
-	var UpDownComment = new Array( "", "", "" );	//	HP,MP,SP上昇率コメント
-	var AvgHp = 0;									//	平均HP
-	var AvgMp = 0;									//	平均MP
-	var AvgSp = 0;									//	平均SP
 
-	//	上昇率コメント取得
-	GetUpDownComment( Job, Result_Hp, Result_Mp, Result_Sp, UpDownComment );
-
-	//	平均HP、MP、SP取得処理
-	AvgHp = GetAverageHp( Job, Lv );
-	AvgMp = GetAverageMp( Job, Lv );
-	AvgSp = GetAverageSp( Job, Lv );
-
-	CharaResultMessage = 
-		"あなたのHP上がり率は「" + Result_Hp + "」です。（このLVでの平均HPは" + AvgHp + "です）\n"+
-		"あなたのMP上がり率は「" + Result_Mp + "」です。（このLVでの平均MPは" + AvgMp + "です）\n"+
-		"あなたのSP上がり率は「" + Result_Sp + "」です。（このLVでの平均SPは" + AvgSp + "です）\n"+
-		"☆見たままのコメント\n"+
-		"このHP上がり率は｢" + UpDownComment[0] + "｣かもしれません。\n"+
-		"このMP上がり率は｢" + UpDownComment[1] + "｣かもしれません。\n"+
-		"このSP上がり率は｢" + UpDownComment[2] + "｣かもしれません。\n"+
-		"\n"+
-
+	CharaResultMessage =
 		"あなたがこれまでにLVUPで取得した力の玉の総数は" + Result_TotalTama + "玉です。\n"+
 		"（このLVで初期化すると" + Result_FormatTama + "玉を取得する事が出来ます。）\n"+
 		"その内訳としてパラメータに使った玉が" + ParaUseTama + "玉で、\n"+
@@ -614,199 +601,7 @@ function GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTam
 		"--------------------------------------------------------\n";
 	return CharaResultMessage;
 }
-//------------------------------------------------------------------------------
-//	関数名		：	上昇率コメント取得処理
-//	機能説明	：	上昇率コメントの取得を行う
-//	パラメータ	：	Job					主職業
-//					Result_Hp			HP上がり率
-//					Result_Mp			MP上がり率
-//					Result_Sp			SP上がり率
-//					UpDownComment		HP,MP,SP上昇率コメント
-//						[0]HP,[1]MP,[2]SP
-//	戻り値		：	なし
-//	備考		：	なし
-//------------------------------------------------------------------------------
-function GetUpDownComment( Job, Result_Hp, Result_Mp, Result_Sp, UpDownComment )
-{
 
-	//	コメントテーブル
-	var CommentTable = 					//	上がり範囲1～2			上がり範囲1～3			上がり範囲2～3			判定方法
-		[								//	[][1]最小	[][2]最大	[][3]最小	[][4]最大	[][5]最小	[][6]最大
-			["確認が必要",					0,			1.00,		0,			1.50,		0,			2.00],		//	[0] 最大値未満
-			["低さを極めている",			1.00,		1.30,		1.50,		1.80,		2.00,		2.30],		//	[1] 最小値以上、最大値未満
-			["そうとうな感じで低め",		1.30,		1.35,		1.80,		1.85,		2.30,		2.35],		//	[2] 最小値以上、最大値未満
-			["結構低め",					1.35,		1.38,		1.85,		1.88,		2.35,		2.38],		//	[3] 最小値以上、最大値未満
-			["すこし低め",					1.38,		1.41,		1.88,		1.91,		2.38,		2.41],		//	[4] 最小値以上、最大値未満
-			["ほんのり低め",				1.41,		1.44,		1.91,		1.94,		2.41,		2.44],		//	[5] 最小値以上、最大値未満
-			["普通ですが、ほんのり低め",	1.44,		1.47,		1.94,		1.97,		2.44,		2.47],		//	[6] 最小値以上、最大値未満
-			["普通",						1.47,		1.50,		1.97,		2.00,		2.47,		2.50],		//	[7] 最小値以上、最大値未満
-			["かなりの普通",				1.50,		1.50,		2.00,		2.00,		2.50,		2.50],		//	[8] 最小値と一致
-			["普通っぽい",					1.50,		1.52,		2.00,		2.02,		2.50,		2.52],		//	[9] 最小値以上、最大値未満
-			["普通ですが少し高め",			1.52,		1.54,		2.02,		2.04,		2.52,		2.54],		//	[10]最小値以上、最大値未満
-			["ほんのり高め",				1.54,		1.56,		2.04,		2.06,		2.54,		2.56],		//	[11]最小値以上、最大値未満
-			["ほどよく高め",				1.56,		1.58,		2.06,		2.08,		2.56,		2.58],		//	[12]最小値以上、最大値未満
-			["いい感じに高い",				1.58,		1.60,		2.08,		2.10,		2.58,		2.60],		//	[13]最小値以上、最大値未満
-			["かなり高め",					1.60,		1.62,		2.10,		2.12,		2.60,		2.62],		//	[14]最小値以上、最大値未満
-			["相当な感じに高め",			1.62,		1.70,		2.12,		2.20,		2.62,		2.70],		//	[15]最小値以上、最大値未満
-			["最強クラスに入る",			1.70,		2.00,		2.20,		2.50,		2.70,		3.00],		//	[16]最小値以上、最大値以下
-			["確認が必要",					2.00,		0,			2.50,		0,			3.00,		0	]		//	[17]最小値より大きい
-		];
-
-	//	コメントテーブル上がり範囲最小使用位置設定フラグ
-	var Hp = 0;
-	var Mp = 0;
-	var Sp = 0;
-
-	//	コメントテーブル上がり範囲最小使用位置設定
-	if( Job == "戦" || Job == "剣" ){
-		Hp = 5;
-		Mp = 1;
-		Sp = 3;
-	}
-	if( Job == "聖" || Job == "盗" ){
-		Hp = 3;
-		Mp = 3;
-		Sp = 3;
-	}
-	if( Job == "魔" ){
-		Hp = 1;
-		Mp = 5;
-		Sp = 1;
-	}
-
-	//	テーブル分ループ
-	for( var i = 0; i <= 17; ++i ){
-		//	HPの設定
-		if( UpDownComment[0] == "" ){
-
-			//	確認が必要レコード判定（小）
-			if( i == 0 ){
-				//	最大値未満の場合
-				if( Result_Hp < CommentTable[i][Hp+1] ){
-					UpDownComment[0] = CommentTable[i][0];
-				}
-			}
-
-			//	かなりの普通レコード判定
-			else if( i == 8 ){
-				//	値が一致する場合
-				if( Result_Hp == CommentTable[i][Hp] ){
-					UpDownComment[0] = CommentTable[i][0];
-				}
-			}
-
-			//	最強クラスに入るレコード判定
-			else if( i == 16 ){
-				//	最小値以上、最大値以下
-				if( Result_Hp >= CommentTable[i][Hp] && Result_Hp <= CommentTable[i][Hp+1] ){
-					UpDownComment[0] = CommentTable[i][0];
-				}
-			}
-
-			//	確認が必要レコード判定（大）
-			else if( i == 17 ){
-				//	最小値より大きい場合
-				if( Result_Hp > CommentTable[i][Hp] ){
-					UpDownComment[0] = CommentTable[i][0];
-				}
-			}
-
-			//	上記以外
-			else{
-				//	最小値以上、最大値未満
-				if( Result_Hp >= CommentTable[i][Hp] && Result_Hp < CommentTable[i][Hp+1] ){
-					UpDownComment[0] = CommentTable[i][0];
-				}
-			}
-		}
-		//	MPの設定
-		if( UpDownComment[1] == "" ){
-
-			//	確認が必要レコード判定（小）
-			if( i == 0 ){
-				//	最大値未満の場合
-				if( Result_Mp < CommentTable[i][Mp+1] ){
-					UpDownComment[1] = CommentTable[i][0];
-				}
-			}
-
-			//	かなりの普通レコード判定
-			else if( i == 8 ){
-				//	値が一致する場合
-				if( Result_Mp == CommentTable[i][Mp] ){
-					UpDownComment[1] = CommentTable[i][0];
-				}
-			}
-
-			//	最強クラスに入るレコード判定
-			else if( i == 16 ){
-				//	最小値以上、最大値以下
-				if( Result_Mp >= CommentTable[i][Mp] && Result_Mp <= CommentTable[i][Mp+1] ){
-					UpDownComment[1] = CommentTable[i][0];
-				}
-			}
-
-			//	確認が必要レコード判定（大）
-			else if( i == 17 ){
-				//	最小値より大きい場合
-				if( Result_Mp > CommentTable[i][Mp] ){
-					UpDownComment[1] = CommentTable[i][0];
-				}
-			}
-
-			//	上記以外
-			else{
-				//	最小値以上、最大値未満
-				if( Result_Mp >= CommentTable[i][Mp] && Result_Mp < CommentTable[i][Mp+1] ){
-					UpDownComment[1] = CommentTable[i][0];
-				}
-			}
-		}
-		//	SPの設定
-		if( UpDownComment[2] == "" ){
-
-			//	確認が必要レコード判定（小）
-			if( i == 0 ){
-				//	最大値未満の場合
-				if( Result_Sp < CommentTable[i][Sp+1] ){
-					UpDownComment[2] = CommentTable[i][0];
-				}
-			}
-
-			//	かなりの普通レコード判定
-			else if( i == 8 ){
-				//	値が一致する場合
-				if( Result_Sp == CommentTable[i][Sp] ){
-					UpDownComment[2] = CommentTable[i][0];
-				}
-			}
-
-			//	最強クラスに入るレコード判定
-			else if( i == 16 ){
-				//	最小値以上、最大値以下
-				if( Result_Sp >= CommentTable[i][Sp] && Result_Sp <= CommentTable[i][Sp+1] ){
-					UpDownComment[2] = CommentTable[i][0];
-				}
-			}
-
-			//	確認が必要レコード判定（大）
-			else if( i == 17 ){
-				//	最小値より大きい場合
-				if( Result_Sp > CommentTable[i][Sp] ){
-					UpDownComment[2] = CommentTable[i][0];
-				}
-			}
-
-			//	上記以外
-			else{
-				//	最小値以上、最大値未満
-				if( Result_Sp >= CommentTable[i][Sp] && Result_Sp < CommentTable[i][Sp+1] ){
-					UpDownComment[2] = CommentTable[i][0];
-				}
-			}
-		}
-	}
-}
 //------------------------------------------------------------------------------
 //	関数名		：	小数点以下補正処理
 //	機能説明	：	HP、MP、SP上がり率が小数点第６位より大きい場合、

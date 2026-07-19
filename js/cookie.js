@@ -107,8 +107,6 @@ function SetFormValue( CookieValue )
 	}
 	document.chara.job.value = Job;
 
-	//	副業メニュー切り替え処理
-	DispSideJob( document.chara.job.value );
 
 	//	クッキー構成変更による旧バージョンクッキーデータ考慮
 	var SideJob = unescape( CookieValue[2] );
@@ -142,7 +140,6 @@ function SetFormValue( CookieValue )
 	document.chara.skill8.value				= unescape( CookieValue[19] );
 	document.chara.skill9.value				= unescape( CookieValue[20] );
 	document.chara.skill10.value			= unescape( CookieValue[21] );
-	document.chara.skill11.value			= unescape( CookieValue[22] );
 	document.chara.balance.value			= unescape( CookieValue[23] );
 	document.chara.weapon.value				= unescape( CookieValue[24] );
 	document.chara.weaponp.value			= unescape( CookieValue[25] );
@@ -205,17 +202,6 @@ function SetFormValue( CookieValue )
 	document.chara.holy[4].disabled			= eval( unescape( CookieValue[82] ) );
 	document.chara.holy[5].disabled			= eval( unescape( CookieValue[83] ) );
 	document.chara.holy[6].disabled			= eval( unescape( CookieValue[84] ) );
-	document.chara.link.checked				= eval( unescape( CookieValue[85] ) );
-	document.chara.mode[0].checked			= eval( unescape( CookieValue[86] ) );
-	document.chara.mode[0].disabled			= eval( unescape( CookieValue[87] ) );
-	document.chara.mode[1].checked			= eval( unescape( CookieValue[88] ) );
-	document.chara.mode[1].disabled			= eval( unescape( CookieValue[89] ) );
-	document.chara.per01.value				= unescape( CookieValue[90] );
-	document.chara.per05.value				= unescape( CookieValue[91] );
-	document.chara.per10.value				= unescape( CookieValue[92] );
-	document.chara.per15.value				= unescape( CookieValue[93] );
-	document.chara.per20.value				= unescape( CookieValue[94] );
-	document.chara.per26.value				= unescape( CookieValue[95] );
 	document.chara.taiseif.value			= unescape( CookieValue[96] );
 	document.chara.taiseii.value			= unescape( CookieValue[97] );
 	document.chara.taiseih.value			= unescape( CookieValue[98] );
@@ -264,7 +250,7 @@ function GetFormValue( CookieValue )
 	CookieValue[19] = document.chara.skill8.value;
 	CookieValue[20] = document.chara.skill9.value;
 	CookieValue[21] = document.chara.skill10.value;
-	CookieValue[22] = document.chara.skill11.value;
+	CookieValue[22] = "1";
 	CookieValue[23] = document.chara.balance.value;
 	CookieValue[24] = document.chara.weapon.value;
 	CookieValue[25] = document.chara.weaponp.value;
@@ -327,17 +313,17 @@ function GetFormValue( CookieValue )
 	CookieValue[82] = document.chara.holy[4].disabled;
 	CookieValue[83] = document.chara.holy[5].disabled;
 	CookieValue[84] = document.chara.holy[6].disabled;
-	CookieValue[85] = document.chara.link.checked;
-	CookieValue[86] = document.chara.mode[0].checked;
-	CookieValue[87] = document.chara.mode[0].disabled;
-	CookieValue[88] = document.chara.mode[1].checked;
-	CookieValue[89] = document.chara.mode[1].disabled;
-	CookieValue[90] = document.chara.per01.value;
-	CookieValue[91] = document.chara.per05.value;
-	CookieValue[92] = document.chara.per10.value;
-	CookieValue[93] = document.chara.per15.value;
-	CookieValue[94] = document.chara.per20.value;
-	CookieValue[95] = document.chara.per26.value;
+	CookieValue[85] = false;
+	CookieValue[86] = false;
+	CookieValue[87] = true;
+	CookieValue[88] = false;
+	CookieValue[89] = true;
+	CookieValue[90] = "90";
+	CookieValue[91] = "80";
+	CookieValue[92] = "50";
+	CookieValue[93] = "20";
+	CookieValue[94] = "10";
+	CookieValue[95] = "5";
 	CookieValue[96] = document.chara.taiseif.value;
 	CookieValue[97] = document.chara.taiseii.value;
 	CookieValue[98] = document.chara.taiseih.value;

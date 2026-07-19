@@ -15,12 +15,6 @@ function CharaSub()
 	Skill8 = 1;
 	Skill9 = 1;
 	Skill10 = 1;
-	Skill11 = 1;
-
-	//	スキル２０・２０カウンタ
-	//	フォーム初期値０とし、初期化ボタン押下時、Lv60以上であれば２を設定する。
-	//	スキル２０するたびに減算する。
-	var Count2020 = document.chara.count2020;
 
 	//	取得魔法の設定
 	aFire = document.chara.fire;
@@ -31,51 +25,17 @@ function CharaSub()
 	//	現在のLvまでに獲得した力の玉を取得
 	Result_TotalTama = GetTotalTama(Lv);
 
-	//	初期化の際に取得できる力の玉
-	//	戦士、聖職者、魔法使いの場合
-	if( Job == "戦" || Job == "聖" || Job == "魔" ) {
-		Balance = 26 + Result_TotalTama;
+	//	初期化の際に取得できる力の玉（全職業共通）
+	Balance = INITIAL_TAMA + Result_TotalTama;
 
-	//	剣闘士の場合
-	} else if( Job == "剣" ) {
-		Balance = 24 + Result_TotalTama;
-
-	//	盗賊の場合
-	} else {
-		Balance = 36 + Result_TotalTama;
-	}
-
-	//	職業別初期パラメータ
-	//	STR,INT,AGR,DEX,VIT,MEN
-	var aSen = new Array( 12,6,6,10,6,6 );	//	戦士
-	var aKen = new Array( 12,6,6,6,12,6 );	//	剣闘士
-	var aSei = new Array( 6,10,6,6,6,12 );	//	聖職者
-	var aTou = new Array( 6,6,6,6,6,6 );	//	盗賊
-	var aMa = new Array( 6,12,6,6,6,10 );	//	魔法使い
-
-	//	初期パラメータ
-	var FirstStr = 6;
-	var FirstInt = 6;
-	var FirstAgr = 6;
-	var FirstDex = 6;
-	var FirstVit = 6;
-	var FirstMen = 6;
-
-	//	該当する職業の初期パラメータを設定する
-	//	盗賊は処理しない
-	if( Job == "戦" ) {
-		FirstStr = aSen[0];		//	STR
-		FirstDex = aSen[3];		//	DEX
-	} else if( Job == "剣" ) {
-		FirstStr = aKen[0];		//	STR
-		FirstVit = aKen[4];		//	VIT
-	} else if( Job == "聖" ) {
-		FirstInt = aSei[1];		//	INT
-		FirstMen = aSei[5];		//	MEN
-	} else if( Job == "魔" ) {
-		FirstInt = aMa[1];		//	INT
-		FirstMen = aMa[5];		//	MEN
-	}
+	//	職業別初期パラメータ取得（const.js）
+	var InitStats = GetInitialStats( Job );
+	var FirstStr = InitStats.str;
+	var FirstInt = InitStats.int;
+	var FirstAgr = InitStats.agr;
+	var FirstDex = InitStats.dex;
+	var FirstVit = InitStats.vit;
+	var FirstMen = InitStats.men;
 
 	//	初期パラメータの設定
 	document.chara.str.value = FirstStr;
@@ -85,7 +45,7 @@ function CharaSub()
 	document.chara.vit.value = FirstVit;
 	document.chara.men.value = FirstMen;
 
-	//	スキル１～１１の設定
+	//	スキル１～１０の設定
 	document.chara.skill1.value = Skill1;
 	document.chara.skill2.value = Skill2;
 	document.chara.skill3.value = Skill3;
@@ -96,7 +56,6 @@ function CharaSub()
 	document.chara.skill8.value = Skill8;
 	document.chara.skill9.value = Skill9;
 	document.chara.skill10.value = Skill10;
-	document.chara.skill11.value = Skill11;
 
 	//	残玉の設定
 	document.chara.balance.value = Balance;
@@ -120,16 +79,14 @@ function CharaSub()
 		document.chara.holy[i].checked = false;
 	}
 
-	//	Lv60以上の場合、玉90個でスキル20-20
-	if( Lv >= 60 ) {
-		Ret = confirm( "玉90個を使用してスキル2つを20にしますか？\n" );
-
-		//	YESの場合
-		if( Ret == true ) {
-			Count2020.value = 2;
-			alert( "スキル20にするスキルアイコンを2つ選択してください。\n" );
-			return;
-		}
+	//	戦士・剣闘士スキルのチェックをはずす
+	var aWarrior = ToElementArray( document.chara.warrior );
+	for( i = 0; i < aWarrior.length; i++ ) {
+		aWarrior[i].checked = false;
+	}
+	var aGladiator = ToElementArray( document.chara.gladiator );
+	for( i = 0; i < aGladiator.length; i++ ) {
+		aGladiator[i].checked = false;
 	}
 }
 
@@ -138,7 +95,7 @@ function CharaSub()
 function FocusLv()
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeLv = document.chara.lv.value;
 	}
@@ -149,7 +106,7 @@ function FocusLv()
 function ChangeLv()
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	Lvの設定
 		var Lv = eval( document.chara.lv.value );
@@ -179,7 +136,7 @@ function ChangeLv()
 function FocusParameter( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeParameter = Obj.value;
 	}
@@ -190,7 +147,7 @@ function FocusParameter( Obj )
 function ChangeParameter( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	パラメータの設定
 		var Parameter =  eval( Obj.value );
@@ -257,7 +214,7 @@ function ChangeParameter( Obj )
 function FocusSkill( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeSkill = Obj.value;
 	}
@@ -268,7 +225,7 @@ function FocusSkill( Obj )
 function ChangeSkill( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	スキルの設定
 		var Skill =  eval( Obj.value );
@@ -455,7 +412,7 @@ function ChangeSkill( Obj )
 function ClickMagic( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	力の玉の設定
 		var Tama = eval( document.chara.balance.value );
@@ -482,7 +439,12 @@ function CheckLink()
 {
 	var aMode = document.chara.mode;
 
-	if( document.chara.link.checked ) {
+	//	残玉連動UI削除済みの場合は処理しない
+	if( !aMode ) {
+		return;
+	}
+
+	if( document.chara.link && document.chara.link.checked ) {
 		for( i = 0; i < aMode.length; i++ ) {
 			aMode[i].disabled = false;
 		}
@@ -499,7 +461,7 @@ function ChangeParameterAll( Value )
 {
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	現在パラメータ取得
 		var Str = document.chara.str.value;
@@ -778,52 +740,3 @@ function ChangeParameterAll( Value )
 	document.chara.men.value = Value;
 }
 //------------------------------------------------------------------------------
-//	関数名		：	力の玉初期化時スキル２０・２０設定処理
-//	機能説明	：	初期化機能において、Ｌｖ６０以上かつスキル２０、２０適用時、
-//					選択した２つのスキルを２０とする。
-//	パラメータ	：	Obj		選択したオブジェクト
-//	戻り値		：	なし
-//	備考		：	スキルメニューにフォーカスがあたった場合のみ呼び出すこと
-//------------------------------------------------------------------------------
-function CharaSubSkill2020( Obj )
-{
-	var Lv = document.chara.lv.value;
-	var Balance = document.chara.balance;
-
-	//	スキル２０・２０カウンタ
-	var Count2020 = document.chara.count2020;
-
-	//	Lv60未満は処理しない
-	if( Lv < 60 ){
-		return;
-	}
-
-	//	スキル２０・２０カウンタが０以下の場合処理しない
-	if( Count2020.value <= 0 ){
-		return;
-	}
-
-	//	コントロール無効の場合処理しない
-	if( Obj.disabled == true ){
-		return;
-	}
-
-	//	スキルが１以外の場合処理しない
-	if( Obj.value != 1 ){
-		return;
-	}
-
-	//	スキルを２０とする
-	Obj.value = 20;
-
-	//	スキル２０・２０カウンタの回数を１つ減らす
-	--Count2020.value;
-
-	//	スキル２つを２０にした場合
-	if( Count2020.value == 0 ){
-
-		//	残玉を90使用する
-		Balance.value -= 90;
-	}
-	return;
-}

@@ -25,7 +25,7 @@ function AllSelect1()
 	}
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	残玉の設定
 		var Tama = eval( document.chara.balance.value );
@@ -86,7 +86,7 @@ function AllSelect2()
 	}
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	残玉の設定
 		var Tama = eval( document.chara.balance.value );
@@ -148,7 +148,7 @@ function AllSelect3()
 	}
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	残玉の設定
 		var Tama = eval( document.chara.balance.value );
@@ -210,7 +210,7 @@ function AllSelect4()
 	}
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link.checked ) {
+	if( document.chara.link && document.chara.link.checked ) {
 
 		//	残玉の設定
 		var Tama = eval( document.chara.balance.value );
