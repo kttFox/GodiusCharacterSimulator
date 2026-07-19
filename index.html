@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- saved from url=(0053)https://hanpen.x0.to/godius/tool/godichara/chara.html -->
-<html lang="ja" class=" dhifkqyxf idc0_350"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="ja" class=" dhifkqyxf idc0_350">
+	<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Godius Eternal War キャラクターシミュレーター</title>
 		
 		<meta http-equiv="Content-Script-Type" content="text/javascript">
@@ -10,7 +11,7 @@
 		<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
 		<link rel="stylesheet" href="./css/main.css" type="text/css">
 		<script type="text/javascript" src="./js/const.js"></script>
-<script type="text/javascript" src="./js/main.js"></script>
+		<script type="text/javascript" src="./js/main.js"></script>
 		<script type="text/javascript" src="./js/sub.js"></script>
 		<script type="text/javascript" src="./js/check.js"></script>
 		<script type="text/javascript" src="./js/select.js"></script>
@@ -19,13 +20,66 @@
 		<script type="text/javascript" src="./js/extra.js"></script>
 		<script type="text/javascript" src="./js/cookie.js"></script>
 		<script type="text/javascript" src="./js/realtime.js"></script>
+		<style>
+			div.title {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			}
+			.gc-badge {
+			display: inline-flex;
+			font-family: Verdana, Geneva, "DejaVu Sans", sans-serif;
+			font-size: 11px;
+			line-height: 20px;
+			color: #fff;
+			border-radius: 3px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-shadow: 0 1px 0 rgba(0,0,0,.3);
+			}
+			.gc-badge .gc-label { background: #555; padding: 0 6px; }
+			.gc-badge .gc-value { background: #007ec6; padding: 0 6px; }
+		</style>
+		<script>
+			function renderBadge(views) {
+				var el = document.getElementById("counter");
+				if (!el) {
+					// head 内で実行された時点では #counter が未生成なので待つ
+					setTimeout(function() { renderBadge(views); }, 100);
+					return;
+				}
+				el.innerHTML =
+					'<a href="https://www.goatcounter.com/" target="_blank" rel="noopener" style="text-decoration:none;">' +
+					'<span class="gc-badge"><span class="gc-label">visitors</span>' +
+					'<span class="gc-value">' + views + '</span></span></a>';
+			}
+
+			function showCounter() {
+				// ローカル確認用: file:// や localhost ではダミー値で表示
+				if (location.protocol === "file:" ||
+					location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+					renderBadge("12,345");
+					return;
+				}
+
+				// counter JSON API から直接値を取得する
+				// (type:"html" はクロスオリジン iframe になるため JS から値を読めない)
+				fetch("https://kttfox.goatcounter.com/counter/" +
+						encodeURIComponent(location.pathname) + ".json")
+					.then(function(r) { return r.json(); })
+					.then(function(data) { renderBadge(data.count_unique || data.count); })
+					.catch(function() { /* 取得失敗時は非表示のまま */ });
+			}
+			showCounter();
+		</script>
+		<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 	</head>
 	<body onload="FormReset()" class="vsc-initialized">
 		<table width="800">
 			<tbody><tr>
 				<td>
 					<form name="chara">
-						<div class="title">■Godius Eternal War キャラクターシミュレーター</div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター</span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 
@@ -2177,5 +2231,4 @@
 				</td>
 			</tr>
 		</tbody></table>
-
 </body></html>
