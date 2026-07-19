@@ -1,0 +1,396 @@
+//------------------------------------------------------------------------------
+//	関数名		：	クッキー情報設定処理
+//	機能説明	：	フォームの値を取得し、クッキー情報へ値を設定する。
+//	パラメータ	：	CookieName	クッキー名
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function SetCookie( CookieName )
+{
+	//	変数宣言
+	var CookieValue  = new Array();		//	フォーム取得配列
+	var CookieString = "";				//	クッキー設定文字列
+	var Expire = new Date();			//	クッキー有効期限設定オブジェクト
+	var ExpireDay = 31;					//	クッキー有効日数
+	var ExpireMonth = 12;				//	クッキー有効月数
+	var ExpireYear = 3;					//	クッキー有効年数
+
+	//	確認メッセージ
+	var ReturnValue = confirm( "セーブします。よろしいですか？\n" );
+
+	//	NOの場合
+	if( ReturnValue == false ) {
+		return;
+	}
+
+	//	フォーム情報取得処理
+	GetFormValue( CookieValue );
+
+	//	クッキー有効期限
+	Expire.setTime( Expire.getTime() + 1000 * 60 * 60 * 24 * ExpireDay * ExpireMonth * ExpireYear );
+
+	//	先頭配列エスケープ
+	CookieString = escape( CookieValue[0] );
+
+	//	クッキー配列内容ループ
+	for( var i = 1 ; i < CookieValue.length; ++i ){
+		CookieString += "%00" + escape( CookieValue[i] );
+	}
+
+	//	クッキー情報の書き込み
+	document.cookie = CookieName + "=" + CookieString + "; expires=" + Expire.toGMTString();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	クッキー情報取得処理
+//	機能説明	：	クッキー情報を取得し、フォームへ値を設定する。
+//	パラメータ	：	CookieName	クッキー名
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function GetCookie( CookieName )
+{
+	//	変数宣言
+	var CookieValue  = new Array();		//	フォーム取得配列
+	var CookieString = "";				//	クッキー設定文字列
+
+	//	クッキー名へイコールを付加
+	CookieName += "=";
+
+	//	クッキー名の検索
+	ReturnValue = document.cookie.indexOf( CookieName );
+	if( ReturnValue == -1 ){
+		alert( "データが存在しません。\n" );
+		return;
+	}
+
+	//	クッキー情報を分割して設定
+	CookieValue = document.cookie.split( "; " );
+
+	var i = 0;
+
+	while( CookieValue[i] ){
+
+		//	クッキー名の検索
+		if( CookieValue[i].substr(0, CookieName.length) == CookieName ){
+			//	クッキー設定
+			CookieString = CookieValue[i].substr(11, CookieValue[i].length );
+			break;
+		}
+		++i;
+	}
+
+	//	分割して配列へ設定
+	CookieValue = CookieString.split( "%00" );
+
+	//	フォーム情報設定処理
+	SetFormValue( CookieValue )
+}
+//------------------------------------------------------------------------------
+//	関数名		：	フォーム情報設定処理
+//	機能説明	：	フォームへ値を設定する。
+//	パラメータ	：	CookieValue		クッキー取得配列
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function SetFormValue( CookieValue )
+{
+	//	フォームへ値を設定
+	document.chara.lv.value					= unescape( CookieValue[0] );
+
+	//	クッキー構成変更による旧バージョンクッキーデータ考慮
+	var Job = unescape( CookieValue[1] );
+	if( Job != "戦" && Job != "剣" && Job != "盗" && Job != "魔" && Job != "聖" && Job != "錬" && Job != "裁" && Job != "鍛" && Job != "鳥" ){
+		Job = ConvJobValue( Job );
+		if( Job == -1 ){
+			return;
+		}
+	}
+	document.chara.job.value = Job;
+
+	//	副業メニュー切り替え処理
+	DispSideJob( document.chara.job.value );
+
+	//	クッキー構成変更による旧バージョンクッキーデータ考慮
+	var SideJob = unescape( CookieValue[2] );
+	if( SideJob != "戦" && SideJob != "剣" && SideJob != "盗" && SideJob != "魔" && SideJob != "聖" && SideJob != "錬" && SideJob != "裁" && SideJob != "鍛" && SideJob != "鳥" ){
+		SideJob = ConvJobValue( SideJob );
+		if( SideJob == -1 ){
+			return;
+		}
+	}
+	document.chara.sidejob.value = SideJob;
+
+	//	職業別スキルメニュー切り替え処理
+	ChangeSkillMenuByJob();
+
+	document.chara.hp.value					= unescape( CookieValue[3] );
+	document.chara.mp.value					= unescape( CookieValue[4] );
+	document.chara.sp.value					= unescape( CookieValue[5] );
+	document.chara.str.value				= unescape( CookieValue[6] );
+	document.chara.int.value				= unescape( CookieValue[7] );
+	document.chara.dex.value				= unescape( CookieValue[8] );
+	document.chara.agr.value				= unescape( CookieValue[9] );
+	document.chara.vit.value				= unescape( CookieValue[10] );
+	document.chara.men.value				= unescape( CookieValue[11] );
+	document.chara.skill1.value				= unescape( CookieValue[12] );
+	document.chara.skill2.value				= unescape( CookieValue[13] );
+	document.chara.skill3.value				= unescape( CookieValue[14] );
+	document.chara.skill4.value				= unescape( CookieValue[15] );
+	document.chara.skill5.value				= unescape( CookieValue[16] );
+	document.chara.skill6.value				= unescape( CookieValue[17] );
+	document.chara.skill7.value				= unescape( CookieValue[18] );
+	document.chara.skill8.value				= unescape( CookieValue[19] );
+	document.chara.skill9.value				= unescape( CookieValue[20] );
+	document.chara.skill10.value			= unescape( CookieValue[21] );
+	document.chara.skill11.value			= unescape( CookieValue[22] );
+	document.chara.balance.value			= unescape( CookieValue[23] );
+	document.chara.weapon.value				= unescape( CookieValue[24] );
+	document.chara.weaponp.value			= unescape( CookieValue[25] );
+	document.chara.armor.value				= unescape( CookieValue[26] );
+	document.chara.armorp.value				= unescape( CookieValue[27] );
+	document.chara.shoes.value				= unescape( CookieValue[28] );
+	document.chara.shoesp.value				= unescape( CookieValue[29] );
+	document.chara.shield.value				= unescape( CookieValue[30] );
+	document.chara.ring1.value				= unescape( CookieValue[31] );
+	document.chara.ring2.value				= unescape( CookieValue[32] );
+	document.chara.necklace.value			= unescape( CookieValue[33] );
+	document.chara.wc.value					= unescape( CookieValue[34] );
+	document.chara.hc.value					= unescape( CookieValue[35] );
+	document.chara.ac.value					= unescape( CookieValue[36] );
+	document.chara.dc.value					= unescape( CookieValue[37] );
+	document.chara.weight.value				= unescape( CookieValue[38] );
+	document.chara.firebutton.disabled		= eval( unescape( CookieValue[39] ) );
+	document.chara.fire[0].checked			= eval( unescape( CookieValue[40] ) );
+	document.chara.fire[1].checked			= eval( unescape( CookieValue[41] ) );
+	document.chara.fire[2].checked			= eval( unescape( CookieValue[42] ) );
+	document.chara.fire[3].checked			= eval( unescape( CookieValue[43] ) );
+	document.chara.fire[0].disabled			= eval( unescape( CookieValue[44] ) );
+	document.chara.fire[1].disabled			= eval( unescape( CookieValue[45] ) );
+	document.chara.fire[2].disabled			= eval( unescape( CookieValue[46] ) );
+	document.chara.fire[3].disabled			= eval( unescape( CookieValue[47] ) );
+	document.chara.icebutton.disabled		= eval( unescape( CookieValue[48] ) );
+	document.chara.ice[0].checked			= eval( unescape( CookieValue[49] ) );
+	document.chara.ice[1].checked			= eval( unescape( CookieValue[50] ) );
+	document.chara.ice[2].checked			= eval( unescape( CookieValue[51] ) );
+	document.chara.ice[3].checked			= eval( unescape( CookieValue[52] ) );
+	document.chara.ice[0].disabled			= eval( unescape( CookieValue[53] ) );
+	document.chara.ice[1].disabled			= eval( unescape( CookieValue[54] ) );
+	document.chara.ice[2].disabled			= eval( unescape( CookieValue[55] ) );
+	document.chara.ice[3].disabled			= eval( unescape( CookieValue[56] ) );
+	document.chara.magicalbutton.disabled	= eval( unescape( CookieValue[57] ) );
+	document.chara.magical[0].checked		= eval( unescape( CookieValue[58] ) );
+	document.chara.magical[1].checked		= eval( unescape( CookieValue[59] ) );
+	document.chara.magical[2].checked		= eval( unescape( CookieValue[60] ) );
+	document.chara.magical[3].checked		= eval( unescape( CookieValue[61] ) );
+	document.chara.magical[4].checked		= eval( unescape( CookieValue[62] ) );
+	document.chara.magical[5].checked		= eval( unescape( CookieValue[63] ) );
+	document.chara.magical[0].disabled		= eval( unescape( CookieValue[64] ) );
+	document.chara.magical[1].disabled		= eval( unescape( CookieValue[65] ) );
+	document.chara.magical[2].disabled		= eval( unescape( CookieValue[66] ) );
+	document.chara.magical[3].disabled		= eval( unescape( CookieValue[67] ) );
+	document.chara.magical[4].disabled		= eval( unescape( CookieValue[68] ) );
+	document.chara.magical[5].disabled		= eval( unescape( CookieValue[69] ) );
+	document.chara.holybutton.disabled		= eval( unescape( CookieValue[70] ) );
+	document.chara.holy[0].checked			= eval( unescape( CookieValue[71] ) );
+	document.chara.holy[1].checked			= eval( unescape( CookieValue[72] ) );
+	document.chara.holy[2].checked			= eval( unescape( CookieValue[73] ) );
+	document.chara.holy[3].checked			= eval( unescape( CookieValue[74] ) );
+	document.chara.holy[4].checked			= eval( unescape( CookieValue[75] ) );
+	document.chara.holy[5].checked			= eval( unescape( CookieValue[76] ) );
+	document.chara.holy[6].checked			= eval( unescape( CookieValue[77] ) );
+	document.chara.holy[0].disabled			= eval( unescape( CookieValue[78] ) );
+	document.chara.holy[1].disabled			= eval( unescape( CookieValue[79] ) );
+	document.chara.holy[2].disabled			= eval( unescape( CookieValue[80] ) );
+	document.chara.holy[3].disabled			= eval( unescape( CookieValue[81] ) );
+	document.chara.holy[4].disabled			= eval( unescape( CookieValue[82] ) );
+	document.chara.holy[5].disabled			= eval( unescape( CookieValue[83] ) );
+	document.chara.holy[6].disabled			= eval( unescape( CookieValue[84] ) );
+	document.chara.link.checked				= eval( unescape( CookieValue[85] ) );
+	document.chara.mode[0].checked			= eval( unescape( CookieValue[86] ) );
+	document.chara.mode[0].disabled			= eval( unescape( CookieValue[87] ) );
+	document.chara.mode[1].checked			= eval( unescape( CookieValue[88] ) );
+	document.chara.mode[1].disabled			= eval( unescape( CookieValue[89] ) );
+	document.chara.per01.value				= unescape( CookieValue[90] );
+	document.chara.per05.value				= unescape( CookieValue[91] );
+	document.chara.per10.value				= unescape( CookieValue[92] );
+	document.chara.per15.value				= unescape( CookieValue[93] );
+	document.chara.per20.value				= unescape( CookieValue[94] );
+	document.chara.per26.value				= unescape( CookieValue[95] );
+	document.chara.taiseif.value			= unescape( CookieValue[96] );
+	document.chara.taiseii.value			= unescape( CookieValue[97] );
+	document.chara.taiseih.value			= unescape( CookieValue[98] );
+	document.chara.taiseim.value			= unescape( CookieValue[99] );
+	document.chara.taiseis.value			= unescape( CookieValue[100] );
+	document.chara.taiseip.value			= unescape( CookieValue[101] );
+	document.chara.taiseigenf.value			= unescape( CookieValue[102] );
+	document.chara.taiseigeni.value			= unescape( CookieValue[103] );
+	document.chara.taiseigenh.value			= unescape( CookieValue[104] );
+	document.chara.taiseigenm.value			= unescape( CookieValue[105] );
+	document.chara.doping[0].checked		= eval(unescape(CookieValue[106]));
+	document.chara.doping[1].checked		= eval(unescape(CookieValue[107]));
+	document.chara.doping[2].checked		= eval(unescape(CookieValue[108]));
+	document.chara.doping[3].checked		= eval(unescape(CookieValue[109]));
+	document.chara.doping[4].checked		= eval(unescape(CookieValue[110]));
+}
+//------------------------------------------------------------------------------
+//	関数名		：	フォーム情報取得処理
+//	機能説明	：	フォームの値を取得する。
+//	パラメータ	：	CookieValue		フォーム取得配列
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function GetFormValue( CookieValue )
+{
+	//	フォームの値を取得
+	CookieValue[0] = document.chara.lv.value;
+	CookieValue[1] = document.chara.job.value;
+	CookieValue[2] = document.chara.sidejob.value;
+	CookieValue[3] = document.chara.hp.value;
+	CookieValue[4] = document.chara.mp.value;
+	CookieValue[5] = document.chara.sp.value;
+	CookieValue[6] = document.chara.str.value;
+	CookieValue[7] = document.chara.int.value;
+	CookieValue[8] = document.chara.dex.value;
+	CookieValue[9] = document.chara.agr.value;
+	CookieValue[10] = document.chara.vit.value;
+	CookieValue[11] = document.chara.men.value;
+	CookieValue[12] = document.chara.skill1.value;
+	CookieValue[13] = document.chara.skill2.value;
+	CookieValue[14] = document.chara.skill3.value;
+	CookieValue[15] = document.chara.skill4.value;
+	CookieValue[16] = document.chara.skill5.value;
+	CookieValue[17] = document.chara.skill6.value;
+	CookieValue[18] = document.chara.skill7.value;
+	CookieValue[19] = document.chara.skill8.value;
+	CookieValue[20] = document.chara.skill9.value;
+	CookieValue[21] = document.chara.skill10.value;
+	CookieValue[22] = document.chara.skill11.value;
+	CookieValue[23] = document.chara.balance.value;
+	CookieValue[24] = document.chara.weapon.value;
+	CookieValue[25] = document.chara.weaponp.value;
+	CookieValue[26] = document.chara.armor.value;
+	CookieValue[27] = document.chara.armorp.value;
+	CookieValue[28] = document.chara.shoes.value;
+	CookieValue[29] = document.chara.shoesp.value;
+	CookieValue[30] = document.chara.shield.value;
+	CookieValue[31] = document.chara.ring1.value;
+	CookieValue[32] = document.chara.ring2.value;
+	CookieValue[33] = document.chara.necklace.value;
+	CookieValue[34] = document.chara.wc.value;
+	CookieValue[35] = document.chara.hc.value;
+	CookieValue[36] = document.chara.ac.value;
+	CookieValue[37] = document.chara.dc.value;
+	CookieValue[38] = document.chara.weight.value;
+	CookieValue[39] = document.chara.firebutton.disabled;
+	CookieValue[40] = document.chara.fire[0].checked;
+	CookieValue[41] = document.chara.fire[1].checked;
+	CookieValue[42] = document.chara.fire[2].checked;
+	CookieValue[43] = document.chara.fire[3].checked;
+	CookieValue[44] = document.chara.fire[0].disabled;
+	CookieValue[45] = document.chara.fire[1].disabled;
+	CookieValue[46] = document.chara.fire[2].disabled;
+	CookieValue[47] = document.chara.fire[3].disabled;
+	CookieValue[48] = document.chara.icebutton.disabled;
+	CookieValue[49] = document.chara.ice[0].checked;
+	CookieValue[50] = document.chara.ice[1].checked;
+	CookieValue[51] = document.chara.ice[2].checked;
+	CookieValue[52] = document.chara.ice[3].checked;
+	CookieValue[53] = document.chara.ice[0].disabled;
+	CookieValue[54] = document.chara.ice[1].disabled;
+	CookieValue[55] = document.chara.ice[2].disabled;
+	CookieValue[56] = document.chara.ice[3].disabled;
+	CookieValue[57] = document.chara.magicalbutton.disabled;
+	CookieValue[58] = document.chara.magical[0].checked;
+	CookieValue[59] = document.chara.magical[1].checked;
+	CookieValue[60] = document.chara.magical[2].checked;
+	CookieValue[61] = document.chara.magical[3].checked;
+	CookieValue[62] = document.chara.magical[4].checked;
+	CookieValue[63] = document.chara.magical[5].checked;
+	CookieValue[64] = document.chara.magical[0].disabled;
+	CookieValue[65] = document.chara.magical[1].disabled;
+	CookieValue[66] = document.chara.magical[2].disabled;
+	CookieValue[67] = document.chara.magical[3].disabled;
+	CookieValue[68] = document.chara.magical[4].disabled;
+	CookieValue[69] = document.chara.magical[5].disabled;
+	CookieValue[70] = document.chara.holybutton.disabled;
+	CookieValue[71] = document.chara.holy[0].checked;
+	CookieValue[72] = document.chara.holy[1].checked;
+	CookieValue[73] = document.chara.holy[2].checked;
+	CookieValue[74] = document.chara.holy[3].checked;
+	CookieValue[75] = document.chara.holy[4].checked;
+	CookieValue[76] = document.chara.holy[5].checked;
+	CookieValue[77] = document.chara.holy[6].checked;
+	CookieValue[78] = document.chara.holy[0].disabled;
+	CookieValue[79] = document.chara.holy[1].disabled;
+	CookieValue[80] = document.chara.holy[2].disabled;
+	CookieValue[81] = document.chara.holy[3].disabled;
+	CookieValue[82] = document.chara.holy[4].disabled;
+	CookieValue[83] = document.chara.holy[5].disabled;
+	CookieValue[84] = document.chara.holy[6].disabled;
+	CookieValue[85] = document.chara.link.checked;
+	CookieValue[86] = document.chara.mode[0].checked;
+	CookieValue[87] = document.chara.mode[0].disabled;
+	CookieValue[88] = document.chara.mode[1].checked;
+	CookieValue[89] = document.chara.mode[1].disabled;
+	CookieValue[90] = document.chara.per01.value;
+	CookieValue[91] = document.chara.per05.value;
+	CookieValue[92] = document.chara.per10.value;
+	CookieValue[93] = document.chara.per15.value;
+	CookieValue[94] = document.chara.per20.value;
+	CookieValue[95] = document.chara.per26.value;
+	CookieValue[96] = document.chara.taiseif.value;
+	CookieValue[97] = document.chara.taiseii.value;
+	CookieValue[98] = document.chara.taiseih.value;
+	CookieValue[99] = document.chara.taiseim.value;
+	CookieValue[100]= document.chara.taiseis.value;
+	CookieValue[101]= document.chara.taiseip.value;
+	CookieValue[102]= document.chara.taiseigenf.value;
+	CookieValue[103]= document.chara.taiseigeni.value;
+	CookieValue[104]= document.chara.taiseigenh.value;
+	CookieValue[105]= document.chara.taiseigenm.value;
+	CookieValue[106]= document.chara.doping[0].checked;
+	CookieValue[107]= document.chara.doping[1].checked;
+	CookieValue[108]= document.chara.doping[2].checked;
+	CookieValue[109]= document.chara.doping[3].checked;
+	CookieValue[110]= document.chara.doping[4].checked;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	職業文言変換処理
+//	機能説明	：	フォームへ設定する職業の値の変換を行う。
+//	パラメータ	：	String	変換対象
+//	戻り値		：	戦～鳥	変換後職業
+//					-1		変換失敗
+//	備考		：	ver1.74以前の形式をver1.75の形式へ変換する
+//------------------------------------------------------------------------------
+function ConvJobValue( String )
+{
+	if( String == "sen" ){
+		return	"戦";
+	}
+	if( String == "ken" ){
+		return	"剣";
+	}
+	if( String == "tou" ){
+		return	"盗";
+	}
+	if( String == "ma" ){
+		return	"魔";
+	}
+	if( String == "sei" ){
+		return	"聖";
+	}
+	if( String == "ren" ){
+		return	"錬";
+	}
+	if( String == "sai" ){
+		return	"裁";
+	}
+	if( String == "kaji" ){
+		return	"鍛";
+	}
+	if( String == "tori" ){
+		return	"鳥";
+	}
+
+	return -1;
+}

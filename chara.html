@@ -1,0 +1,2680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0053)https://hanpen.x0.to/godius/tool/godichara/chara.html -->
+<html lang="ja" class=" dhifkqyxf idc0_350"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>ガディウスキャラ診断ツール</title>
+		
+		<meta http-equiv="Content-Script-Type" content="text/javascript">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
+		<link rel="stylesheet" href="./css/main.css" type="text/css">
+		<script type="text/javascript" src="./js/main.js"></script>
+		<script type="text/javascript" src="./js/sub.js"></script>
+		<script type="text/javascript" src="./js/check.js"></script>
+		<script type="text/javascript" src="./js/select.js"></script>
+		<script type="text/javascript" src="./js/disp.js"></script>
+		<script type="text/javascript" src="./js/calc.js"></script>
+		<script type="text/javascript" src="./js/extra.js"></script>
+		<script type="text/javascript" src="./js/cookie.js"></script>
+	</head>
+	<body onload="FormReset()" class="vsc-initialized">
+		<b>キャラ診断ツール ver2.03</b>
+		<p>本家デロデロさま作のキャラ診断機はこちら　→　http://www61.tok2.com/home/derrodero/</p>
+		<table width="600">
+			<tbody><tr>
+				<td>
+					<hr noshade="" color="gray" size="1">
+					<p>
+					</p><form name="chara">
+						<div class="title">■ガディウスキャラ診断ツール</div>
+						<div class="main">
+							<div class="sub">
+
+								キャラ1
+								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara1&#39;)">
+								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara1&#39;)">
+
+								キャラ2
+								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara2&#39;)">
+								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara2&#39;)">
+
+								キャラ3
+								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara3&#39;)">
+								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara3&#39;)">
+
+							</div>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<div class="sub">
+								<input type="checkbox" value="link" name="link" onclick="CheckLink()">残玉連動　
+								<input type="radio" value="fixed" name="mode" disabled="">固定スキルアップ　
+								<input type="radio" value="gamble" name="mode" disabled="">確率スキルアップ
+								(<a href="javascript:OpenMenu(&#39;set&#39;)">成功率設定</a>)<br>
+							</div>
+							<div id="set" class="set" style="display:none">
+								スキル成功率<br>
+								1～4:<input type="text" name="per01" value="90" size="3" maxlength="3" onblur="CheckPercent(this)">%
+								5～9:<input type="text" name="per05" value="80" size="3" maxlength="3" onblur="CheckPercent(this)">%
+								10～14:<input type="text" name="per10" value="50" size="3" maxlength="3" onblur="CheckPercent(this)">%
+								15～19:<input type="text" name="per15" value="20" size="3" maxlength="3" onblur="CheckPercent(this)">%
+								20～25:<input type="text" name="per20" value="10" size="3" maxlength="3" onblur="CheckPercent(this)">%
+								26～30:<input type="text" name="per26" value="5" size="3" maxlength="3" onblur="CheckPercent(this)">%<br>
+								31～44:<input type="text" name="per31" value="5" size="3" maxlength="3" onblur="CheckPercent(this)">%
+							</div>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							Ｌｖ　　
+							<select name="lv" onfocus="FocusLv()" onchange="ChangeLv()">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+								<option value="100">AG1</option>
+								<option value="101">AG2</option>
+								<option value="102">AG3</option>
+								<option value="103">AG4</option>
+								<option value="104">AG5</option>
+								<option value="105">AG6</option>
+								<option value="106">AG7</option>
+								<option value="107">AG8</option>
+								<option value="108">AG9</option>
+								<option value="109">AG10</option>
+								<option value="110">AG11</option>
+								<option value="111">AG12</option>
+								<option value="112">AG13</option>
+								<option value="113">AG14</option>
+								<option value="114">AG15</option>
+								<option value="115">AG16</option>
+								<option value="116">AG17</option>
+								<option value="117">AG18</option>
+								<option value="118">AG19</option>
+								<option value="119">AG20</option>
+								<option value="120">AG21</option>
+								<option value="120">AG21</option>
+								<option value="121">AG22</option>
+								<option value="122">AG23</option>
+								<option value="123">AG24</option>
+								<option value="124">AG25</option>
+								<option value="125">AG26</option>
+								<option value="126">AG27</option>
+								<option value="127">AG28</option>
+								<option value="128">AG29</option>
+								<option value="129">AG30</option>
+								<option value="130">AG31</option>
+								<option value="131">AG32</option>
+								<option value="132">AG33</option>
+								<option value="133">AG34</option>
+								<option value="134">AG35</option>
+								<option value="135">AG36</option>
+								<option value="136">AG37</option>
+								<option value="137">AG38</option>
+								<option value="138">AG39</option>
+								<option value="139">AG40</option>
+								<option value="140">AG41</option>
+								<option value="141">AG42</option>
+								<option value="142">AG43</option>
+								<option value="143">AG44</option>
+								<option value="144">AG45</option>
+								<option value="145">AG46</option>
+								<option value="146">AG47</option>
+								<option value="147">AG48</option>
+								<option value="148">AG49</option>
+								<option value="149">AG50</option>
+								<option value="150">AG51</option>
+								<option value="151">AG52</option>
+								<option value="152">AG53</option>
+								<option value="153">AG54</option>
+								<option value="154">AG55</option>
+								<option value="155">AG56</option>
+								<option value="156">AG57</option>
+								<option value="157">AG58</option>
+								<option value="158">AG59</option>
+								<option value="159">AG60</option>
+								<option value="160">AG61</option>
+								<option value="161">AG62</option>
+								<option value="162">AG63</option>
+								<option value="163">AG64</option>
+								<option value="164">AG65</option>
+								<option value="165">AG66</option>
+								<option value="166">AG67</option>
+								<option value="167">AG68</option>
+								<option value="168">AG69</option>
+								<option value="169">AG70</option>
+								<option value="170">AG71</option>
+								<option value="171">AG72</option>
+								<option value="172">AG73</option>
+								<option value="173">AG74</option>
+								<option value="174">AG75</option>
+								<option value="175">AG76</option>
+								<option value="176">AG77</option>
+								<option value="177">AG78</option>
+								<option value="178">AG79</option>
+								<option value="179">AG80</option>
+								<option value="180">AG81</option>
+								<option value="181">AG82</option>
+								<option value="182">AG83</option>
+								<option value="183">AG84</option>
+								<option value="184">AG85</option>
+								<option value="185">AG86</option>
+								<option value="186">AG87</option>
+								<option value="187">AG88</option>
+								<option value="188">AG89</option>
+								<option value="189">AG90</option>
+								<option value="190">AG91</option>
+								<option value="191">AG92</option>
+								<option value="192">AG93</option>
+								<option value="193">AG94</option>
+								<option value="194">AG95</option>
+								<option value="195">AG96</option>
+								<option value="196">AG97</option>
+								<option value="197">AG98</option>
+								<option value="198">AG99</option>
+								<option value="199">AG100</option>
+								<option value="200">AG101</option>
+								<option value="201">AG102</option>
+								<option value="202">AG103</option>
+								<option value="203">AG104</option>
+								<option value="204">AG105</option>
+								<option value="205">AG106</option>
+								<option value="206">AG107</option>
+								<option value="207">AG108</option>
+								<option value="208">AG109</option>
+								<option value="209">AG110</option>
+								<option value="210">AG111</option>
+								<option value="211">AG112</option>
+								<option value="212">AG113</option>
+								<option value="213">AG114</option>
+								<option value="214">AG115</option>
+								<option value="215">AG116</option>
+								<option value="216">AG117</option>
+								<option value="217">AG118</option>
+								<option value="218">AG119</option>
+								<option value="219">AG120</option>
+								<option value="220">AG121</option>
+								<option value="221">AG122</option>
+								<option value="222">AG123</option>
+								<option value="223">AG124</option>
+								<option value="224">AG125</option>
+								<option value="225">AG126</option>
+								<option value="226">AG127</option>
+								<option value="227">AG128</option>
+								<option value="228">AG129</option>
+								<option value="229">AG130</option>
+								<option value="230">AG131</option>
+								<option value="231">AG132</option>
+								<option value="232">AG133</option>
+								<option value="233">AG134</option>
+								<option value="234">AG135</option>
+								<option value="235">AG136</option>
+								<option value="236">AG137</option>
+								<option value="237">AG138</option>
+								<option value="238">AG139</option>
+								<option value="239">AG140</option>
+								<option value="240">AG141</option>
+								<option value="241">AG142</option>
+								<option value="242">AG143</option>
+								<option value="243">AG144</option>
+								<option value="244">AG145</option>
+								<option value="245">AG146</option>
+								<option value="246">AG147</option>
+								<option value="247">AG148</option>
+								<option value="248">AG149</option>
+								<option value="249">AG150</option>
+								<option value="250">AG151</option>
+								<option value="251">AG152</option>
+								<option value="252">AG153</option>
+								<option value="253">AG154</option>
+								<option value="254">AG155</option>
+								<option value="255">AG156</option>
+							</select>　　
+
+							主職業　
+							<select name="job" onchange="DispSideJob(this.value);ChangeSkillMenuByJob()">
+								<option value="戦">戦士</option>
+								<option value="剣">剣闘士</option>
+								<option value="聖">聖職者</option>
+								<option value="盗">盗賊</option>
+								<option value="魔">魔法使い</option>
+							</select>　
+
+							副業　　
+							<select name="sidejob" onchange="ChangeSkillMenuByJob()">
+								
+								
+								
+								
+								
+								
+							<option value="盗">盗賊　　　</option><option value="錬">錬金術士</option><option value="聖">聖職者</option><option value="裁">裁縫士</option><option value="鍛">鍛治屋</option><option value="鳥">バード</option></select><br>
+
+							<input type="hidden" name="senpos" value="0">
+							<input type="hidden" name="kenpos" value="0">
+							<input type="hidden" name="seipos" value="0">
+							<input type="hidden" name="toupos" value="0">
+							<input type="hidden" name="mapos" value="0">
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							ＨＰ　　
+							<input type="text" name="hp" maxlength="3" size="5">　　　
+
+							ＭＰ　　
+							<input type="text" name="mp" maxlength="3" size="5">　　　
+
+							ＳＰ　　
+							<input type="text" name="sp" maxlength="3" size="5"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="button" value="パラALL15" onclick="ChangeParameterAll(15)">　
+							<input type="button" value="パラALL20" onclick="ChangeParameterAll(20)">　
+							<input type="button" value="パラALL25" onclick="ChangeParameterAll(25)">　
+							<input type="button" value="パラALL30" onclick="ChangeParameterAll(30)">　
+							<input type="button" value="パラALL99" onclick="ChangeParameterAll(99)"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							ＳＴＲ　
+							<select name="str" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12" selected="">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select>　　　
+
+							ＩＮＴ　
+							<select name="int" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select>　　　
+
+							ＤＥＸ　
+							<select name="dex" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10" selected="">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select><br>
+
+							ＡＧＲ　
+							<select name="agr" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select>　　　
+
+							ＶＩＴ　
+							<select name="vit" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select>　　　
+
+							ＭＥＮ　
+							<select name="men" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+								<option value="45">45</option>
+								<option value="46">46</option>
+								<option value="47">47</option>
+								<option value="48">48</option>
+								<option value="49">49</option>
+								<option value="50">50</option>
+								<option value="51">51</option>
+								<option value="52">52</option>
+								<option value="53">53</option>
+								<option value="54">54</option>
+								<option value="55">55</option>
+								<option value="56">56</option>
+								<option value="57">57</option>
+								<option value="58">58</option>
+								<option value="59">59</option>
+								<option value="60">60</option>
+								<option value="61">61</option>
+								<option value="62">62</option>
+								<option value="63">63</option>
+								<option value="64">64</option>
+								<option value="65">65</option>
+								<option value="66">66</option>
+								<option value="67">67</option>
+								<option value="68">68</option>
+								<option value="69">69</option>
+								<option value="70">70</option>
+								<option value="71">71</option>
+								<option value="72">72</option>
+								<option value="73">73</option>
+								<option value="74">74</option>
+								<option value="75">75</option>
+								<option value="76">76</option>
+								<option value="77">77</option>
+								<option value="78">78</option>
+								<option value="79">79</option>
+								<option value="80">80</option>
+								<option value="81">81</option>
+								<option value="82">82</option>
+								<option value="83">83</option>
+								<option value="84">84</option>
+								<option value="85">85</option>
+								<option value="86">86</option>
+								<option value="87">87</option>
+								<option value="88">88</option>
+								<option value="89">89</option>
+								<option value="90">90</option>
+								<option value="91">91</option>
+								<option value="92">92</option>
+								<option value="93">93</option>
+								<option value="94">94</option>
+								<option value="95">95</option>
+								<option value="96">96</option>
+								<option value="97">97</option>
+								<option value="98">98</option>
+								<option value="99">99</option>
+							</select>　　　
+
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<span id="id_skill1" class="skill" onclick="CharaSubSkill2020(document.chara.skill1)"><img src="./img/skill01.gif"></span>
+							<select name="skill1" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+
+							<span id="id_skill2" class="skill" onclick="CharaSubSkill2020(document.chara.skill2)"><img src="./img/skill02.gif"></span>
+							<select name="skill2" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+
+							<span id="id_skill3" class="skill" onclick="CharaSubSkill2020(document.chara.skill3)"><img src="./img/skill03.gif"></span>
+							<select name="skill3" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+
+							<span id="id_skill4" class="skill" onclick="CharaSubSkill2020(document.chara.skill4)"><img src="./img/skill04.gif"></span>
+							<select name="skill4" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+
+							<span id="id_skill5" class="skill" onclick="CharaSubSkill2020(document.chara.skill5)"><img src="./img/skill05.gif"></span>
+							<select name="skill5" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+
+							<span id="id_skill6" class="skill" onclick="CharaSubSkill2020(document.chara.skill6)"><img src="./img/skill06.gif"></span>
+							<select name="skill6" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select><br>
+
+							<span id="id_skill7" class="skill" onclick="CharaSubSkill2020(document.chara.skill7)"><img src="./img/skill08.gif"></span>
+							<select name="skill7" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+							<span id="id_skill8" class="skill" onclick="CharaSubSkill2020(document.chara.skill8)"><img src="./img/skill09.gif"></span>
+							<select name="skill8" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+							<span id="id_skill9" class="skill" onclick="CharaSubSkill2020(document.chara.skill9)"><img src="./img/skill10.gif"></span>
+							<select name="skill9" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+							<span id="id_skill10" class="skill" onclick="CharaSubSkill2020(document.chara.skill10)"><img src="./img/skill11.gif"></span>
+							<select name="skill10" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>　
+
+							<span id="id_skill11" class="skill" onclick="CharaSubSkill2020(document.chara.skill11)"><img src="./img/skill99.gif"></span>
+							<select name="skill11" disabled="disabled" onfocus="FocusSkill(this)" onchange="ChangeSkill(this)">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+								<option value="21">21</option>
+								<option value="22">22</option>
+								<option value="23">23</option>
+								<option value="24">24</option>
+								<option value="25">25</option>
+								<option value="26">26</option>
+								<option value="27">27</option>
+								<option value="28">28</option>
+								<option value="29">29</option>
+								<option value="30">30</option>
+								<option value="31">31</option>
+								<option value="32">32</option>
+								<option value="33">33</option>
+								<option value="34">34</option>
+								<option value="35">35</option>
+								<option value="36">36</option>
+								<option value="37">37</option>
+								<option value="38">38</option>
+								<option value="39">39</option>
+								<option value="40">40</option>
+								<option value="41">41</option>
+								<option value="42">42</option>
+								<option value="43">43</option>
+								<option value="44">44</option>
+							</select>
+
+							残玉
+							<input type="text" name="balance" maxlength="3" size="5" value="0" onblur="CheckBalanceValue()"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<a href="javascript:OpenMenu(&#39;equipment&#39;)">装備シミュレータ</a><br>
+
+							<div id="equipment" class="sub" style="display:none">
+								武器　　
+								<select name="weapon">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">ダガー</option>
+									<option value="2">ショートソード</option>
+									<option value="3">レイピア</option>
+									<option value="4">プレードソード</option>
+									<option value="5">ファルシオン</option>
+									<option value="6">ロングソード</option>
+									<option value="7">ブロードソード</option>
+									<option value="8">バスタードソード</option>
+									<option value="9">ナーガブレード</option>
+									<option value="10">テラブレード</option>
+									<option value="11">ビスター</option>
+									<option value="12">古代ビスター</option>
+									<option value="13">ティナブレード</option>
+									<option value="14">シャムシェール</option>
+									<option value="15">クレイモア</option>
+									<option value="16">ツーハンドソード</option>
+									<option value="17">タイタンソード</option>
+									<option value="18">サージソード</option>
+									<option value="19">エクスソード</option>
+									<option value="20">古代エクスソード</option>
+									<option value="21">サーメディソード</option>
+									<option value="22">スタッフ</option>
+									<option value="23">クラブ</option>
+									<option value="24">メイス</option>
+									<option value="25">ロングメイス</option>
+									<option value="26">ウォーハンマー</option>
+									<option value="27">フレイル</option>
+									<option value="28">モール</option>
+									<option value="29">ヘビーモール</option>
+									<option value="30">オークハンマー</option>
+									<option value="31">スパイクフレイル</option>
+									<option value="32">バトルハンマー</option>
+									<option value="33">古代バトルハンマー</option>
+									<option value="34">ギィーガーメイス</option>
+									<option value="35">魔法の杖</option>
+									<option value="36">魂の杖(炎)</option>
+									<option value="37">魂の杖(氷)</option>
+									<option value="38">クリスタルスタッフ</option>
+									<option value="39">古代クリスタルロッド</option>
+									<option value="40">クライズロッド</option>
+									<option value="41">ハンドアクス</option>
+									<option value="42">スモールアクス</option>
+									<option value="43">バトルアクス</option>
+									<option value="44">クレセントアクス</option>
+									<option value="45">ラージアクス</option>
+									<option value="46">グレートアクス</option>
+									<option value="47">バ―サーカアクス</option>
+									<option value="48">ウォーアクス</option>
+									<option value="49">ジェニックス</option>
+									<option value="50">古代ジェニックス</option>
+									<option value="51">ディラーアクス</option>
+									<option value="52">スピア</option>
+									<option value="53">トライデント</option>
+									<option value="54">ランス</option>
+									<option value="55">パイク</option>
+									<option value="56">ハルベルド</option>
+									<option value="57">サラマンダーパイク</option>
+									<option value="58">バーブスピア</option>
+									<option value="59">エックスハルバード</option>
+									<option value="60">古代エクスハルバード</option>
+									<option value="61">アビゴルランス</option>
+									<option value="62">グラブ</option>
+									<option value="63">フィスト</option>
+									<option value="64">ガントレット</option>
+									<option value="65">パタ</option>
+									<option value="66">ゴーレムフィスト</option>
+									<option value="67">ソーンズフィスト</option>
+									<option value="68">スクリューパタ</option>
+									<option value="69">古代スクリューパタ</option>
+									<option value="70">ゲイモスフィスト</option>
+									<option value="71">イフリート</option>
+									<option value="72">マーメイド</option>
+									<option value="73">ドラゴンブレス</option>
+									<option value="74">フレイムタン</option>
+									<option value="75">アイスブラント</option>
+									<option value="76">モール魔法の杖</option>
+									<option value="77">モールバスタードソード</option>
+									<option value="78">モールフレイル</option>
+									<option value="79">モールクレセントアクス</option>
+									<option value="80">モールツーハンドソード</option>
+									<option value="81">モールガントレット</option>
+									<option value="82">モールパイク</option>
+									<option value="83">モールナーガブレード</option>
+									<option value="84">モールオークハンマー</option>
+									<option value="85">モールバーサーカーアクス</option>
+									<option value="86">モールタイタンソード</option>
+									<option value="87">モールゴーレムフィスト</option>
+									<option value="88">モールサラマンダーパイク</option>
+									<option value="89">モール魂の杖(炎)</option>
+									<option value="90">モール魂の杖(氷)</option>
+									<option value="91">モールテラブレード</option>
+									<option value="92">モールスパイクフレイル</option>
+									<option value="93">モールウォーアクス</option>
+									<option value="94">モールサージソード</option>
+									<option value="95">モールソーンズフィスト</option>
+									<option value="96">モールバーブスピア</option>
+									<option value="97">モール古代ビスター</option>
+									<option value="98">モール古代バトルハンマー</option>
+									<option value="99">モール古代エクスソード</option>
+									<option value="100">モール古代ジェニックス</option>
+									<option value="101">モール古代スクリューパタ</option>
+									<option value="102">モール古代エクスハルバード</option>
+									<option value="103">モール古代クリスタルロッド</option>
+									<option value="104">ライトレイピア</option>
+									<option value="105">ライトバトルアクス</option>
+									<option value="106">ライトパイク</option>
+									<option value="107">ライトガントレット</option>
+									<option value="108">ライトロングメイス</option>
+									<option value="109">ライトシャムシェール</option>
+									<option value="110">ティンクルスター</option>
+									<option value="111">シルフィードリング</option>
+									<option value="112">シルフィードソード</option>
+									<option value="113">シルフィードブレード</option>
+									<option value="114">シルフィードランス</option>
+									<option value="115">シルフィードメイス</option>
+									<option value="116">シルフィードアックス</option>
+									<option value="117">シルフィードフィスト</option>
+									<option value="118">シルフィードスタッフ</option>
+									<option value="119">フェンリルの杖</option>
+									<option value="120">フェニックスの杖</option>
+									<option value="121">大司祭の杖</option>
+									<option value="122">ギィーガチェイン</option>
+									<option value="123">ティナカトラス</option>
+									<option value="124">ディーラーチョップ</option>
+									<option value="125">ファルスピアー</option>
+									<option value="126">ゲイモスクロー</option>
+									<option value="127">ンゴールファング</option>
+									<option value="128">クラウンロッド</option>
+									<option value="129">モールフェンリルの杖</option>
+									<option value="130">モールフェニックスの杖</option>
+									<option value="131">モール大司祭の杖</option>
+									<option value="132">ブレイジングダガー</option>
+									<option value="133">クロスガーディアン</option>
+									<option value="134">グレイブボム</option>
+									<option value="135">トールハンマー</option>
+									<option value="136">デスサイズ</option>
+									<option value="137">ムラマサ</option>
+									<option value="138">モールブレイジングダガー</option>
+									<option value="139">モールクロスガーディアン</option>
+									<option value="140">モールグレイブボム</option>
+									<option value="141">モールトールハンマー</option>
+									<option value="142">モールデスサイズ</option>
+									<option value="143">モールムラマサ</option>
+									<option value="144">サクラソード</option>
+									<option value="145">スライムリング</option>
+									<option value="146">スネークリング</option>
+									<option value="147">ビーストリング</option>
+									<option value="148">ドラゴンリング</option>
+									<option value="149">ミュータントリング</option>
+									<option value="150">ミミックリング</option>
+									<option value="151">シビライズリング</option>
+									<option value="152">ストーンリング</option>
+									<option value="153">カースリング</option>
+									<option value="154">モールスライムリング</option>
+									<option value="155">モールスネークリング</option>
+									<option value="156">モールビーストリング</option>
+									<option value="157">モールドラゴンリング</option>
+									<option value="158">モールミュータントリング</option>
+									<option value="159">モールミミックリング</option>
+									<option value="160">モールシビライズリング</option>
+									<option value="161">モールストーンリング</option>
+									<option value="162">モールカースリング</option>
+									<option value="163">バグキャッチャー</option>
+								</select>
+								<select name="weaponp">
+									<option value="0">N</option>
+									<option value="1">+1</option>
+									<option value="2">+2</option>
+									<option value="3">+3</option>
+									<option value="4">+4</option>
+									<option value="5">+5</option>
+									<option value="6">+6</option>
+									<option value="7">+7</option>
+									<option value="8">+8</option>
+									<option value="9">+9</option>
+									<option value="10">+10</option>
+									<option value="11">+11</option>
+									<option value="12">+12</option>
+									<option value="13">+13</option>
+									<option value="14">+14</option>
+									<option value="15">+15</option>
+								</select><br>
+
+								鎧・服　
+								<select name="armor">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">ノーマルアーマー</option>
+									<option value="2">レザーアーマー</option>
+									<option value="3">リベットアーマー</option>
+									<option value="4">スケイルメイル</option>
+									<option value="5">チェインメイル</option>
+									<option value="6">チタンアーマー</option>
+									<option value="7">プレートアーマー</option>
+									<option value="8">テブートアーマー</option>
+									<option value="9">ブリガンディ</option>
+									<option value="10">ミスリルアーマー</option>
+									<option value="11">ヘビーアーマー</option>
+									<option value="12">タルロスアーマー</option>
+									<option value="13">レイダンアーマー</option>
+									<option value="14">ローブ</option>
+									<option value="15">ヒップホップ</option>
+									<option value="16">羽織袴/振袖</option>
+									<option value="17">パヂチョゴリ/チマチョゴリ</option>
+									<option value="18">マント</option>
+									<option value="19">タキシード/ドレス</option>
+									<option value="20">ケープ</option>
+									<option value="21">レオタード</option>
+									<option value="22">道着</option>
+									<option value="23">パンク/ミニスカート</option>
+									<option value="24">ストライプ</option>
+									<option value="25">チョガ</option>
+									<option value="26">チーパオ</option>
+									<option value="27">ホイ</option>
+									<option value="28">テクノ</option>
+									<option value="29">キルト</option>
+									<option value="30">ロイヤルガード</option>
+									<option value="31">ウィボス</option>
+									<option value="32">エシーロ</option>
+									<option value="33">リフラン</option>
+									<option value="34">アイウェス</option>
+									<option value="35">マシーヴ</option>
+									<option value="36">ユニフォーム</option>
+									<option value="37">モールヒップホップ</option>
+									<option value="38">モールケープ</option>
+									<option value="39">モールパンク/ミニスカート</option>
+									<option value="40">モールチョガ</option>
+									<option value="41">モールホイ</option>
+									<option value="42">モールテクノ</option>
+									<option value="43">モールキルト</option>
+									<option value="44">モールウィボス</option>
+									<option value="45">モールエシーロ</option>
+									<option value="46">モールリフラン</option>
+									<option value="47">モールアイウェス</option>
+									<option value="48">モールマシーヴ</option>
+									<option value="49">バロンアーマー</option>
+									<option value="50">バロンプレート</option>
+									<option value="51">モールバロンプレート</option>
+									<option value="52">ライトプリンス/ライトプリンセス</option>
+									<option value="53">モールライトプリンス/ライトプリンセス</option>
+									<option value="54">ドラゴンメイル</option>
+									<option value="55">モールドラゴンメイル</option>
+								</select>
+								<select name="armorp">
+									<option value="0">N</option>
+									<option value="1">+1</option>
+									<option value="2">+2</option>
+									<option value="3">+3</option>
+									<option value="4">+4</option>
+									<option value="5">+5</option>
+									<option value="6">+6</option>
+									<option value="7">+7</option>
+									<option value="8">+8</option>
+									<option value="9">+9</option>
+									<option value="10">+10</option>
+									<option value="11">+11</option>
+									<option value="12">+12</option>
+									<option value="13">+13</option>
+									<option value="14">+14</option>
+									<option value="15">+15</option>
+								</select><br>
+
+								靴　　　
+								<select name="shoes">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">ビギナーシューズ</option>
+									<option value="2">レザーブーツ</option>
+									<option value="3">ロングブーツ</option>
+									<option value="4">チェインブーツ</option>
+									<option value="5">スチールブーツ</option>
+									<option value="6">グリーブシューズ</option>
+									<option value="7">パワーブーツ</option>
+									<option value="8">ウィングブーツ</option>
+									<option value="9">チェインシューズ</option>
+									<option value="10">チタンシューズ</option>
+									<option value="11">プレートシューズ</option>
+									<option value="12">ライトシューズ</option>
+									<option value="13">ミスリルシューズ</option>
+									<option value="14">ヘビーシューズ</option>
+									<option value="15">タルロスシューズ</option>
+									<option value="16">レイダンシューズ</option>
+									<option value="17">草履</option>
+									<option value="18">サッカー靴</option>
+									<option value="19">疾風草履</option>
+									<option value="20">バロンシューズ</option>
+								</select>
+								<select name="shoesp">
+									<option value="0">N</option>
+									<option value="1">+1</option>
+									<option value="2">+2</option>
+									<option value="3">+3</option>
+									<option value="4">+4</option>
+									<option value="5">+5</option>
+									<option value="6">+6</option>
+									<option value="7">+7</option>
+									<option value="8">+8</option>
+									<option value="9">+9</option>
+								</select><br>
+
+								盾　　　
+								<select name="shield">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">ウッドシールド</option>
+									<option value="2">ラウンドシールド</option>
+									<option value="3">カイトシールド</option>
+									<option value="4">リーフシールド</option>
+									<option value="5">タワーシールド</option>
+									<option value="6">ゴシックシールド</option>
+									<option value="7">アイアンシールド</option>
+									<option value="8">アイアンシールド改</option>
+									<option value="9">ホワイトシールド</option>
+									<option value="10">ホワイトシールド改</option>
+									<option value="11">レッドシールド(軽)</option>
+									<option value="12">レッドシールド</option>
+									<option value="13">レッドシールド改</option>
+									<option value="14">ドラゴンテイル</option>
+									<option value="15">ドラゴンテイル改</option>
+									<option value="16">タイタンシールド</option>
+									<option value="17">回避の盾</option>
+									<option value="18">ドリームガーダー</option>
+								</select><br>
+
+								指輪１　
+								<select name="ring1">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">移動の指輪</option>
+									<option value="2">攻撃の指輪</option>
+									<option value="3">防御の指輪</option>
+									<option value="4">炎保護の指輪</option>
+									<option value="5">氷保護の指輪</option>
+									<option value="6">炎の指輪</option>
+									<option value="7">氷の指輪</option>
+									<option value="8">幸運の指輪</option>
+									<option value="9">信念の指輪</option>
+									<option value="10">手さばきの指輪</option>
+									<option value="11">風の指輪</option>
+									<option value="12">霧の指輪</option>
+									<option value="13">援護の指輪</option>
+									<option value="14">警告の指輪</option>
+									<option value="15">狂乱の指輪</option>
+									<option value="16">必殺の指輪</option>
+									<option value="17">破壊の指輪</option>
+									<option value="18">回復の指輪</option>
+									<option value="19">魔法の指輪</option>
+									<option value="20">激情の指輪</option>
+									<option value="21">破砕の指輪</option>
+									<option value="22">堅固の指輪</option>
+									<option value="23">護衛の指輪</option>
+									<option value="24">ウェルリンの指輪(炎)</option>
+									<option value="25">ウェルリンの指輪(氷)</option>
+									<option value="26">カイルの指輪(炎)</option>
+									<option value="27">カイルの指輪(氷)</option>
+									<option value="28">魔法保護の指輪</option>
+									<option value="29">エチリンの指輪</option>
+									<option value="30">エブリンの指輪</option>
+									<option value="31">暗黒の指輪(炎)</option>
+									<option value="32">暗黒の指輪(氷)</option>
+									<option value="33">暗黒の指輪(魔)</option>
+									<option value="34">暗黒の指輪(聖)</option>
+									<option value="35">暗黒の指輪(撃)</option>
+									<option value="36">暗黒守護指輪(炎)</option>
+									<option value="37">暗黒守護指輪(氷)</option>
+									<option value="38">暗黒守護指輪(魔)</option>
+									<option value="39">暗黒守護指輪(聖)</option>
+									<option value="40">暗黒守護指輪(撃)</option>
+									<option value="41">突撃の指輪</option>
+									<option value="42">富豪の指輪</option>
+									<option value="43">旋風の指輪</option>
+									<option value="44">陽炎の指輪</option>
+									<option value="45">狂拳の指輪</option>
+									<option value="46">瞬殺の指輪</option>
+									<option value="47">鋼鉄の指輪</option>
+									<option value="48">用心棒の指輪</option>
+									<option value="49">闘神の指輪</option>
+									<option value="50">金剛の指輪</option>
+									<option value="51">炎守護の指輪</option>
+									<option value="52">氷守護の指輪</option>
+									<option value="53">援護守護の指輪</option>
+									<option value="54">信仰の指輪</option>
+									<option value="55">韋駄天の指輪</option>
+									<option value="56">風林火山の指輪</option>
+									<option value="57">防護の指輪</option>
+									<option value="58">庇護の指輪</option>
+									<option value="59">大魔法の指輪</option>
+									<option value="60">抗魔の指輪</option>
+									<option value="61">白金の指輪</option>
+									<option value="62">白銀の指輪</option>
+									<option value="63">炎侵攻の指輪</option>
+									<option value="64">氷侵攻の指輪</option>
+									<option value="65">援護侵攻の指輪</option>
+									<option value="66">邪信の指輪</option>
+								</select><br>
+
+								指輪２　
+								<select name="ring2">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">移動の指輪</option>
+									<option value="2">攻撃の指輪</option>
+									<option value="3">防御の指輪</option>
+									<option value="4">炎保護の指輪</option>
+									<option value="5">氷保護の指輪</option>
+									<option value="6">炎の指輪</option>
+									<option value="7">氷の指輪</option>
+									<option value="8">幸運の指輪</option>
+									<option value="9">信念の指輪</option>
+									<option value="10">手さばきの指輪</option>
+									<option value="11">風の指輪</option>
+									<option value="12">霧の指輪</option>
+									<option value="13">援護の指輪</option>
+									<option value="14">警告の指輪</option>
+									<option value="15">狂乱の指輪</option>
+									<option value="16">必殺の指輪</option>
+									<option value="17">破壊の指輪</option>
+									<option value="18">回復の指輪</option>
+									<option value="19">魔法の指輪</option>
+									<option value="20">激情の指輪</option>
+									<option value="21">破砕の指輪</option>
+									<option value="22">堅固の指輪</option>
+									<option value="23">護衛の指輪</option>
+									<option value="24">ウェルリンの指輪(炎)</option>
+									<option value="25">ウェルリンの指輪(氷)</option>
+									<option value="26">カイルの指輪(炎)</option>
+									<option value="27">カイルの指輪(氷)</option>
+									<option value="28">魔法保護の指輪</option>
+									<option value="29">エチリンの指輪</option>
+									<option value="30">エブリンの指輪</option>
+									<option value="31">暗黒の指輪(炎)</option>
+									<option value="32">暗黒の指輪(氷)</option>
+									<option value="33">暗黒の指輪(魔)</option>
+									<option value="34">暗黒の指輪(聖)</option>
+									<option value="35">暗黒の指輪(撃)</option>
+									<option value="36">暗黒守護指輪(炎)</option>
+									<option value="37">暗黒守護指輪(氷)</option>
+									<option value="38">暗黒守護指輪(魔)</option>
+									<option value="39">暗黒守護指輪(聖)</option>
+									<option value="40">暗黒守護指輪(撃)</option>
+									<option value="41">突撃の指輪</option>
+									<option value="42">富豪の指輪</option>
+									<option value="43">旋風の指輪</option>
+									<option value="44">陽炎の指輪</option>
+									<option value="45">狂拳の指輪</option>
+									<option value="46">瞬殺の指輪</option>
+									<option value="47">鋼鉄の指輪</option>
+									<option value="48">用心棒の指輪</option>
+									<option value="49">闘神の指輪</option>
+									<option value="50">金剛の指輪</option>
+									<option value="51">炎守護の指輪</option>
+									<option value="52">氷守護の指輪</option>
+									<option value="53">援護守護の指輪</option>
+									<option value="54">信仰の指輪</option>
+									<option value="55">韋駄天の指輪</option>
+									<option value="56">風林火山の指輪</option>
+									<option value="57">防護の指輪</option>
+									<option value="58">庇護の指輪</option>
+									<option value="59">大魔法の指輪</option>
+									<option value="60">抗魔の指輪</option>
+									<option value="61">白金の指輪</option>
+									<option value="62">白銀の指輪</option>
+									<option value="63">炎侵攻の指輪</option>
+									<option value="64">氷侵攻の指輪</option>
+									<option value="65">援護侵攻の指輪</option>
+									<option value="66">邪信の指輪</option>
+								</select><br>
+
+								ネクレ　
+								<select name="necklace">
+									<option value="0">なし　　　　　　　　　　　　　　　　　　　</option>
+									<option value="1">移動のネックレス</option>
+									<option value="2">攻撃のネックレス</option>
+									<option value="3">防御のネックレス</option>
+									<option value="4">炎保護のネックレス</option>
+									<option value="5">氷保護のネックレス</option>
+									<option value="6">炎のネックレス</option>
+									<option value="7">氷のネックレス</option>
+									<option value="8">幸運のネックレス</option>
+									<option value="9">信念のネックレス</option>
+									<option value="10">手さばきのネックレス</option>
+									<option value="11">風のネックレス</option>
+									<option value="12">霧のネックレス</option>
+									<option value="13">援護のネックレス</option>
+									<option value="14">警告のネックレス</option>
+									<option value="15">狂乱のネックレス</option>
+									<option value="16">必殺のネックレス</option>
+									<option value="17">破壊のネックレス</option>
+									<option value="18">回復のネックレス</option>
+									<option value="19">魔法のネックレス</option>
+									<option value="20">激情のネックレス</option>
+									<option value="21">破砕のネックレス</option>
+									<option value="22">堅固のネックレス</option>
+									<option value="23">護衛のネックレス</option>
+									<option value="24">ウェルリンネックレス(炎)</option>
+									<option value="25">ウェルリンネックレス(氷)</option>
+									<option value="26">カイルネックレス(炎)</option>
+									<option value="27">カイルネックレス(氷)</option>
+									<option value="28">魔法保護のネックレス</option>
+									<option value="29">エチリンのネックレス</option>
+									<option value="30">エブリンのネックレス</option>
+									<option value="41">突撃のネックレス</option>
+									<option value="42">富豪のネックレス</option>
+									<option value="43">旋風のネックレス</option>
+									<option value="44">陽炎のネックレス</option>
+									<option value="45">狂拳のネックレス</option>
+									<option value="46">瞬殺のネックレス</option>
+									<option value="47">鋼鉄のネックレス</option>
+									<option value="48">用心棒のネックレス</option>
+									<option value="49">闘神のネックレス</option>
+									<option value="50">金剛のネックレス</option>
+									<option value="51">炎守護のネックレス</option>
+									<option value="52">氷守護のネックレス</option>
+									<option value="53">援護守護のネックレス</option>
+									<option value="54">信仰のネックレス</option>
+									<option value="55">韋駄天のネックレス</option>
+									<option value="56">風林火山のネックレス</option>
+									<option value="57">防護のネックレス</option>
+									<option value="58">庇護のネックレス</option>
+									<option value="59">大魔法のネックレス</option>
+									<option value="60">抗魔のネックレス</option>
+									<option value="61">白金のネックレス</option>
+									<option value="62">白銀のネックレス</option>
+									<option value="63">炎侵攻のネックレス</option>
+									<option value="64">氷侵攻のネックレス</option>
+									<option value="65">援護侵攻のネックレス</option>
+									<option value="66">邪信のネックレス</option>
+								</select><br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								セット装備　
+								<input type="button" value="レイダン" onclick="SelectRaydanSet()">
+								<input type="button" value="バロン" onclick="SelectBaronSet()">
+								<input type="button" value="堅固s/護衛" onclick="SelectSolidSet()">
+								<input type="button" value="鋼鉄s/陽炎" onclick="SelectSteelSet()">
+								<input type="button" value="狂拳s/突撃" onclick="SelectOnslaughtSet()"><br>
+								　　　　　　
+								<input type="button" value="LP/羽靴" onclick="SelectLightPrince()">
+								<input type="button" value="金剛s/鋼鉄" onclick="SelectDiamondSet()">
+								<input type="button" value="闘神s/狂拳" onclick="SelectFightingGodSet()">
+								<input type="button" value="韋駄天s/旋風" onclick="SelectSkandaSet()"><br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								ドーピング　
+								<input type="checkbox" name="doping" value="0">力の薬
+								<input type="checkbox" name="doping" value="1">マジブレ
+								<input type="checkbox" name="doping" value="2">ブレス
+								<input type="checkbox" name="doping" value="3">グロース
+								<input type="checkbox" name="doping" value="4">歌30勇気<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								<input type="button" value="試算！" onclick="CalcMain()">　
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								ステ　：ＷＣ
+								<input type="text" name="wc" maxlength="3" size="4">
+
+								ＨＣ
+								<input type="text" name="hc" maxlength="3" size="4">
+
+								ＡＣ
+								<input type="text" name="ac" maxlength="3" size="4">
+
+								ＤＣ
+								<input type="text" name="dc" maxlength="3" size="4">
+
+								重さ
+								<input type="text" name="weight" maxlength="2" size="4"><br>
+
+								耐性　：火　
+								<input type="text" name="taiseif" maxlength="2" size="4">
+
+								氷　
+								<input type="text" name="taiseii" maxlength="3" size="4">
+
+								聖　
+								<input type="text" name="taiseih" maxlength="3" size="4">
+
+								援護
+								<input type="text" name="taiseim" maxlength="3" size="4">
+
+								病気
+								<input type="text" name="taiseis" maxlength="3" size="4">
+
+								毒
+								<input type="text" name="taiseip" maxlength="3" size="4"><br>
+
+								耐性減：火　
+								<input type="text" name="taiseigenf" maxlength="2" size="4">
+
+								氷　
+								<input type="text" name="taiseigeni" maxlength="3" size="4">
+
+								聖　
+								<input type="text" name="taiseigenh" maxlength="3" size="4">
+
+								援護
+								<input type="text" name="taiseigenm" maxlength="3" size="4"><br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								内訳<br>
+								<textarea name="detail" rows="11"></textarea>
+
+							</div>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="button" value="火炎" onclick="AllSelect1()" name="firebutton" disabled="">
+							<input type="checkbox" name="fire" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/fire04.gif" alt="ファイアボール(2)">
+							<input type="checkbox" name="fire" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/fire05.gif" alt="ファイアシールド(1)">
+							<input type="checkbox" name="fire" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/fire06.gif" alt="ファイアショック(3)">
+							<input type="checkbox" name="fire" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/fire07.gif" alt="ファイアストライク(2)"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="button" value="冷凍" onclick="AllSelect2()" name="icebutton" disabled="">
+							<input type="checkbox" name="ice" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/ice04.gif" alt="アイスボール(2)">
+							<input type="checkbox" name="ice" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/ice05.gif" alt="アイスシールド(1)">
+							<input type="checkbox" name="ice" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/ice06.gif" alt="アイスウェーブ(3)">
+							<input type="checkbox" name="ice" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/ice07.gif" alt="アイスストライク(2)"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="button" value="援護" onclick="AllSelect3()" name="magicalbutton" disabled="">
+							<input type="checkbox" name="magical" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/magical02.gif" alt="ホールド(3)">
+							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical03.gif" alt="マジカルグロース(1)">
+							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical04.gif" alt="マジカルシールド(1)">
+							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical05.gif" alt="ウィークネス(1)">
+							<input type="checkbox" name="magical" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/magical06.gif" alt="アシッドクラウド(2)">
+							<input type="checkbox" name="magical" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/magical07.gif" alt="バインド(4)"><br>
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="button" value="聖職" onclick="AllSelect4()" name="holybutton" disabled="">
+							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy01.gif" alt="キュア(1)">
+							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy02.gif" alt="キュアポイズン(1)">
+							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy03.gif" alt="ブレス(1)">
+							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy06.gif" alt="カース(1)">
+							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy07.gif" alt="キュアシック(1)">
+							<input type="checkbox" name="holy" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/holy08.gif" alt="ホーリーボール(2)">
+							<input type="checkbox" name="holy" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/holy09.gif" alt="リザレクト(4)">
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							<input type="hidden" name="count2020" value="0">
+							<input type="button" value="診断！" onclick="CharaMain()">　
+							<input type="button" value="初期化！" onclick="CharaSub()">　
+							<input type="button" value="リセット！" onclick="FormReset()">　
+
+							<hr noshade="" size="1" color="#cccccc">
+
+							結果<br>
+							<textarea name="result" rows="22"></textarea><br>
+
+							<a href="javascript:OpenMenu(&#39;extra&#39;)">おまけ</a><br>
+							<div id="extra" class="sub" style="display:none">
+								火炎魔法 (成功率・消費ＭＰ)<br>
+								<img src="./img/fire01.gif" alt="ファイアミサイル 発動Lv1 安定Lv11 消費MP10"> <input type="text" name="fireper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp01" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire02.gif" alt="ファイアブレード 発動Lv4 安定Lv14 消費MP15"> <input type="text" name="fireper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp02" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire03.gif" alt="ファイアソード 発動Lv5 安定Lv17 消費MP18"> <input type="text" name="fireper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp03" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire04.gif" alt="ファイアボール 発動Lv10 安定Lv23 消費MP30"> <input type="text" name="fireper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
+								<img src="./img/fire05.gif" alt="ファイアシールド 発動Lv11 安定Lv25 消費MP24"> <input type="text" name="fireper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp05" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire06.gif" alt="ファイアショック 発動Lv24 安定Lv33 消費MP23"> <input type="text" name="fireper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp06" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire07.gif" alt="ファイアストライク 発動Lv32 安定Lv44 消費MP25"> <input type="text" name="fireper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								冷凍魔法 (成功率・消費ＭＰ)<br>
+								<img src="./img/ice01.gif" alt="アイスミサイル 発動Lv1 安定Lv11 消費MP10"> <input type="text" name="iceper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp01" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice02.gif" alt="アイスブレード 発動Lv5 安定Lv15 消費MP15"> <input type="text" name="iceper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp02" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice03.gif" alt="アイスソード 発動Lv6 安定Lv18 消費MP18"> <input type="text" name="iceper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp03" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice04.gif" alt="アイスボール 発動Lv7 安定Lv26 消費MP30"> <input type="text" name="iceper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
+								<img src="./img/ice05.gif" alt="アイスシールド 発動Lv22 安定Lv31 消費MP24"> <input type="text" name="iceper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp05" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice06.gif" alt="アイスショック 発動Lv27 安定Lv37 消費MP20"> <input type="text" name="iceper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp06" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice07.gif" alt="アイスストライク 発動Lv33 安定Lv45 消費MP25"> <input type="text" name="iceper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								援護魔法 (成功率・消費ＭＰ)<br>
+								<img src="./img/magical01.gif" alt="マジカルブレード 発動Lv5 安定Lv14 消費MP18"> <input type="text" name="magicalper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp01" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical02.gif" alt="ホールド 発動Lv17 安定Lv25 消費MP26"> <input type="text" name="magicalper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp02" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical03.gif" alt="マジカルグロース 発動Lv22 安定Lv31 消費MP15"> <input type="text" name="magicalper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp03" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical04.gif" alt="マジカルシールド 発動Lv30 安定Lv40 消費MP28"> <input type="text" name="magicalper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
+								<img src="./img/magical05.gif" alt="ウィークネス 発動Lv37 安定Lv47 消費MP12"> <input type="text" name="magicalper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp05" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical06.gif" alt="アシッドクラウド 発動Lv47 安定Lv57 消費MP40"> <input type="text" name="magicalper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp06" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical07.gif" alt="バインド 発動Lv68 安定Lv77 消費MP30"> <input type="text" name="magicalper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								聖魔法 (成功率・消費ＭＰ)<br>
+								<img src="./img/holy01.gif" alt="キュア 発動Lv1 安定Lv9 消費MP10"> <input type="text" name="holyper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp01" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy02.gif" alt="キュアポイズン 発動Lv10 安定Lv19 消費MP10"> <input type="text" name="holyper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp02" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy03.gif" alt="ブレス 発動Lv14 安定Lv25 消費MP12"> <input type="text" name="holyper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp03" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy04.gif" alt="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6"> <input type="text" name="holyper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
+								<img src="./img/holy05.gif" alt="ホーリーブレード 発動Lv17 安定Lv26 消費MP14"> <input type="text" name="holyper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp05" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy06.gif" alt="カース 発動Lv23 安定Lv31 消費MP20"> <input type="text" name="holyper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp06" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy07.gif" alt="キュアシック 発動Lv27 安定Lv36 消費MP15"> <input type="text" name="holyper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy08.gif" alt="ホーリーボール 発動Lv39 安定Lv47 消費MP25"> <input type="text" name="holyper08" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp08" value="0" maxlength="3" size="5" disabled="disabled"><br>
+								<img src="./img/holy09.gif" alt="リザレクト 発動Lv58 安定Lv67 消費MP40"> <input type="text" name="holyper09" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp09" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy10.gif" alt="リリース 発動Lv56 安定Lv92 消費MP50"> <input type="text" name="holyper10" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp10" value="0" maxlength="3" size="5" disabled="disabled">
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								呪文 (成功率・詠唱時間 (回復アクセ／影響歌) )<br>
+								<img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4"> <input type="text" name="songper01" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime01" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime01acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime01acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime01acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime01kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime01fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song02.gif" alt="卑怯者の歌 初期MP6 SP11 維持MP4 SP5">
+								<input type="text" name="songper02" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime02" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime02acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime02acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime02acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime02kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime02fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song03.gif" alt="恐怖の歌 初期MP7 SP15 維持MP4 SP4">
+								<input type="text" name="songper03" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime03" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime03acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime03acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime03acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime03kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime03fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song04.gif" alt="盲目の歌 初期MP20 SP25 維持MP6 SP5">
+								<input type="text" name="songper04" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime04" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime04acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime04acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime04acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime04kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime04fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song05.gif" alt="回復の歌 初期MP10 SP15 維持MP5 SP4">
+								<input type="text" name="songper05" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime05" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime05acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime05acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime05acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime05kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime05fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song06.gif" alt="不治の歌 初期MP12 SP17 維持MP6 SP5">
+								<input type="text" name="songper06" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime06" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime06acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime06acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime06acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime06kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime06fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<img src="./img/song07.gif" alt="沈黙の歌 初期MP20 SP20 維持MP6 SP5">
+								<input type="text" name="songper07" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								なし<input type="text" name="songtime07" value="00:00" maxlength="5" size="5" disabled="disabled">
+								1点<input type="text" name="songtime07acc1" value="00:00" maxlength="5" size="5" disabled="disabled">
+								2点<input type="text" name="songtime07acc2" value="00:00" maxlength="5" size="5" disabled="disabled">
+								3点<input type="text" name="songtime07acc3" value="00:00" maxlength="5" size="5" disabled="disabled">
+								回復<input type="text" name="songtime07kaihuku" value="00:00" maxlength="5" size="5" disabled="disabled">
+								不治<input type="text" name="songtime07fuji" value="00:00" maxlength="5" size="5" disabled="disabled">
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								錬金 (成功率)<br>
+								<img src="./img/alchemy01.gif" alt="解毒薬"> <input type="text" name="alchemy01" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy02.gif" alt="特効薬"> <input type="text" name="alchemy02" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy03.gif" alt="毒薬"> <input type="text" name="alchemy03" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy04.gif" alt="ウィルスボトル"> <input type="text" name="alchemy04" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy05.gif" alt="SPカプセル"> <input type="text" name="alchemy05" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy06.gif" alt="ソードオイル"> <input type="text" name="alchemy06" value="0.0" maxlength="3" size="5" disabled="disabled">%<br>
+								<img src="./img/alchemy07.gif" alt="アーマーオイル"> <input type="text" name="alchemy07" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy08.gif" alt="シールドオイル"> <input type="text" name="alchemy08" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy09.gif" alt="石化治療薬"> <input type="text" name="alchemy09" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy10.gif" alt="力の薬"> <input type="text" name="alchemy10" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy11.gif" alt="炎の結晶"> <input type="text" name="alchemy11" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/alchemy12.gif" alt="氷の結晶"> <input type="text" name="alchemy12" value="0.0" maxlength="3" size="5" disabled="disabled">%<br>
+								<img src="./img/alchemy13.gif" alt="復活の薬"> <input type="text" name="alchemy13" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<br>
+
+								<hr noshade="" size="1" color="#cccccc">
+
+								応急 (成功率)<br>
+								<img src="./img/holy01.gif" alt="回復"> <input type="text" name="oq01" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<img src="./img/holy09.gif" alt="蘇生"> <input type="text" name="oq02" value="0.0" maxlength="3" size="5" disabled="disabled">%
+								<br>
+
+							</div>
+						</div>
+					</form>
+
+					<hr noshade="" color="#cccccccc" size="1">
+
+					＜使用方法＞
+					<font color="red">※ブラウザのJavaScript設定、Cookie設定を有効にしてください。</font>
+					<ol>
+						<li>キャラ診断</li>
+						<ul>
+							<li>項目をすべて入力し、診断！をクリックしてください。</li>
+							<li>テキストボックスに診断結果が出力されます。</li>
+							<li>HP、MP、SPのいずれかを空欄にすると、そのLvでの平均値が入ります。</li>
+							<li>所持していないスキル(灰色箇所)については値を無視して診断します。</li>
+							<li>初期化時の損得についてはスキル20・20機能を使用したとみなします。</li>
+						</ul>
+
+						<li>初期化</li>
+						<ul>
+							<li>Lvと職業を選択し、初期化！をクリックしてください。</li>
+							<li>パラメータおよびスキルが初期値に設定されます。</li>
+							<li>残玉に対してLvに応じた力の玉が設定されます。</li>
+							<li>Lv60以上の場合、玉90個を使用し、スキル2つを20にできます。</li>
+							<li>スキル20にしたいスキルアイコンを2つ選択してください。</li>
+						</ul>
+
+						<li>スキル・パラメータアップ</li>
+						<ul>
+							<li>残玉連動チェックボックスにチェックを入れてください。</li>
+							<li>スキル・パラメータを操作すると、自動的に残玉が増減します。</li>
+							<li>取得魔法を操作すると、職業に応じて自動的に残玉が増減します。</li>
+						</ul>
+
+						<li>固定制スキルアップ</li>
+						<ul>
+							<li>残玉連動および固定制スキルアップにチェックを入れてください。</li>
+							<li>スキルを操作する際に固定スキルアップに必要な玉を消費します。</li>
+							<li>残玉連動にチェックが入っていない場合は動作しません。</li>
+						</ul>
+
+						<li>確率制スキルアップ</li>
+						<ul>
+							<li>残玉連動および確率制スキルアップにチェックを入れてください。</li>
+							<li>スキルを操作する際に設定した成功率に基づいて必要な玉を消費します。</li>
+							<li>成功率設定をクリックすることで各スキルの成功率(1～100)を設定できます。</li>
+							<li>固定、確率、どちらもチェックが入っていない場合は、力の玉を1つ消費します。</li>
+							<li>残玉連動にチェックが入っていない場合は動作しません。</li>
+						</ul>
+
+						<li>パラメータ一括変更ボタン</li>
+						<ul>
+							<li>指定したパラメータへの一括変更ができます。</li>
+							<li>残玉連動にチェックを入れた場合、自動的に残玉が増減します。</li>
+						</ul>
+
+						<li>装備シミュレータ</li>
+						<ul>
+							<li>装備シミュレータをクリックし、設定画面を展開してください。</li>
+							<li>装備品を選択し、試算！をクリックしてください。</li>
+							<li>パラメータ、および装備に基づき能力値を算出します。</li>
+							<li>なお、本機能はキャラ診断、初期化とは独立した機能です。</li>
+						</ul>
+
+						<li>おまけ</li>
+						<ul>
+							<li>おまけをクリックし、出力メニューを展開してください。</li>
+							<li>キャラ診断時、選択した職業に応じて関連スキルの成功率を表示します。</li>
+							<li>呪文時間詠唱時間はラグや環境により実際の時間と異なる場合があります。</li>
+						</ul>
+
+						<li>キャラデータセーブ機能</li>
+						<ul>
+							<li>3キャラ分の入力情報をセーブボタンで保存し、ロードボタンで読み込みます。</li>
+							<li>ブラウザのCookie設定がオンになっていない場合は動作保証外とします。</li>
+						</ul>
+					</ol>
+
+					<hr noshade="" color="#cccccccc" size="1">
+
+					＜開発履歴＞
+					<table>
+						<tbody><tr>
+							<td width="150" valign="top">ver2.03　2013/04/19</td>
+							<td>診断ツール：転生対応(ステ上限変更30→99　スキル上限変更30→44)</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver2.02　2011/12/02</td>
+							<td>装備シミュレータ：アクセ8点(大魔法、抗魔、白金、白銀、炎侵攻、氷侵攻、援護侵攻、邪信)追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver2.01　2011/09/21</td>
+							<td>装備シミュレータ：アクセ3点(風林火山、防護、庇護)追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver2.00　2011/08/21</td>
+							<td>装備シミュレータ：バグキャッチャー追加、スライムリングの適用スキルを剣から素手に修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.99　2011/08/19</td>
+							<td>装備シミュレータ：魂武器、ドラゴンメイル追加、靴以外の改造上限値を＋15へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.98　2011/04/24</td>
+							<td>装備シミュレータ：韋駄天アクセ、サクラソード追加、カイルアクセ性能修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.97　2011/01/27</td>
+							<td>Lv上限をAG99からAG156(Lv255)へ変更<br>
+							装備シミュレータ：M大司祭・ムラマサ等の新武器追加、金剛・闘神セットボタン追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.96　2010/09/06</td>
+							<td>Firefox利用時、おまけ等折りたたみメニューが展開できないのを修正<br>
+							Firefox利用時、職業の選択によるスキル変更が行われないのを修正<br>
+							装備シミュレータ：闘神、金剛アクセのセット装備ボーナス不具合修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.95　2010/08/11</td>
+							<td>装備シミュレータ：炎守護、氷守護、援護守護、信仰アクセ追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.94　2010/07/28</td>
+							<td>装備シミュレータ：闘神アクセ、金剛アクセ追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.93　2010/04/23</td>
+							<td>装備シミュレータ：ライトプリンス、ライトプリンセス追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.92　2010/03/19</td>
+							<td>装備シミュレータ：モール武器2点、ドーピング追加、セット装備変更</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.91　2009/06/22</td>
+							<td>診断ツール：フェンリルの杖、フェニックスの杖の消費MP減少率を20％から15％へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.90　2009/06/17</td>
+							<td>装備シミュレータ：バロンプレート、Mマシーヴ、Mバロンプレート追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.89　2009/05/31</td>
+							<td>診断ツール：大司祭の杖の消費MP減少率を20％から15％へ修正<br>
+							装備シミュレータ：改造精霊剣のHC上昇値を0へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.88　2009/05/27</td>
+							<td>診断ツール：おまけメニューの消費MP出力について装備シミュレータの武器と連動するよう修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.87　2009/01/05</td>
+							<td>装備シミュレータ：新イベ武器7点追加、アクセのHC内訳表示不具合修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.86　2008/10/22</td>
+							<td>装備シミュレータ：新アクセ16点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.85　2008/10/15</td>
+							<td>装備シミュレータ：7周年SS大賞開催に伴い、靴改造値上限を5から9へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.84　2008/09/10</td>
+							<td>装備シミュレータ：バロンアーマー、バロンシューズ追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.83　2008/08/07</td>
+							<td>装備シミュレータ：耐性、耐性減の出力機能追加<br>
+							装備シミュレータ：暗黒守護(撃)アクセ誤記修正<br>
+							IE利用時のレイアウト崩れを修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.82　2008/07/24</td>
+							<td>Firefox利用時のレイアウト崩れを修正<br>
+							戦士職の診断時、おまけの消費MPが0.0となっていたのを0へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.81　2008/07/09</td>
+							<td>装備シミュレータ：新杖3点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.80　2008/06/13</td>
+							<td>装備シミュレータ：モール服11点追加、カイル首、ウェル首誤記修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.79　2008/05/27</td>
+							<td>装備シミュレータ：シルフィードシリーズ7点追加、古代X槍誤記修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.78　2008/05/06</td>
+							<td>装備シミュレータ：改造シルフィードリングのHC上昇値を0へ修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.77　2008/03/29</td>
+							<td>装備シミュレータ：暗黒守護指輪5点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.76　2007/12/25</td>
+							<td>2007年クリスマス＆2008年お正月イベントアイテム3点追加<br>
+							装備シミュレータ内訳表示欄追加<br>
+							キャラ診断時、HPMPSPの平均を表示<br>
+							モール暗殺武器の剣スキル適用対応<br>
+							回避スキルを精霊剣適用対象外へ修正<br>
+							不治影響下における呪文詠唱時間追加<br>
+							回復アクセ、回復の歌、不治の歌あり時の呪文詠唱時間追加<br>
+							リセットボタン押下時、副業がリセットされない不具合修正<br>
+							キャラデータが30日で削除される不具合修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.75　2007/12/12</td>
+							<td>キャラデータセーブ機能実装<br>
+							残玉の不正チェック追加<br>
+							副業関連処理修正（副業メニュー動的生成）<br>
+							ブラウザ更新時、フォームの項目をリセットするよう変更<br>
+							リセットボタン押下時、スキルラベルが画像とならない不具合を修正<br>
+							ライトレイピア、バトルアクス、ロングメイスの性能の修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.74　2007/11/29</td>
+							<td>装備シミュレータ：新盾6点、ライト武器6点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.73　2007/11/26</td>
+							<td>装備シミュレータ：暗黒の指輪5点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.72　2007/11/19</td>
+							<td>スキル名称のアイコン化</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.71　2007/11/17</td>
+							<td>戦士系職業の魔法チェックボックス無効化</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.70　2007/11/13</td>
+							<td>おまけメニュー追加<br>
+							魔錬の火および氷スキルの適用スキルのミスを修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.63　2007/10/25</td>
+							<td>聖錬選択時、応急スキルが存在しない不具合を修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.62　2007/10/22</td>
+							<td>剣鳥の暗殺および槍スキルの適用スキルのミスを修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.61　2007/10/18</td>
+							<td>モール武器28点追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.60　2007/10/18</td>
+							<td>武器試算ツール組み込み<br>
+							組み込みに伴い装備シミュレータへ名称変更<br>
+							装備シミュレータ位置と取得魔法設定位置入れ替え</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.51　2007/09/27</td>
+							<td>HP、MP、SP上がり率が0の場合、小数点以下を表示しないよう修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.50　2007/09/23</td>
+							<td>硬さ試算ツール組み込み</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.40　2007/09/22</td>
+							<td>キャラ診断時、☆見たままのコメント追加<br>
+							キャラ診断時、聖リリース発動率および錬金成功率表示<br>
+							スキル使用玉0の場合、成功率0％とするよう不具合修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.30　2007/09/16</td>
+							<td>スキル職業対応化<br>
+							魔法の残玉連動において職業を考慮するよう変更<br>
+							初期化時のスキル20・20においてスキルを選択できるよう変更<br>
+							リセットボタン追加<br>
+							初期化アラート削除</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.20　2007/09/06</td>
+							<td>副業メニュー追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.14　2007/04/22</td>
+							<td>パラメータ一括変更ボタン追加</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.13　2006/11/17</td>
+							<td>確率制スキルアップ機能実装</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.12　2006/11/02</td>
+							<td>Lv上限をAG21からAG99へ変更<br>
+							無駄な処理を省いてファイル容量を軽量化</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.11　2006/10/16</td>
+							<td>剣闘士の初期VITを6としていた不具合を修正<br>
+							MENの残玉連動において、増減が逆となっていた不具合を修正</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.10　2006/10/15</td>
+							<td>初期化・スキルアップ機能実装</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.02　2006/10/06</td>
+							<td>HP、MP、SPが空欄の場合、レベルの平均値を設定するよう変更</td>
+						</tr>
+						<tr>
+							<td width="150" valign="top">ver1.01　2006/10/05</td>
+							<td>魔法使いにおいてパラメータに使用した玉が正しく計算されない不具合を修正</td>
+						</tr>
+						<tr>
+							<td>ver1.00　2006/10/04</td>
+							<td>リリース</td>
+						</tr>
+					</tbody></table>
+
+					<hr noshade="" color="#cccccccc" size="1">
+
+					＜参考＞
+					<ul>
+						<li>キャラ診断機能</li>
+						<ul>
+							<li>ガディウスキャラ診断機　Version1.07（デロデロ様）</li>
+							<li>http://www61.tok2.com/home/derrodero/</li>
+						</ul>
+
+						<li>魔法消費ＭＰ</li>
+						<ul>
+							<li>GodiusMP（ユンボ様）</li>
+							<li>http://www.geocities.co.jp/Milkyway-Orion/4897/godius/mp2.html</li>
+						</ul>
+
+						<li>聖リリース発動率</li>
+						<ul>
+							<li>Godiuscommunity 質問掲示板No.1444 リリース(魔法)の発動LVについて</li>
+							<li>http://gc.e-hobby.net/bbs/help/bbs.cgi?mode=view&amp;Code=1444&amp;R=1</li>
+						</ul>
+
+						<li>呪文発動率</li>
+						<ul>
+							<li>歌発動率の予想式（正式版）（ドルクロア様）</li>
+							<li>http://resist.main.jp/topic/hatudosiki.html</li>
+						</ul>
+
+						<li>錬金成功率</li>
+						<ul>
+							<li>GODIUS Online Forum</li>
+							<li>http://godius.s201.xrea.com/p_alchemy.html</li>
+						</ul>
+
+						<li>応急発動率</li>
+						<ul>
+							<li>応急戦士の部屋（ふうみ様）</li>
+							<li>http://p.cocot.jp/godius/oq/</li>
+						</ul>
+					</ul>
+
+					<hr noshade="" color="gray" size="1">
+
+					<center>Copyright (c) EAST ENTERTAINMENT・SUCCESS・GAMESPACE24 2001-2007</center>
+				</td>
+			</tr>
+		</tbody></table>
+	
+
+<linkclump-plus><span style="margin: 0px auto; border: 0px dotted red; position: absolute; z-index: 2147483646; visibility: hidden;"></span><span style="z-index: 2147483647; display: inline-block; visibility: hidden; position: absolute; top: 0px; left: 0px; line-height: 16px; font-size: 16px; font-weight: 400; color: black; background-color: transparent; padding: 8px; border-radius: 8px; border: 4px double transparent;"></span></linkclump-plus></body></html>
