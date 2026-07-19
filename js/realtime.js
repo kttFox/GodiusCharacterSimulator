@@ -97,8 +97,13 @@ function CalcNeedTama()
 
 	//	スキルLvはキャラLvの半分までのため、最大スキルLv×2以上のLvが必要
 	var MinLvBySkill = MaxSkill * 2;
+
+	//	ステータス26以上はLv75以上が必要
+	var MaxPara = Math.max( Str, Int, Agr, Dex, Vit, Men );
+	var MinLv = Math.max( MinLvBySkill, ( MaxPara >= 26 ) ? 75 : 1 );
+
 	var ReachLv = 0;
-	for( i = MinLvBySkill > 1 ? MinLvBySkill : 1; i <= MAX_LV; i++ ) {
+	for( i = MinLv > 1 ? MinLv : 1; i <= MAX_LV; i++ ) {
 		if( JobBonus + GetTotalTama( i ) >= NeedTotal ) {
 			ReachLv = i;
 			break;
