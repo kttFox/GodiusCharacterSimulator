@@ -1033,6 +1033,8 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 		Second = 0;
 		Mp = MpOrg;
 		Sp = SpOrg;
+		var NextMpTime = MpUpSec;	//	次回MP回復時刻
+		var NextSpTime = SpUpSec;	//	次回SP回復時刻
 
 		//	呪文発動
 		Mp -= SongTable[i][0];
@@ -1071,7 +1073,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 				Second = Math.floor( Second );
 
 				//	分および秒設定
-				Minute = (Second / 60).toFixed(0);
+				Minute = Math.floor( Second / 60 );
 				StrMinute = Minute + "";
 
 				Second = Second % 60;
@@ -1092,6 +1094,14 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 					String += Second;
 				}
 
+				//	切れ要因付与(m：MP切れ、s：SP切れ)
+				if( Mp <= 0 ){
+					String += "m";
+				}
+				if( Sp <= 0 ){
+					String += "s";
+				}
+
 				//	テーブルへ設定
 				SongTime[i] = String;
 
@@ -1100,22 +1110,30 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 			}
 
 			//	MP回復
-			if( Second % MpUpSec == 0 ){
-				Mp += MpUp;
+			//	(0.25秒刻みとの剰余判定では回復周期が割り切れず判定漏れするため、
+			//	 次回回復時刻を累積して経過分をまとめて回復する)
+			if( MpUpSec > 0 ){
+				while( Second + 0.0001 >= NextMpTime ){
+					Mp += MpUp;
+					NextMpTime += MpUpSec;
 
-				//	上限超過時は最大を設定
-				if( Mp >= MpOrg ){
-					Mp = MpOrg;
+					//	上限超過時は最大を設定
+					if( Mp >= MpOrg ){
+						Mp = MpOrg;
+					}
 				}
 			}
 
 			//	SP回復
-			if( Second % SpUpSec == 0 ){
-				Sp += SpUp;
+			if( SpUpSec > 0 ){
+				while( Second + 0.0001 >= NextSpTime ){
+					Sp += SpUp;
+					NextSpTime += SpUpSec;
 
-				//	上限超過時は最大を設定
-				if( Sp >= SpOrg ){
-					Sp = SpOrg;
+					//	上限超過時は最大を設定
+					if( Sp >= SpOrg ){
+						Sp = SpOrg;
+					}
 				}
 			}
 
