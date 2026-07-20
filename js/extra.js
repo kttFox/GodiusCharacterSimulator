@@ -977,8 +977,8 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 	var StrSecond = 0;									//	経過秒(文字列)
 	var StrMinute = 0;									//	経過分(文字列)
 	var String = "00:00";								//	経過時間(文字列)
-	var MpUp = Math.floor( Math.round( MpOrg / 10 ) );	//	1回あたりのMP回復量
-	var SpUp = Math.floor( Math.round( SpOrg / 10 ) );	//	1回あたりのSP回復量
+	var MpUp = MpOrg / 10;								//	1回あたりのMP回復量
+	var SpUp = SpOrg / 10;								//	1回あたりのSP回復量
 	var MpUpSec = GetRegenerationSecond( Men );			//	MP自動回復秒数取得
 	var SpUpSec = GetRegenerationSecond( Vit );			//	SP自動回復秒数取得
 
@@ -987,10 +987,10 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 		[5,			10,		4,		4],					//	[0]勇気
 		[6,			11,		4,		5],					//	[1]卑怯
 		[7,			15,		4,		4],					//	[2]恐怖
-		[20,		25,		6,		5],					//	[3]盲目
+		[20,		25,		6,		6],					//	[3]盲目
 		[10,		15,		5,		4],					//	[4]回復
-		[12,		17,		6,		5],					//	[5]不治
-		[20,		20,		6,		5]					//	[6]沈黙
+		[12,		17,		5,		4],					//	[5]不治
+		[20,		20,		6,		7]					//	[6]沈黙
 	];
 
 	//	不治の歌ありの場合、回復量0とする
@@ -1021,8 +1021,10 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 		SpUp += 5;
 	}
 
-	MpUp -= 0;
-	SpUp -= 0;
+	//	呪文（歌）の詠唱中は回復量が半分になる（端数処理なし、小数点を含めて計算）
+	MpUp = MpUp / 2;
+	SpUp = SpUp / 2;
+
 	MpUpSec -= 0;
 	SpUpSec -= 0;
 
