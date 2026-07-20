@@ -9,6 +9,29 @@ div.title{
 	border-left:1px solid #aaaaaa;
 	border-right:1px solid #888888;
 	padding:4px;
+	display:flex;
+	align-items:center;
+	gap:6px;
+}
+div.title span:first-child{
+	flex:1;
+}
+#extra img,
+#extra input{
+	vertical-align:middle;
+}
+#extra img{
+	margin-right:4px;
+}
+label.magiclabel{
+	cursor:pointer;
+	display:inline-block;
+	padding:4px 0;
+	vertical-align:middle;
+}
+label.magiclabel input,
+label.magiclabel img{
+	vertical-align:middle;
 }
 div.main{
 	background-color:#dddddd;
@@ -122,5 +145,4 @@ img[src*="/magical"],
 img[src*="/holy"],
 img[src*="/skill_"] {
 	vertical-align: middle;
-	margin-right: 12px;
 }

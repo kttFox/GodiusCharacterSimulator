@@ -247,6 +247,11 @@ function UpdateRealtimeAll()
 	UpdateAverageHpMpSp();
 	CharaMain( true );
 	CalcMain();
+
+	//	共有URLリアルタイム更新
+	if( typeof UpdateShareUrl == "function" ) {
+		UpdateShareUrl();
+	}
 }
 
 //	リアルタイム監視初期化処理
@@ -281,7 +286,7 @@ function InitNeedTamaWatcher()
 
 	//	プログラムから値を書き換える既存関数をラップし、実行後に表示を更新する
 	//	（初期化、一括変更、リセット、ロード、魔法クリック、セット装備）
-	var WrapFuncs = [ "CharaSub", "ChangeParameterAll", "FormReset", "GetCookie", "ClickMagic",
+	var WrapFuncs = [ "CharaSub", "ChangeParameterAll", "FormReset", "LoadChara", "ClickMagic",
 		"SelectBaronSet", "SelectDiamondSet", "SelectFightingGodSet", "SelectLightPrince",
 		"SelectOnslaughtSet", "SelectRaydanSet", "SelectSkandaSet", "SelectSolidSet", "SelectSteelSet" ];
 	for( i = 0; i < WrapFuncs.length; i++ ) {
@@ -298,21 +303,19 @@ function InitNeedTamaWatcher()
 		} )( WrapFuncs[i] );
 	}
 
-	//	取得魔法・戦士・剣闘士スキルのアイコンクリックで直前のチェックボックスをON/OFFする
+	//	取得魔法・戦士・剣闘士スキルのチェックボックスとアイコンをlabelでひとまとめにし、
+	//	アイコンや隙間を含めてどこをクリックしてもON/OFFできるようにする
 	var MagicChecks = [ f.fire, f.ice, f.magical, f.holy, f.warrior, f.gladiator ];
 	for( i = 0; i < MagicChecks.length; i++ ) {
 		var Checks = ToElementArray( MagicChecks[i] );
 		for( k = 0; k < Checks.length; k++ ) {
 			var Img = Checks[k].nextElementSibling;
 			if( Img && Img.tagName == "IMG" ) {
-				Img.style.cursor = "pointer";
-				( function( CheckBox ) {
-					Img.addEventListener( "click", function() {
-						if( !CheckBox.disabled ) {
-							CheckBox.click();
-						}
-					} );
-				} )( Checks[k] );
+				var Label = document.createElement( "label" );
+				Label.className = "magiclabel";
+				Checks[k].parentNode.insertBefore( Label, Checks[k] );
+				Label.appendChild( Checks[k] );
+				Label.appendChild( Img );
 			}
 		}
 	}

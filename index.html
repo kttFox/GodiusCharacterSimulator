@@ -18,8 +18,9 @@
 		<script type="text/javascript" src="./js/disp.js"></script>
 		<script type="text/javascript" src="./js/calc.js"></script>
 		<script type="text/javascript" src="./js/extra.js"></script>
-		<script type="text/javascript" src="./js/cookie.js"></script>
+		<script type="text/javascript" src="./js/storage.js"></script>
 		<script type="text/javascript" src="./js/realtime.js"></script>
+		<script type="text/javascript" src="./js/share.js"></script>
 		<style>
 			div.title {
 			display: flex;
@@ -74,31 +75,35 @@
 		</script>
 		<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 	</head>
-	<body onload="FormReset()" class="vsc-initialized">
+	<body onload="FormReset();InitStorage();UpdateLoadButtons();InitShare();" class="vsc-initialized">
 		<table width="800">
 			<tbody><tr>
 				<td>
 					<form name="chara">
-						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター</span><span id="counter"></span></div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 
-								キャラ1
-								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara1&#39;)">
-								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara1&#39;)">
+								<span id="slotname1">キャラ1</span>
+								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara1&#39;)">
+								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara1&#39;)">
 
-								キャラ2
-								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara2&#39;)">
-								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara2&#39;)">
+								<span id="slotname2">キャラ2</span>
+								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara2&#39;)">
+								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara2&#39;)">
 
-								キャラ3
-								<input type="button" name="save" value="セーブ" onclick="SetCookie(&#39;godichara3&#39;)">
-								<input type="button" name="load" value="ロード" onclick="GetCookie(&#39;godichara3&#39;)">
+								<span id="slotname3">キャラ3</span>
+								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara3&#39;)">
+								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara3&#39;)">
 
 							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
+							キャラ名
+							<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力"><br>
+							
+							<hr noshade="" size="1" color="#cccccc">
 
 							Ｌｖ
 							<select name="lv" onfocus="FocusLv()" onchange="ChangeLv()">
@@ -1399,7 +1404,7 @@
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							<textarea name="result" rows="17"></textarea><br>
+							<textarea name="result" rows="17" readonly></textarea><br>
 
 							<a href="javascript:OpenMenu(&#39;equipment&#39;)">装備シミュレーター</a><br>
 
@@ -1960,54 +1965,54 @@
 								<hr noshade="" size="1" color="#cccccc">
 
 								ステ　：ＷＣ
-								<input type="text" name="wc" maxlength="3" size="4">
+								<input type="text" name="wc" maxlength="3" size="4" readonly>
 
 								ＨＣ
-								<input type="text" name="hc" maxlength="3" size="4">
+								<input type="text" name="hc" maxlength="3" size="4" readonly>
 
 								ＡＣ
-								<input type="text" name="ac" maxlength="3" size="4">
+								<input type="text" name="ac" maxlength="3" size="4" readonly>
 
 								ＤＣ
-								<input type="text" name="dc" maxlength="3" size="4">
+								<input type="text" name="dc" maxlength="3" size="4" readonly>
 
 								重さ
-								<input type="text" name="weight" maxlength="2" size="4"><br>
+								<input type="text" name="weight" maxlength="2" size="4" readonly><br>
 
 								耐性　：火　
-								<input type="text" name="taiseif" maxlength="2" size="4">
+								<input type="text" name="taiseif" maxlength="2" size="4" readonly>
 
 								氷　
-								<input type="text" name="taiseii" maxlength="3" size="4">
+								<input type="text" name="taiseii" maxlength="3" size="4" readonly>
 
 								聖　
-								<input type="text" name="taiseih" maxlength="3" size="4">
+								<input type="text" name="taiseih" maxlength="3" size="4" readonly>
 
 								援護
-								<input type="text" name="taiseim" maxlength="3" size="4">
+								<input type="text" name="taiseim" maxlength="3" size="4" readonly>
 
 								病気
-								<input type="text" name="taiseis" maxlength="3" size="4">
+								<input type="text" name="taiseis" maxlength="3" size="4" readonly>
 
 								毒
-								<input type="text" name="taiseip" maxlength="3" size="4"><br>
+								<input type="text" name="taiseip" maxlength="3" size="4" readonly><br>
 
 								耐性減：火　
-								<input type="text" name="taiseigenf" maxlength="2" size="4">
+								<input type="text" name="taiseigenf" maxlength="2" size="4" readonly>
 
 								氷　
-								<input type="text" name="taiseigeni" maxlength="3" size="4">
+								<input type="text" name="taiseigeni" maxlength="3" size="4" readonly>
 
 								聖　
-								<input type="text" name="taiseigenh" maxlength="3" size="4">
+								<input type="text" name="taiseigenh" maxlength="3" size="4" readonly>
 
 								援護
-								<input type="text" name="taiseigenm" maxlength="3" size="4"><br>
+								<input type="text" name="taiseigenm" maxlength="3" size="4" readonly><br>
 
 								<hr noshade="" size="1" color="#cccccc">
 
 								内訳<br>
-								<textarea name="detail" rows="11"></textarea>
+								<textarea name="detail" rows="11" readonly></textarea>
 
 							</div>
 
@@ -2017,13 +2022,13 @@
 							<div id="extra" class="sub" style="display:none">
 								<a href="javascript:OpenMenu(&#39;extra_fire&#39;)">火炎魔法 (成功率・消費ＭＰ)</a><br>
 								<div id="extra_fire" style="display:block">
-								<img src="./img/fire01.gif" alt="ファイアミサイル 発動Lv1 安定Lv11 消費MP10" title="ファイアミサイル 発動Lv1 安定Lv11 消費MP10"> <input type="text" name="fireper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp01" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/fire02.gif" alt="ファイアブレード 発動Lv4 安定Lv14 消費MP15" title="ファイアブレード 発動Lv4 安定Lv14 消費MP15"> <input type="text" name="fireper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp02" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/fire03.gif" alt="ファイアソード 発動Lv5 安定Lv17 消費MP18" title="ファイアソード 発動Lv5 安定Lv17 消費MP18"> <input type="text" name="fireper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp03" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/fire04.gif" alt="ファイアボール 発動Lv10 安定Lv23 消費MP30" title="ファイアボール 発動Lv10 安定Lv23 消費MP30"> <input type="text" name="fireper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
-								<img src="./img/fire05.gif" alt="ファイアシールド 発動Lv11 安定Lv25 消費MP24" title="ファイアシールド 発動Lv11 安定Lv25 消費MP24"> <input type="text" name="fireper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp05" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/fire06.gif" alt="ファイアショック 発動Lv24 安定Lv33 消費MP23" title="ファイアショック 発動Lv24 安定Lv33 消費MP23"> <input type="text" name="fireper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp06" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/fire07.gif" alt="ファイアストライク 発動Lv32 安定Lv44 消費MP25" title="ファイアストライク 発動Lv32 安定Lv44 消費MP25"> <input type="text" name="fireper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="firemp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/fire01.gif" alt="ファイアミサイル 発動Lv1 安定Lv11 消費MP10" title="ファイアミサイル 発動Lv1 安定Lv11 消費MP10"><input type="text" name="fireper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/fire02.gif" alt="ファイアブレード 発動Lv4 安定Lv14 消費MP15" title="ファイアブレード 発動Lv4 安定Lv14 消費MP15"><input type="text" name="fireper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/fire03.gif" alt="ファイアソード 発動Lv5 安定Lv17 消費MP18" title="ファイアソード 発動Lv5 安定Lv17 消費MP18"><input type="text" name="fireper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/fire04.gif" alt="ファイアボール 発動Lv10 安定Lv23 消費MP30" title="ファイアボール 発動Lv10 安定Lv23 消費MP30"><input type="text" name="fireper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+								<img src="./img/fire05.gif" alt="ファイアシールド 発動Lv11 安定Lv25 消費MP24" title="ファイアシールド 発動Lv11 安定Lv25 消費MP24"><input type="text" name="fireper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/fire06.gif" alt="ファイアショック 発動Lv24 安定Lv33 消費MP23" title="ファイアショック 発動Lv24 安定Lv33 消費MP23"><input type="text" name="fireper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/fire07.gif" alt="ファイアストライク 発動Lv32 安定Lv44 消費MP25" title="ファイアストライク 発動Lv32 安定Lv44 消費MP25"><input type="text" name="fireper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<br>
 								</div>
 
@@ -2031,13 +2036,13 @@
 
 								<a href="javascript:OpenMenu(&#39;extra_ice&#39;)">冷凍魔法 (成功率・消費ＭＰ)</a><br>
 								<div id="extra_ice" style="display:block">
-								<img src="./img/ice01.gif" alt="アイスミサイル 発動Lv1 安定Lv11 消費MP10" title="アイスミサイル 発動Lv1 安定Lv11 消費MP10"> <input type="text" name="iceper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp01" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/ice02.gif" alt="アイスブレード 発動Lv5 安定Lv15 消費MP15" title="アイスブレード 発動Lv5 安定Lv15 消費MP15"> <input type="text" name="iceper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp02" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/ice03.gif" alt="アイスソード 発動Lv6 安定Lv18 消費MP18" title="アイスソード 発動Lv6 安定Lv18 消費MP18"> <input type="text" name="iceper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp03" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/ice04.gif" alt="アイスボール 発動Lv7 安定Lv26 消費MP30" title="アイスボール 発動Lv7 安定Lv26 消費MP30"> <input type="text" name="iceper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
-								<img src="./img/ice05.gif" alt="アイスシールド 発動Lv22 安定Lv31 消費MP24" title="アイスシールド 発動Lv22 安定Lv31 消費MP24"> <input type="text" name="iceper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp05" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/ice06.gif" alt="アイスショック 発動Lv27 安定Lv37 消費MP20" title="アイスショック 発動Lv27 安定Lv37 消費MP20"> <input type="text" name="iceper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp06" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/ice07.gif" alt="アイスストライク 発動Lv33 安定Lv45 消費MP25" title="アイスストライク 発動Lv33 安定Lv45 消費MP25"> <input type="text" name="iceper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="icemp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/ice01.gif" alt="アイスミサイル 発動Lv1 安定Lv11 消費MP10" title="アイスミサイル 発動Lv1 安定Lv11 消費MP10"><input type="text" name="iceper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/ice02.gif" alt="アイスブレード 発動Lv5 安定Lv15 消費MP15" title="アイスブレード 発動Lv5 安定Lv15 消費MP15"><input type="text" name="iceper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/ice03.gif" alt="アイスソード 発動Lv6 安定Lv18 消費MP18" title="アイスソード 発動Lv6 安定Lv18 消費MP18"><input type="text" name="iceper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/ice04.gif" alt="アイスボール 発動Lv7 安定Lv26 消費MP30" title="アイスボール 発動Lv7 安定Lv26 消費MP30"><input type="text" name="iceper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+								<img src="./img/ice05.gif" alt="アイスシールド 発動Lv22 安定Lv31 消費MP24" title="アイスシールド 発動Lv22 安定Lv31 消費MP24"><input type="text" name="iceper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/ice06.gif" alt="アイスショック 発動Lv27 安定Lv37 消費MP20" title="アイスショック 発動Lv27 安定Lv37 消費MP20"><input type="text" name="iceper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/ice07.gif" alt="アイスストライク 発動Lv33 安定Lv45 消費MP25" title="アイスストライク 発動Lv33 安定Lv45 消費MP25"><input type="text" name="iceper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<br>
 								</div>
 
@@ -2045,13 +2050,13 @@
 
 								<a href="javascript:OpenMenu(&#39;extra_magical&#39;)">援護魔法 (成功率・消費ＭＰ)</a><br>
 								<div id="extra_magical" style="display:block">
-								<img src="./img/magical01.gif" alt="マジカルブレード 発動Lv5 安定Lv14 消費MP18" title="マジカルブレード 発動Lv5 安定Lv14 消費MP18"> <input type="text" name="magicalper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp01" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/magical02.gif" alt="ホールド 発動Lv17 安定Lv25 消費MP26" title="ホールド 発動Lv17 安定Lv25 消費MP26"> <input type="text" name="magicalper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp02" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/magical03.gif" alt="マジカルグロース 発動Lv22 安定Lv31 消費MP15" title="マジカルグロース 発動Lv22 安定Lv31 消費MP15"> <input type="text" name="magicalper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp03" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/magical04.gif" alt="マジカルシールド 発動Lv30 安定Lv40 消費MP28" title="マジカルシールド 発動Lv30 安定Lv40 消費MP28"> <input type="text" name="magicalper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
-								<img src="./img/magical05.gif" alt="ウィークネス 発動Lv37 安定Lv47 消費MP12" title="ウィークネス 発動Lv37 安定Lv47 消費MP12"> <input type="text" name="magicalper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp05" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/magical06.gif" alt="アシッドクラウド 発動Lv47 安定Lv57 消費MP40" title="アシッドクラウド 発動Lv47 安定Lv57 消費MP40"> <input type="text" name="magicalper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp06" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/magical07.gif" alt="バインド 発動Lv68 安定Lv77 消費MP30" title="バインド 発動Lv68 安定Lv77 消費MP30"> <input type="text" name="magicalper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="magicalmp07" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/magical01.gif" alt="マジカルブレード 発動Lv5 安定Lv14 消費MP18" title="マジカルブレード 発動Lv5 安定Lv14 消費MP18"><input type="text" name="magicalper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/magical02.gif" alt="ホールド 発動Lv17 安定Lv25 消費MP26" title="ホールド 発動Lv17 安定Lv25 消費MP26"><input type="text" name="magicalper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/magical03.gif" alt="マジカルグロース 発動Lv22 安定Lv31 消費MP15" title="マジカルグロース 発動Lv22 安定Lv31 消費MP15"><input type="text" name="magicalper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/magical04.gif" alt="マジカルシールド 発動Lv30 安定Lv40 消費MP28" title="マジカルシールド 発動Lv30 安定Lv40 消費MP28"><input type="text" name="magicalper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+								<img src="./img/magical05.gif" alt="ウィークネス 発動Lv37 安定Lv47 消費MP12" title="ウィークネス 発動Lv37 安定Lv47 消費MP12"><input type="text" name="magicalper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/magical06.gif" alt="アシッドクラウド 発動Lv47 安定Lv57 消費MP40" title="アシッドクラウド 発動Lv47 安定Lv57 消費MP40"><input type="text" name="magicalper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/magical07.gif" alt="バインド 発動Lv68 安定Lv77 消費MP30" title="バインド 発動Lv68 安定Lv77 消費MP30"><input type="text" name="magicalper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<br>
 								</div>
 
@@ -2059,16 +2064,16 @@
 
 								<a href="javascript:OpenMenu(&#39;extra_holy&#39;)">聖魔法 (成功率・消費ＭＰ)</a><br>
 								<div id="extra_holy" style="display:block">
-								<img src="./img/holy01.gif" alt="キュア 発動Lv1 安定Lv9 消費MP10" title="キュア 発動Lv1 安定Lv9 消費MP10"> <input type="text" name="holyper01" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp01" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy02.gif" alt="キュアポイズン 発動Lv10 安定Lv19 消費MP10" title="キュアポイズン 発動Lv10 安定Lv19 消費MP10"> <input type="text" name="holyper02" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp02" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy03.gif" alt="ブレス 発動Lv14 安定Lv25 消費MP12" title="ブレス 発動Lv14 安定Lv25 消費MP12"> <input type="text" name="holyper03" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp03" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy04.gif" alt="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6" title="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6"> <input type="text" name="holyper04" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp04" value="0" maxlength="3" size="5" disabled="disabled"><br>
-								<img src="./img/holy05.gif" alt="ホーリーブレード 発動Lv17 安定Lv26 消費MP14" title="ホーリーブレード 発動Lv17 安定Lv26 消費MP14"> <input type="text" name="holyper05" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp05" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy06.gif" alt="カース 発動Lv23 安定Lv31 消費MP20" title="カース 発動Lv23 安定Lv31 消費MP20"> <input type="text" name="holyper06" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp06" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy07.gif" alt="キュアシック 発動Lv27 安定Lv36 消費MP15" title="キュアシック 発動Lv27 安定Lv36 消費MP15"> <input type="text" name="holyper07" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp07" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy08.gif" alt="ホーリーボール 発動Lv39 安定Lv47 消費MP25" title="ホーリーボール 発動Lv39 安定Lv47 消費MP25"> <input type="text" name="holyper08" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp08" value="0" maxlength="3" size="5" disabled="disabled"><br>
-								<img src="./img/holy09.gif" alt="リザレクト 発動Lv58 安定Lv67 消費MP40" title="リザレクト 発動Lv58 安定Lv67 消費MP40"> <input type="text" name="holyper09" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp09" value="0" maxlength="3" size="5" disabled="disabled">
-								<img src="./img/holy10.gif" alt="リリース 発動Lv56 安定Lv92 消費MP50" title="リリース 発動Lv56 安定Lv92 消費MP50"> <input type="text" name="holyper10" value="0.0" maxlength="3" size="5" disabled="disabled">% <input type="text" name="holymp10" value="0" maxlength="3" size="5" disabled="disabled">
+								<img src="./img/holy01.gif" alt="キュア 発動Lv1 安定Lv9 消費MP10" title="キュア 発動Lv1 安定Lv9 消費MP10"><input type="text" name="holyper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy02.gif" alt="キュアポイズン 発動Lv10 安定Lv19 消費MP10" title="キュアポイズン 発動Lv10 安定Lv19 消費MP10"><input type="text" name="holyper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy03.gif" alt="ブレス 発動Lv14 安定Lv25 消費MP12" title="ブレス 発動Lv14 安定Lv25 消費MP12"><input type="text" name="holyper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy04.gif" alt="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6" title="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6"><input type="text" name="holyper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+								<img src="./img/holy05.gif" alt="ホーリーブレード 発動Lv17 安定Lv26 消費MP14" title="ホーリーブレード 発動Lv17 安定Lv26 消費MP14"><input type="text" name="holyper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy06.gif" alt="カース 発動Lv23 安定Lv31 消費MP20" title="カース 発動Lv23 安定Lv31 消費MP20"><input type="text" name="holyper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy07.gif" alt="キュアシック 発動Lv27 安定Lv36 消費MP15" title="キュアシック 発動Lv27 安定Lv36 消費MP15"><input type="text" name="holyper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy08.gif" alt="ホーリーボール 発動Lv39 安定Lv47 消費MP25" title="ホーリーボール 発動Lv39 安定Lv47 消費MP25"><input type="text" name="holyper08" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp08" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+								<img src="./img/holy09.gif" alt="リザレクト 発動Lv58 安定Lv67 消費MP40" title="リザレクト 発動Lv58 安定Lv67 消費MP40"><input type="text" name="holyper09" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp09" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+								<img src="./img/holy10.gif" alt="リリース 発動Lv56 安定Lv92 消費MP50" title="リリース 発動Lv56 安定Lv92 消費MP50"><input type="text" name="holyper10" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp10" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<br>
 								</div>
 
@@ -2076,73 +2081,67 @@
 
 								<a href="javascript:OpenMenu(&#39;extra_song&#39;)">呪文 (成功率・詠唱時間 (回復アクセ／影響歌) )</a><br>
 								<div id="extra_song" style="display:block">
-								<img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4" title="勇気の歌 初期MP5 SP10 維持MP4 SP4"> <input type="text" name="songper01" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime01" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime01acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime01acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime01acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime01kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime01fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4" title="勇気の歌 初期MP5 SP10 維持MP4 SP4"><input type="text" name="songper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime01" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime01acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime01acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime01acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime01kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime01fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song02.gif" alt="卑怯者の歌 初期MP6 SP11 維持MP4 SP5" title="卑怯者の歌 初期MP6 SP11 維持MP4 SP5">
-								<input type="text" name="songper02" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime02" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime02acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime02acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime02acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime02kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime02fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song02.gif" alt="卑怯者の歌 初期MP6 SP11 維持MP4 SP5" title="卑怯者の歌 初期MP6 SP11 維持MP4 SP5"><input type="text" name="songper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime02" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime02acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime02acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime02acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime02kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime02fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song03.gif" alt="恐怖の歌 初期MP7 SP15 維持MP4 SP4" title="恐怖の歌 初期MP7 SP15 維持MP4 SP4">
-								<input type="text" name="songper03" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime03" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime03acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime03acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime03acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime03kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime03fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song03.gif" alt="恐怖の歌 初期MP7 SP15 維持MP4 SP4" title="恐怖の歌 初期MP7 SP15 維持MP4 SP4"><input type="text" name="songper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime03" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime03acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime03acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime03acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime03kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime03fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song04.gif" alt="盲目の歌 初期MP20 SP25 維持MP6 SP5" title="盲目の歌 初期MP20 SP25 維持MP6 SP5">
-								<input type="text" name="songper04" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime04" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime04acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime04acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime04acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime04kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime04fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song04.gif" alt="盲目の歌 初期MP20 SP25 維持MP6 SP5" title="盲目の歌 初期MP20 SP25 維持MP6 SP5"><input type="text" name="songper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime04" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime04acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime04acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime04acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime04kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime04fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song05.gif" alt="回復の歌 初期MP10 SP15 維持MP5 SP4" title="回復の歌 初期MP10 SP15 維持MP5 SP4">
-								<input type="text" name="songper05" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime05" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime05acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime05acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime05acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime05kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime05fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song05.gif" alt="回復の歌 初期MP10 SP15 維持MP5 SP4" title="回復の歌 初期MP10 SP15 維持MP5 SP4"><input type="text" name="songper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime05" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime05acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime05acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime05acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime05kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime05fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song06.gif" alt="不治の歌 初期MP12 SP17 維持MP6 SP5" title="不治の歌 初期MP12 SP17 維持MP6 SP5">
-								<input type="text" name="songper06" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime06" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime06acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime06acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime06acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime06kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime06fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song06.gif" alt="不治の歌 初期MP12 SP17 維持MP6 SP5" title="不治の歌 初期MP12 SP17 維持MP6 SP5"><input type="text" name="songper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime06" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime06acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime06acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime06acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime06kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime06fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
-								<img src="./img/song07.gif" alt="沈黙の歌 初期MP20 SP20 維持MP6 SP5" title="沈黙の歌 初期MP20 SP20 維持MP6 SP5">
-								<input type="text" name="songper07" value="0.0" maxlength="3" size="5" disabled="disabled">%
-								なし<input type="text" name="songtime07" value="00:00" maxlength="7" size="5" disabled="disabled">
-								1点<input type="text" name="songtime07acc1" value="00:00" maxlength="7" size="5" disabled="disabled">
-								2点<input type="text" name="songtime07acc2" value="00:00" maxlength="7" size="5" disabled="disabled">
-								3点<input type="text" name="songtime07acc3" value="00:00" maxlength="7" size="5" disabled="disabled">
-								回復<input type="text" name="songtime07kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled">
-								不治<input type="text" name="songtime07fuji" value="00:00" maxlength="7" size="5" disabled="disabled">
+								<img src="./img/song07.gif" alt="沈黙の歌 初期MP20 SP20 維持MP6 SP5" title="沈黙の歌 初期MP20 SP20 維持MP6 SP5"><input type="text" name="songper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
+								なし<input type="text" name="songtime07" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								1点<input type="text" name="songtime07acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								2点<input type="text" name="songtime07acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								3点<input type="text" name="songtime07acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								回復<input type="text" name="songtime07kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
+								不治<input type="text" name="songtime07fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
 								<br>
 
 								</div>

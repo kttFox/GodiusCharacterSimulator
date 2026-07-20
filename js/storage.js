@@ -1,89 +1,201 @@
+//	フォーム初期値セーブ文字列（初期値セーブ判定用）
+var DefaultSaveString = null;
+
 //------------------------------------------------------------------------------
-//	関数名		：	クッキー情報設定処理
-//	機能説明	：	フォームの値を取得し、クッキー情報へ値を設定する。
-//	パラメータ	：	CookieName	クッキー名
+//	関数名		：	ストレージ機能初期化処理
+//	機能説明	：	フォームの初期値からセーブ文字列を作成し保持する。
+//	パラメータ	：	なし
+//	戻り値		：	なし
+//	備考		：	body onload から FormReset() の後に呼び出すこと
+//------------------------------------------------------------------------------
+function InitStorage()
+{
+	DefaultSaveString = BuildSaveString();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブ文字列作成処理
+//	機能説明	：	フォームの現在値からセーブデータ文字列を作成する。
+//	パラメータ	：	なし
+//	戻り値		：	セーブデータ文字列（キャラ名は含まない）
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function BuildSaveString()
+{
+	var SaveValue = new Array();
+
+	//	フォーム情報取得処理
+	GetFormValue( SaveValue );
+
+	//	先頭配列エスケープ
+	var SaveString = escape( SaveValue[0] );
+
+	//	配列内容ループ
+	for( var i = 1 ; i < SaveValue.length; ++i ){
+		SaveString += "%00" + escape( SaveValue[i] );
+	}
+	return SaveString;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブデータ読み込み処理
+//	機能説明	：	localStorageからセーブデータ文字列を取得する。
+//	パラメータ	：	Key		セーブデータキー名
+//	戻り値		：	セーブデータ文字列（存在しない場合はnull）
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function ReadSaveData( Key )
+{
+	try {
+		var Value = localStorage.getItem( Key );
+		if( Value != null && Value != "" ){
+			return Value;
+		}
+	} catch( e ) {
+		;
+	}
+	return null;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブ情報設定処理
+//	機能説明	：	フォームの値を取得し、localStorageへ値を設定する。
+//	パラメータ	：	SaveKey	セーブデータキー名
 //	戻り値		：	なし
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function SetCookie( CookieName )
+function SaveChara( SaveKey )
 {
 	//	変数宣言
-	var CookieValue  = new Array();		//	フォーム取得配列
-	var CookieString = "";				//	クッキー設定文字列
-	var Expire = new Date();			//	クッキー有効期限設定オブジェクト
-	var ExpireDay = 31;					//	クッキー有効日数
-	var ExpireMonth = 12;				//	クッキー有効月数
-	var ExpireYear = 3;					//	クッキー有効年数
+	var SaveString = "";				//	セーブデータ設定文字列
+
+	//	キャラ名取得
+	var CharaName = document.chara.charaname ? document.chara.charaname.value : "";
+
+	//	セーブ文字列作成処理（キャラ名なし）
+	SaveString = BuildSaveString();
+
+	//	初期値セーブの場合、セーブ情報を削除する
+	if( SaveString == DefaultSaveString && CharaName == "" ){
+
+		//	セーブデータがない場合は何もしない
+		if( ReadSaveData( SaveKey ) == null ){
+			alert( "初期値のためセーブしませんでした。\n" );
+			return;
+		}
+
+		//	確認メッセージ
+		if( confirm( "初期値のため、このスロットのセーブ情報を削除します。よろしいですか？\n" ) == false ){
+			return;
+		}
+
+		//	セーブデータ削除
+		try {
+			localStorage.removeItem( SaveKey );
+		} catch( e ) {
+			;
+		}
+
+		//	ロードボタン有効化状態更新処理
+		UpdateLoadButtons();
+		return;
+	}
 
 	//	確認メッセージ
-	var ReturnValue = confirm( "セーブします。よろしいですか？\n" );
+	var ConfirmMsg = ( CharaName != "" ) ? "「" + CharaName + "」をセーブします。よろしいですか？\n" : "セーブします。よろしいですか？\n";
+	var ReturnValue = confirm( ConfirmMsg );
 
 	//	NOの場合
 	if( ReturnValue == false ) {
 		return;
 	}
 
-	//	フォーム情報取得処理
-	GetFormValue( CookieValue );
+	//	キャラ名設定（インデックス111）
+	SaveString += "%00" + escape( CharaName );
 
-	//	クッキー有効期限
-	Expire.setTime( Expire.getTime() + 1000 * 60 * 60 * 24 * ExpireDay * ExpireMonth * ExpireYear );
-
-	//	先頭配列エスケープ
-	CookieString = escape( CookieValue[0] );
-
-	//	クッキー配列内容ループ
-	for( var i = 1 ; i < CookieValue.length; ++i ){
-		CookieString += "%00" + escape( CookieValue[i] );
+	//	localStorageへの書き込み
+	try {
+		localStorage.setItem( SaveKey, SaveString );
+	} catch( e ) {
+		alert( "セーブに失敗しました。\n" );
+		return;
 	}
 
-	//	クッキー情報の書き込み
-	document.cookie = CookieName + "=" + CookieString + "; expires=" + Expire.toGMTString();
+	//	ロードボタン有効化状態更新処理
+	UpdateLoadButtons();
 }
 //------------------------------------------------------------------------------
-//	関数名		：	クッキー情報取得処理
-//	機能説明	：	クッキー情報を取得し、フォームへ値を設定する。
-//	パラメータ	：	CookieName	クッキー名
+//	関数名		：	ロードボタン有効化状態更新処理
+//	機能説明	：	各スロットのセーブデータ有無を確認し、
+//					データがないスロットのロードボタンを無効化する。
+//					また、スロットラベルへセーブ済みキャラ名を表示する。
+//	パラメータ	：	なし
+//	戻り値		：	なし
+//	備考		：	ページ読み込み時、およびセーブ後に呼び出す。
+//------------------------------------------------------------------------------
+function UpdateLoadButtons()
+{
+	//	ロードボタン群（DOM順にスロット1～3へ対応）
+	var aLoad = ToElementArray( document.chara.load );
+
+	for( var Slot = 1; Slot <= 3; ++Slot ){
+		if( aLoad[ Slot - 1 ] ){
+			//	セーブデータの有無で有効・無効を切り替え
+			aLoad[ Slot - 1 ].disabled = ( ReadSaveData( "godichara" + Slot ) == null );
+		}
+
+		//	スロットラベルへセーブ済みキャラ名を表示
+		var Label = document.getElementById( "slotname" + Slot );
+		if( Label ){
+			var CharaName = GetSavedCharaName( Slot );
+			Label.innerText = ( CharaName != "" ) ? CharaName : "キャラ" + Slot;
+		}
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブ済みキャラ名取得処理
+//	機能説明	：	指定スロットのセーブデータからキャラ名を取得する。
+//	パラメータ	：	Slot	スロット番号（1～3）
+//	戻り値		：	キャラ名（データなし・未入力は空文字）
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function GetSavedCharaName( Slot )
+{
+	var SaveData = ReadSaveData( "godichara" + Slot );
+
+	if( SaveData != null ){
+		var SaveValue = SaveData.split( "%00" );
+		if( SaveValue[111] != undefined ){
+			return unescape( SaveValue[111] );
+		}
+	}
+	return "";
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブ情報取得処理
+//	機能説明	：	localStorageから値を取得し、フォームへ値を設定する。
+//	パラメータ	：	SaveKey	セーブデータキー名
 //	戻り値		：	なし
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function GetCookie( CookieName )
+function LoadChara( SaveKey )
 {
-	//	変数宣言
-	var CookieValue  = new Array();		//	フォーム取得配列
-	var CookieString = "";				//	クッキー設定文字列
+	//	セーブデータ読み込み処理
+	var SaveString = ReadSaveData( SaveKey );
 
-	//	クッキー名へイコールを付加
-	CookieName += "=";
-
-	//	クッキー名の検索
-	ReturnValue = document.cookie.indexOf( CookieName );
-	if( ReturnValue == -1 ){
+	//	データなしの場合
+	if( SaveString == null ){
 		alert( "データが存在しません。\n" );
 		return;
 	}
 
-	//	クッキー情報を分割して設定
-	CookieValue = document.cookie.split( "; " );
-
-	var i = 0;
-
-	while( CookieValue[i] ){
-
-		//	クッキー名の検索
-		if( CookieValue[i].substr(0, CookieName.length) == CookieName ){
-			//	クッキー設定
-			CookieString = CookieValue[i].substr(11, CookieValue[i].length );
-			break;
-		}
-		++i;
-	}
-
 	//	分割して配列へ設定
-	CookieValue = CookieString.split( "%00" );
+	var SaveValue = SaveString.split( "%00" );
 
 	//	フォーム情報設定処理
-	SetFormValue( CookieValue )
+	SetFormValue( SaveValue )
+
+	//	キャラ名復元（旧データはキャラ名なしのため空欄とする）
+	if( document.chara.charaname ){
+		document.chara.charaname.value = ( SaveValue[111] != undefined ) ? unescape( SaveValue[111] ) : "";
+	}
 }
 //------------------------------------------------------------------------------
 //	関数名		：	フォーム情報設定処理
