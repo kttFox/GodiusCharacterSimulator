@@ -12,7 +12,6 @@ function CharaMain( Silent )
 	var IceTama = 0;			//	氷
 	var MagicalTama = 0;		//	援護
 	var HolyTama = 0;			//	聖
-	var SkillBaseTama = 0;		//	基準消費量
 	var SonToku = 0;			//	損得計算用
 	var InitSontoku = "";		//	判定メッセージ
 	var Err = 0;				//	エラーアラート
@@ -219,20 +218,6 @@ function CharaMain( Silent )
 	}
 
 	//	力の玉損得勘定
-	//	スキル１から３０までの固定スキルアップに必要な力の玉（const.js）
-	var aSkillBase = SKILL_BASE_TAMA;
-
-	SkillBaseTama += aSkillBase[ ( Skill1 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill2 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill3 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill4 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill5 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill6 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill7 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill8 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill9 - 1 ) ];
-	SkillBaseTama += aSkillBase[ ( Skill10 - 1 ) ];
-
 	//	スキル必要玉数（併用方式：レベル17まで確率(期待値)・18以降固定）
 	var SkillHybridTama = 0;
 	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill1 - 1 ) ];
@@ -246,18 +231,18 @@ function CharaMain( Silent )
 	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill9 - 1 ) ];
 	SkillHybridTama += SKILL_HYBRID_TAMA[ ( Skill10 - 1 ) ];
 
-	//	本人消費量－基準消費量（スキル20・20機能廃止に伴い補正なし）
-	SonToku = SkillUseTama - SkillBaseTama;
+	//	本人消費量－基準消費量（併用方式：レベル17まで確率(期待値)・18以降固定）
+	SonToku = SkillUseTama - SkillHybridTama;
 
 	//	損得判定
 	//	損
 	if( SonToku < 0 ) {
 		SonToku *= -1;
-		InitSontoku += "尚、このキャラを初期化すると" + SonToku + "玉程度「損」するっぽいです。\n";
+		InitSontoku += "尚、このキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「損」するっぽいです。\n";
 
 	//	得
 	} else if( SonToku > 0 ) {
-		InitSontoku += "尚、このキャラを初期化すると" + SonToku + "玉程度「得」するっぽいです。\n";
+		InitSontoku += "尚、このキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「得」するっぽいです。\n";
 
 	//	損得なし
 	} else {
@@ -597,7 +582,7 @@ function GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTam
 		"スキルにつぎ込んだ玉が" + SkillUseTama + "玉っぽいです。\n"+
 		"よって現時点でスキル成功率を単純計算すると" + SkillSuccess + "%です。\n\n"+
 		InitSontoku+
-		"以上！\n"+
+		"\n"+
 		"--------------------------------------------------------\n";
 	return CharaResultMessage;
 }

@@ -1,3 +1,22 @@
+//	残玉連動判定処理
+//	機能説明	：	残玉が空欄以外（値が入力されている）の場合に連動ONと判定する。
+//	戻り値		：	連動ONならtrue、それ以外はfalse
+function IsTamaLink()
+{
+	//	残玉
+	var Balance = document.chara.balance.value;
+	//	空欄の場合は連動しない
+	if( Balance === "" ) {
+		return false;
+	}
+	//	非数値の場合は連動しない
+	if( isNaN( Balance - 0 ) ) {
+		return false;
+	}
+	//	空欄以外（値が入力されている）とき連動
+	return true;
+}
+
 //	力の玉初期化処理
 //	戻り値：なし
 function CharaSub()
@@ -95,7 +114,7 @@ function CharaSub()
 function FocusLv()
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeLv = document.chara.lv.value;
 	}
@@ -106,7 +125,7 @@ function FocusLv()
 function ChangeLv()
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 
 		//	Lvの設定
 		var Lv = eval( document.chara.lv.value );
@@ -136,7 +155,7 @@ function ChangeLv()
 function FocusParameter( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeParameter = Obj.value;
 	}
@@ -147,7 +166,7 @@ function FocusParameter( Obj )
 function ChangeParameter( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 
 		//	パラメータの設定
 		var Parameter =  eval( Obj.value );
@@ -214,7 +233,7 @@ function ChangeParameter( Obj )
 function FocusSkill( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 		//	フォーカス時のレベルを前回レベルに設定
 		BeforeSkill = Obj.value;
 	}
@@ -225,7 +244,7 @@ function FocusSkill( Obj )
 function ChangeSkill( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 
 		//	スキルの設定
 		var Skill =  eval( Obj.value );
@@ -240,7 +259,7 @@ function ChangeSkill( Obj )
 		var Mode = document.chara.mode;
 
 		//	固定制スキルアップの場合
-		if( Mode[0].checked ) {
+		if( Mode && Mode[0].checked ) {
 
 			//	スキル増加時
 			if( Skill > BeforeSkill ) {
@@ -289,7 +308,7 @@ function ChangeSkill( Obj )
 		}
 
 		//	確率制スキルアップの場合
-		else if( Mode[1].checked ) {
+		else if( Mode && Mode[1].checked ) {
 
 			var Per01 = document.chara.per01.value;
 			var Per05 = document.chara.per05.value;
@@ -412,7 +431,7 @@ function ChangeSkill( Obj )
 function ClickMagic( Obj )
 {
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 
 		//	力の玉の設定
 		var Tama = eval( document.chara.balance.value );
@@ -444,7 +463,7 @@ function CheckLink()
 		return;
 	}
 
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 		for( i = 0; i < aMode.length; i++ ) {
 			aMode[i].disabled = false;
 		}
@@ -461,7 +480,7 @@ function ChangeParameterAll( Value )
 {
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 
 		//	現在パラメータ取得
 		var Str = document.chara.str.value;

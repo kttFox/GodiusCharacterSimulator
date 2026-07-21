@@ -297,7 +297,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 		//	火チェックボックスOFF
 		for( var i = 0; i < Fire.length; ++i ){
 			//	残玉連動ONの場合のみ処理を行う
-			if( document.chara.link && document.chara.link.checked ) {
+			if( IsTamaLink() ) {
 				//	チェックボックス無効の場合
 				if( Fire[i].disabled == true ){
 					if( Fire[i].checked == true ){
@@ -311,7 +311,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 		//	氷チェックボックスOFF
 		for( var i = 0; i < Ice.length; ++i ){
 			//	残玉連動ONの場合のみ処理を行う
-			if( document.chara.link && document.chara.link.checked ) {
+			if( IsTamaLink() ) {
 				//	チェックボックス無効の場合
 				if( Ice[i].disabled == true ){
 					if( Ice[i].checked == true ){
@@ -337,7 +337,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 	else{
 		for( var i = 0; i < Holy.length; ++i ){
 			//	残玉連動ONの場合のみ処理を行う
-			if( document.chara.link && document.chara.link.checked ) {
+			if( IsTamaLink() ) {
 				//	チェックボックス無効の場合
 				if( Holy[i].disabled == true ){
 					if( Holy[i].checked == true ){
@@ -364,7 +364,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 		//	援護チェックボックスOFF
 		for( var i = 0; i < Magical.length; ++i ){
 			//	残玉連動ONの場合のみ処理を行う
-			if( document.chara.link && document.chara.link.checked ) {
+			if( IsTamaLink() ) {
 				//	チェックボックス無効の場合
 				if( Magical[i].disabled == true ){
 					if( Magical[i].checked == true ){
@@ -378,7 +378,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 	}
 
 	//	残玉連動ONの場合のみ処理を行う
-	if( document.chara.link && document.chara.link.checked ) {
+	if( IsTamaLink() ) {
 		//	残玉設定
 		document.chara.balance.value = Balance;
 	}
@@ -439,15 +439,14 @@ function CheckBalanceValue()
 	//	残玉
 	var Balance = document.chara.balance.value;
 
-	//	空欄の場合
+	//	空欄の場合はそのまま（連動対象外の中立状態）
 	if( Balance == "" ){
-		document.chara.balance.value = 0;
 		return;
 	}
 
-	//	数値でない場合
+	//	数値でない場合は空欄に戻す
 	if( isNaN( Balance ) == true ){
-		document.chara.balance.value = 0;
+		document.chara.balance.value = "";
 		return;
 	}
 }

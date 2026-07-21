@@ -160,7 +160,7 @@ function UpdateNeedTama()
 		"★必要玉数シミュレーター<br>" +
 		"必要合計：<b>約" + r.total + "玉</b>" +
 		"（パラ" + r.para + "玉／スキル約" + r.skill + "玉［17まで確率・18以降固定］／魔法" + r.magic + "玉）<br>" +
-		ReachMsg + "、" + DiffMsg;
+		"平均的に" + ReachMsg + "、" + DiffMsg;
 }
 
 //	コンボボックス増減処理
@@ -178,6 +178,10 @@ function StepSelect( Name, Dir )
 	if( Index < 0 || Index >= Obj.options.length ) {
 		return;
 	}
+
+	//	変更前の値を連動処理へ通知（onfocus相当）
+	Obj.dispatchEvent( new Event( "focus" ) );
+
 	Obj.selectedIndex = Index;
 
 	//	既存のonchange処理・リアルタイム更新を発火させる
