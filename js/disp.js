@@ -382,6 +382,30 @@ function ChangeMagicCheckBox( Job, SideJob )
 		//	残玉設定
 		document.chara.balance.value = Balance;
 	}
+
+	//	取得魔法グループ：対象職業以外は非表示
+	SetMagicSectionDisplay( "magic_fire_sec",      Job == "魔" );
+	SetMagicSectionDisplay( "magic_ice_sec",       Job == "魔" );
+	SetMagicSectionDisplay( "magic_magical_sec",   Job == "魔" || Job == "聖" || SideJob == "聖" );
+	SetMagicSectionDisplay( "magic_holy_sec",      Job == "聖" || SideJob == "聖" );
+	SetMagicSectionDisplay( "magic_warrior_sec",   Job == "戦" );
+	SetMagicSectionDisplay( "magic_gladiator_sec", Job == "剣" );
+}
+
+//------------------------------------------------------------------------------
+//	関数名		：	取得魔法セクション表示切替処理
+//	機能説明	：	取得魔法グループの表示・非表示を切り替える。
+//	パラメータ	：	Id		セクションのID
+//					Show	表示する場合true
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function SetMagicSectionDisplay( Id, Show )
+{
+	var Elem = document.getElementById( Id );
+	if( Elem ){
+		Elem.style.display = Show ? "block" : "none";
+	}
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スキルアイコン画像変換処理

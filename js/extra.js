@@ -71,6 +71,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	火スキルありの場合
 	if( SkillList[7] != 0 ){
+		//	セクション表示
+		document.getElementById("extra_fire_sec").style.display = "block";
 		//	火炎魔法項目設定
 		document.chara.firemp01.value = MagicMpTable[0][0];
 		document.chara.firemp02.value = MagicMpTable[0][1];
@@ -104,6 +106,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	火スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_fire_sec").style.display = "none";
 		//	火炎魔法項目初期化
 		document.chara.firemp01.value = "0";
 		document.chara.firemp02.value = "0";
@@ -137,6 +141,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	氷スキルありの場合
 	if( SkillList[8] != 0 ){
+		//	セクション表示
+		document.getElementById("extra_ice_sec").style.display = "block";
 		//	冷凍魔法項目設定
 		document.chara.icemp01.value = MagicMpTable[1][0];
 		document.chara.icemp02.value = MagicMpTable[1][1];
@@ -170,6 +176,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	氷スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_ice_sec").style.display = "none";
 		//	冷凍魔法項目初期化
 		document.chara.icemp01.value = "0";
 		document.chara.icemp02.value = "0";
@@ -203,6 +211,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	援護スキルありの場合
 	if( SkillList[9] != 0 ){
+		//	セクション表示
+		document.getElementById("extra_magical_sec").style.display = "block";
 		//	援護魔法項目設定
 		document.chara.magicalmp01.value = MagicMpTable[2][0];
 		document.chara.magicalmp02.value = MagicMpTable[2][1];
@@ -237,6 +247,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	援護スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_magical_sec").style.display = "none";
 		//	援護魔法項目初期化
 		document.chara.magicalmp01.value = "0";
 		document.chara.magicalmp02.value = "0";
@@ -270,6 +282,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	聖スキルありの場合
 	if( SkillList[10] != 0 ){
+		//	セクション表示
+		document.getElementById("extra_holy_sec").style.display = "block";
 		//	聖魔法項目設定
 		document.chara.holymp01.value = MagicMpTable[3][0];
 		document.chara.holymp02.value = MagicMpTable[3][1];
@@ -315,6 +329,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	聖スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_holy_sec").style.display = "none";
 		//	聖魔法項目初期化
 		document.chara.holymp01.value = "0";
 		document.chara.holymp02.value = "0";
@@ -360,6 +376,9 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	呪文スキルありの場合
 	if( SkillList[11] != 0 ){
+
+		//	セクション表示
+		document.getElementById("extra_song_sec").style.display = "block";
 
 		//	呪文定義テーブル
 		var SongPer = [
@@ -495,6 +514,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	呪文スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_song_sec").style.display = "none";
 		document.chara.songper01.value = "0.0";
 		document.chara.songper02.value = "0.0";
 		document.chara.songper03.value = "0.0";
@@ -598,6 +619,9 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 	//	錬金スキルありの場合
 	if( SkillList[12] != 0 ){
 
+		//	セクション表示
+		document.getElementById("extra_alchemy_sec").style.display = "block";
+
 		//	錬金アイテム発動率設定テーブル
 		//	[0]アイテム, [1]固有値, [2]成功率
 		var AlchemyItem = [
@@ -637,6 +661,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	錬金スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_alchemy_sec").style.display = "none";
 		document.chara.alchemy01.value = "0.0";
 		document.chara.alchemy02.value = "0.0";
 		document.chara.alchemy03.value = "0.0";
@@ -654,6 +680,9 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	応急スキルありの場合
 	if( SkillList[13] != 0 ){
+
+		//	セクション表示
+		document.getElementById("extra_oq_sec").style.display = "block";
 
 		//	応急回復発動率設定
 		var OqCure = 0;
@@ -677,6 +706,8 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 
 	//	応急スキルなしの場合
 	else{
+		//	セクション非表示
+		document.getElementById("extra_oq_sec").style.display = "none";
 		document.chara.oq01.value = "0.0";
 		document.chara.oq02.value = "0.0";
 		document.chara.oq01.disabled = true;

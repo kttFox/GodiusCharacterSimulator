@@ -1347,7 +1347,8 @@
 
 							<a href="javascript:OpenMenu(&#39;magic&#39;)">取得魔法</a><br>
 							<div id="magic" style="display:block">
-							<input type="button" value="火炎" onclick="AllSelect1()" name="firebutton" disabled="">
+							<div id="magic_fire_sec" style="display:block">
+								<input type="button" value="火炎" onclick="AllSelect1()" name="firebutton" disabled="">
 							<input type="checkbox" name="fire" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/fire04.gif" alt="ファイアボール(2)" title="ファイアボール(2)">
 							<input type="checkbox" name="fire" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/fire05.gif" alt="ファイアシールド(1)" title="ファイアシールド(1)">
 							<input type="checkbox" name="fire" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/fire06.gif" alt="ファイアショック(3)" title="ファイアショック(3)">
@@ -1356,7 +1357,9 @@
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							<input type="button" value="冷凍" onclick="AllSelect2()" name="icebutton" disabled="">
+							</div>
+								<div id="magic_ice_sec" style="display:block">
+								<input type="button" value="冷凍" onclick="AllSelect2()" name="icebutton" disabled="">
 							<input type="checkbox" name="ice" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/ice04.gif" alt="アイスボール(2)" title="アイスボール(2)">
 							<input type="checkbox" name="ice" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/ice05.gif" alt="アイスシールド(1)" title="アイスシールド(1)">
 							<input type="checkbox" name="ice" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/ice06.gif" alt="アイスウェーブ(3)" title="アイスウェーブ(3)">
@@ -1364,37 +1367,45 @@
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							<input type="button" value="援護" onclick="AllSelect3()" name="magicalbutton" disabled="">
-							<input type="checkbox" name="magical" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/magical02.gif" alt="ホールド(3)" title="ホールド(3)">
-							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical03.gif" alt="マジカルグロース(1)" title="マジカルグロース(1)">
-							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical04.gif" alt="マジカルシールド(1)" title="マジカルシールド(1)">
-							<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical05.gif" alt="ウィークネス(1)" title="ウィークネス(1)">
-							<input type="checkbox" name="magical" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/magical06.gif" alt="アシッドクラウド(2)" title="アシッドクラウド(2)">
-							<input type="checkbox" name="magical" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/magical07.gif" alt="バインド(4)" title="バインド(4)">
-							<input type="checkbox" name="magical" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/magical08.png" alt="メイジアーマー(3)" title="メイジアーマー(3)"><br>
+							</div>
+							
+							<div id="magic_holy_sec" style="display:block">
+								<input type="button" value="聖職" onclick="AllSelect4()" name="holybutton" disabled="">
+								<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy01.gif" alt="キュア(1)" title="キュア(1)">
+								<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy02.gif" alt="キュアポイズン(1)" title="キュアポイズン(1)">
+								<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy03.gif" alt="ブレス(1)" title="ブレス(1)">
+								<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy06.gif" alt="カース(1)" title="カース(1)">
+								<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy07.gif" alt="キュアシック(1)" title="キュアシック(1)">
+								<input type="checkbox" name="holy" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/holy08.gif" alt="ホーリーボール(2)" title="ホーリーボール(2)">
+								<input type="checkbox" name="holy" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/holy09.gif" alt="リザレクト(4)" title="リザレクト(4)">
+								<input type="checkbox" name="holy" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/holy11.png" alt="キュアパルス(3)" title="キュアパルス(3)">
+								<input type="checkbox" name="holy" value="5" onclick="ClickMagic(this)" disabled=""><img src="./img/holy12.png" alt="パワーシールド(5)" title="パワーシールド(5)">
+								<hr noshade="" size="1" color="#cccccc">
+							</div>
 
-							<hr noshade="" size="1" color="#cccccc">
+							<div id="magic_magical_sec" style="display:block">
+								<input type="button" value="援護" onclick="AllSelect3()" name="magicalbutton" disabled="">
+								<input type="checkbox" name="magical" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/magical02.gif" alt="ホールド(3)" title="ホールド(3)">
+								<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical03.gif" alt="マジカルグロース(1)" title="マジカルグロース(1)">
+								<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical04.gif" alt="マジカルシールド(1)" title="マジカルシールド(1)">
+								<input type="checkbox" name="magical" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/magical05.gif" alt="ウィークネス(1)" title="ウィークネス(1)">
+								<input type="checkbox" name="magical" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/magical06.gif" alt="アシッドクラウド(2)" title="アシッドクラウド(2)">
+								<input type="checkbox" name="magical" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/magical07.gif" alt="バインド(4)" title="バインド(4)">
+								<input type="checkbox" name="magical" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/magical08.png" alt="メイジアーマー(3)" title="メイジアーマー(3)"><br>
+								<hr noshade="" size="1" color="#cccccc">
+							</div>
 
-							<input type="button" value="聖職" onclick="AllSelect4()" name="holybutton" disabled="">
-							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy01.gif" alt="キュア(1)" title="キュア(1)">
-							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy02.gif" alt="キュアポイズン(1)" title="キュアポイズン(1)">
-							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy03.gif" alt="ブレス(1)" title="ブレス(1)">
-							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy06.gif" alt="カース(1)" title="カース(1)">
-							<input type="checkbox" name="holy" value="1" onclick="ClickMagic(this)" disabled=""><img src="./img/holy07.gif" alt="キュアシック(1)" title="キュアシック(1)">
-							<input type="checkbox" name="holy" value="2" onclick="ClickMagic(this)" disabled=""><img src="./img/holy08.gif" alt="ホーリーボール(2)" title="ホーリーボール(2)">
-							<input type="checkbox" name="holy" value="4" onclick="ClickMagic(this)" disabled=""><img src="./img/holy09.gif" alt="リザレクト(4)" title="リザレクト(4)">
-							<input type="checkbox" name="holy" value="3" onclick="ClickMagic(this)" disabled=""><img src="./img/holy11.png" alt="キュアパルス(3)" title="キュアパルス(3)">
-							<input type="checkbox" name="holy" value="5" onclick="ClickMagic(this)" disabled=""><img src="./img/holy12.png" alt="パワーシールド(5)" title="パワーシールド(5)">
-
-							<hr noshade="" size="1" color="#cccccc">
-
-							<input type="button" value="戦士" name="warriorbutton" disabled="">
+							<div id="magic_warrior_sec" style="display:block">
+								<input type="button" value="戦士" name="warriorbutton" disabled="">
 							<input type="checkbox" name="warrior" value="5" onclick="ClickMagic(this)" disabled=""><img src="./img/skill_戦士.png" alt="シールドブロック(5)" title="シールドブロック(5)"><br>
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							<input type="button" value="剣闘士" name="gladiatorbutton" disabled="">
+							</div>
+								<div id="magic_gladiator_sec" style="display:block">
+								<input type="button" value="剣闘士" name="gladiatorbutton" disabled="">
 							<input type="checkbox" name="gladiator" value="5" onclick="ClickMagic(this)" disabled=""><img src="./img/skill_剣闘士.png" alt="狂砲火(5)" title="狂砲火(5)"><br>
+								</div>
 							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
@@ -2018,9 +2029,9 @@
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							<a href="javascript:OpenMenu(&#39;extra&#39;)">おまけ</a><br>
-							<div id="extra" class="sub" style="display:none">
-								<a href="javascript:OpenMenu(&#39;extra_fire&#39;)">火炎魔法 (成功率・消費ＭＰ)</a><br>
+							<div id="extra" class="sub" style="display:block">
+								<div id="extra_fire_sec" style="display:block">
+								火炎魔法 (成功率・消費ＭＰ)<br>
 								<div id="extra_fire" style="display:block">
 								<img src="./img/fire01.gif" alt="ファイアミサイル 発動Lv1 安定Lv11 消費MP10" title="ファイアミサイル 発動Lv1 安定Lv11 消費MP10"><input type="text" name="fireper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<img src="./img/fire02.gif" alt="ファイアブレード 発動Lv4 安定Lv14 消費MP15" title="ファイアブレード 発動Lv4 安定Lv14 消費MP15"><input type="text" name="fireper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="firemp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
@@ -2034,7 +2045,9 @@
 
 								<hr noshade="" size="1" color="#cccccc">
 
-								<a href="javascript:OpenMenu(&#39;extra_ice&#39;)">冷凍魔法 (成功率・消費ＭＰ)</a><br>
+								</div>
+								<div id="extra_ice_sec" style="display:block">
+								冷凍魔法 (成功率・消費ＭＰ)<br>
 								<div id="extra_ice" style="display:block">
 								<img src="./img/ice01.gif" alt="アイスミサイル 発動Lv1 安定Lv11 消費MP10" title="アイスミサイル 発動Lv1 安定Lv11 消費MP10"><input type="text" name="iceper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
 								<img src="./img/ice02.gif" alt="アイスブレード 発動Lv5 安定Lv15 消費MP15" title="アイスブレード 発動Lv5 安定Lv15 消費MP15"><input type="text" name="iceper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="icemp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
@@ -2048,38 +2061,45 @@
 
 								<hr noshade="" size="1" color="#cccccc">
 
-								<a href="javascript:OpenMenu(&#39;extra_magical&#39;)">援護魔法 (成功率・消費ＭＰ)</a><br>
-								<div id="extra_magical" style="display:block">
-								<img src="./img/magical01.gif" alt="マジカルブレード 発動Lv5 安定Lv14 消費MP18" title="マジカルブレード 発動Lv5 安定Lv14 消費MP18"><input type="text" name="magicalper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/magical02.gif" alt="ホールド 発動Lv17 安定Lv25 消費MP26" title="ホールド 発動Lv17 安定Lv25 消費MP26"><input type="text" name="magicalper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/magical03.gif" alt="マジカルグロース 発動Lv22 安定Lv31 消費MP15" title="マジカルグロース 発動Lv22 安定Lv31 消費MP15"><input type="text" name="magicalper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/magical04.gif" alt="マジカルシールド 発動Lv30 安定Lv40 消費MP28" title="マジカルシールド 発動Lv30 安定Lv40 消費MP28"><input type="text" name="magicalper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
-								<img src="./img/magical05.gif" alt="ウィークネス 発動Lv37 安定Lv47 消費MP12" title="ウィークネス 発動Lv37 安定Lv47 消費MP12"><input type="text" name="magicalper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/magical06.gif" alt="アシッドクラウド 発動Lv47 安定Lv57 消費MP40" title="アシッドクラウド 発動Lv47 安定Lv57 消費MP40"><input type="text" name="magicalper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/magical07.gif" alt="バインド 発動Lv68 安定Lv77 消費MP30" title="バインド 発動Lv68 安定Lv77 消費MP30"><input type="text" name="magicalper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<br>
 								</div>
 
-								<hr noshade="" size="1" color="#cccccc">
+								<div id="extra_holy_sec" style="display:block">
+									聖魔法 (成功率・消費ＭＰ)<br>
+									<div id="extra_holy" style="display:block">
+									<img src="./img/holy01.gif" alt="キュア 発動Lv1 安定Lv9 消費MP10" title="キュア 発動Lv1 安定Lv9 消費MP10"><input type="text" name="holyper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy02.gif" alt="キュアポイズン 発動Lv10 安定Lv19 消費MP10" title="キュアポイズン 発動Lv10 安定Lv19 消費MP10"><input type="text" name="holyper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy03.gif" alt="ブレス 発動Lv14 安定Lv25 消費MP12" title="ブレス 発動Lv14 安定Lv25 消費MP12"><input type="text" name="holyper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy04.gif" alt="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6" title="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6"><input type="text" name="holyper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+									<img src="./img/holy05.gif" alt="ホーリーブレード 発動Lv17 安定Lv26 消費MP14" title="ホーリーブレード 発動Lv17 安定Lv26 消費MP14"><input type="text" name="holyper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy06.gif" alt="カース 発動Lv23 安定Lv31 消費MP20" title="カース 発動Lv23 安定Lv31 消費MP20"><input type="text" name="holyper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy07.gif" alt="キュアシック 発動Lv27 安定Lv36 消費MP15" title="キュアシック 発動Lv27 安定Lv36 消費MP15"><input type="text" name="holyper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy08.gif" alt="ホーリーボール 発動Lv39 安定Lv47 消費MP25" title="ホーリーボール 発動Lv39 安定Lv47 消費MP25"><input type="text" name="holyper08" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp08" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+									<img src="./img/holy09.gif" alt="リザレクト 発動Lv58 安定Lv67 消費MP40" title="リザレクト 発動Lv58 安定Lv67 消費MP40"><input type="text" name="holyper09" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp09" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/holy10.gif" alt="リリース 発動Lv56 安定Lv92 消費MP50" title="リリース 発動Lv56 安定Lv92 消費MP50"><input type="text" name="holyper10" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp10" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<br>
+									</div>
 
-								<a href="javascript:OpenMenu(&#39;extra_holy&#39;)">聖魔法 (成功率・消費ＭＰ)</a><br>
-								<div id="extra_holy" style="display:block">
-								<img src="./img/holy01.gif" alt="キュア 発動Lv1 安定Lv9 消費MP10" title="キュア 発動Lv1 安定Lv9 消費MP10"><input type="text" name="holyper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy02.gif" alt="キュアポイズン 発動Lv10 安定Lv19 消費MP10" title="キュアポイズン 発動Lv10 安定Lv19 消費MP10"><input type="text" name="holyper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy03.gif" alt="ブレス 発動Lv14 安定Lv25 消費MP12" title="ブレス 発動Lv14 安定Lv25 消費MP12"><input type="text" name="holyper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy04.gif" alt="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6" title="ホーリーミサイル 発動Lv1 安定Lv15 消費MP6"><input type="text" name="holyper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
-								<img src="./img/holy05.gif" alt="ホーリーブレード 発動Lv17 安定Lv26 消費MP14" title="ホーリーブレード 発動Lv17 安定Lv26 消費MP14"><input type="text" name="holyper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy06.gif" alt="カース 発動Lv23 安定Lv31 消費MP20" title="カース 発動Lv23 安定Lv31 消費MP20"><input type="text" name="holyper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy07.gif" alt="キュアシック 発動Lv27 安定Lv36 消費MP15" title="キュアシック 発動Lv27 安定Lv36 消費MP15"><input type="text" name="holyper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy08.gif" alt="ホーリーボール 発動Lv39 安定Lv47 消費MP25" title="ホーリーボール 発動Lv39 安定Lv47 消費MP25"><input type="text" name="holyper08" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp08" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
-								<img src="./img/holy09.gif" alt="リザレクト 発動Lv58 安定Lv67 消費MP40" title="リザレクト 発動Lv58 安定Lv67 消費MP40"><input type="text" name="holyper09" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp09" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<img src="./img/holy10.gif" alt="リリース 発動Lv56 安定Lv92 消費MP50" title="リリース 発動Lv56 安定Lv92 消費MP50"><input type="text" name="holyper10" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="holymp10" value="0" maxlength="3" size="5" disabled="disabled" readonly>
-								<br>
+									<hr noshade="" size="1" color="#cccccc">
 								</div>
 
-								<hr noshade="" size="1" color="#cccccc">
+								<div id="extra_magical_sec" style="display:block">
+									援護魔法 (成功率・消費ＭＰ)<br>
+									<div id="extra_magical" style="display:block">
+									<img src="./img/magical01.gif" alt="マジカルブレード 発動Lv5 安定Lv14 消費MP18" title="マジカルブレード 発動Lv5 安定Lv14 消費MP18"><input type="text" name="magicalper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp01" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/magical02.gif" alt="ホールド 発動Lv17 安定Lv25 消費MP26" title="ホールド 発動Lv17 安定Lv25 消費MP26"><input type="text" name="magicalper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp02" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/magical03.gif" alt="マジカルグロース 発動Lv22 安定Lv31 消費MP15" title="マジカルグロース 発動Lv22 安定Lv31 消費MP15"><input type="text" name="magicalper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp03" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/magical04.gif" alt="マジカルシールド 発動Lv30 安定Lv40 消費MP28" title="マジカルシールド 発動Lv30 安定Lv40 消費MP28"><input type="text" name="magicalper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp04" value="0" maxlength="3" size="5" disabled="disabled" readonly><br>
+									<img src="./img/magical05.gif" alt="ウィークネス 発動Lv37 安定Lv47 消費MP12" title="ウィークネス 発動Lv37 安定Lv47 消費MP12"><input type="text" name="magicalper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp05" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/magical06.gif" alt="アシッドクラウド 発動Lv47 安定Lv57 消費MP40" title="アシッドクラウド 発動Lv47 安定Lv57 消費MP40"><input type="text" name="magicalper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp06" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<img src="./img/magical07.gif" alt="バインド 発動Lv68 安定Lv77 消費MP30" title="バインド 発動Lv68 安定Lv77 消費MP30"><input type="text" name="magicalper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>% <input type="text" name="magicalmp07" value="0" maxlength="3" size="5" disabled="disabled" readonly>
+									<br>
+									</div>
 
-								<a href="javascript:OpenMenu(&#39;extra_song&#39;)">呪文 (成功率・詠唱時間 (回復アクセ／影響歌) )</a><br>
+									<hr noshade="" size="1" color="#cccccc">
+								</div>
+
+								<div id="extra_song_sec" style="display:block">
+								呪文 (成功率・詠唱時間 (回復アクセ／影響歌) )<br>
 								<div id="extra_song" style="display:block">
 								<img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4" title="勇気の歌 初期MP5 SP10 維持MP4 SP4"><input type="text" name="songper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
 								なし<input type="text" name="songtime01" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
@@ -2148,7 +2168,9 @@
 
 								<hr noshade="" size="1" color="#cccccc">
 
-								<a href="javascript:OpenMenu(&#39;extra_alchemy&#39;)">錬金 (成功率)</a><br>
+								</div>
+								<div id="extra_alchemy_sec" style="display:block">
+								錬金 (成功率)<br>
 								<div id="extra_alchemy" style="display:block">
 								<img src="./img/alchemy01.gif" alt="解毒薬" title="解毒薬"> <input type="text" name="alchemy01" value="0.0" maxlength="3" size="5" disabled="disabled">%
 								<img src="./img/alchemy02.gif" alt="特効薬" title="特効薬"> <input type="text" name="alchemy02" value="0.0" maxlength="3" size="5" disabled="disabled">%
@@ -2169,11 +2191,14 @@
 
 								<hr noshade="" size="1" color="#cccccc">
 
-								<a href="javascript:OpenMenu(&#39;extra_oq&#39;)">応急 (成功率)</a><br>
+								</div>
+								<div id="extra_oq_sec" style="display:block">
+								応急 (成功率)<br>
 								<div id="extra_oq" style="display:block">
 								<img src="./img/holy01.gif" alt="回復" title="回復"> <input type="text" name="oq01" value="0.0" maxlength="3" size="5" disabled="disabled">%
 								<img src="./img/holy09.gif" alt="蘇生" title="蘇生"> <input type="text" name="oq02" value="0.0" maxlength="3" size="5" disabled="disabled">%
 								<br>
+								</div>
 								</div>
 
 							</div>
@@ -2221,9 +2246,8 @@
 							<li>なお、本機能はキャラ診断、初期化とは独立した機能です。</li>
 						</ul>
 
-						<li>おまけ</li>
+						<li>スキル</li>
 						<ul>
-							<li>おまけをクリックし、出力メニューを展開してください。</li>
 							<li>キャラ診断時、選択した職業に応じて関連スキルの成功率を表示します。</li>
 							<li>呪文時間詠唱時間はラグや環境により実際の時間と異なる場合があります。</li>
 						</ul>
