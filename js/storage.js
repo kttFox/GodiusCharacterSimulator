@@ -219,6 +219,8 @@ function LoadChara( SaveKey )
 	//	キャラ名復元（旧データはキャラ名なしのため空欄とする）
 	if( document.chara.charaname ){
 		document.chara.charaname.value = ( SaveValue[111] != undefined ) ? unescape( SaveValue[111] ) : "";
+		//	F5更新後も維持できるよう自動保存を更新
+		SaveCharaName();
 	}
 }
 //------------------------------------------------------------------------------
@@ -513,4 +515,48 @@ function GetFormValue( SaveValue )
 	SaveValue[121]= aWarrior[0]   ? aWarrior[0].disabled   : true;
 	SaveValue[122]= aGladiator[0] ? aGladiator[0].checked  : false;	//	剣闘士スキル
 	SaveValue[123]= aGladiator[0] ? aGladiator[0].disabled : true;
+}
+//------------------------------------------------------------------------------
+//	キャラ名自動保存用キー
+//------------------------------------------------------------------------------
+var CharaNameKey = "godiuscharaname";
+
+//------------------------------------------------------------------------------
+//	関数名		：	キャラ名自動保存処理
+//	機能説明	：	キャラ名入力欄の値をlocalStorageへ保存する。
+//	パラメータ	：	なし
+//	戻り値		：	なし
+//	備考		：	キャラ名入力欄の oninput から呼び出す。
+//------------------------------------------------------------------------------
+function SaveCharaName()
+{
+	if( !document.chara.charaname ){
+		return;
+	}
+	try {
+		localStorage.setItem( CharaNameKey, document.chara.charaname.value );
+	} catch( e ) {
+		;
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	キャラ名復元処理
+//	機能説明	：	localStorageに保存されたキャラ名を入力欄へ復元する。
+//	パラメータ	：	なし
+//	戻り値		：	なし
+//	備考		：	body onload から FormReset() の後に呼び出すこと。
+//------------------------------------------------------------------------------
+function RestoreCharaName()
+{
+	if( !document.chara.charaname ){
+		return;
+	}
+	try {
+		var Value = localStorage.getItem( CharaNameKey );
+		if( Value != null ){
+			document.chara.charaname.value = Value;
+		}
+	} catch( e ) {
+		;
+	}
 }

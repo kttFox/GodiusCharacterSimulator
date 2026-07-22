@@ -75,7 +75,7 @@
 		</script>
 		<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 	</head>
-	<body onload="FormReset();InitStorage();UpdateLoadButtons();InitShare();" class="vsc-initialized">
+	<body onload="FormReset();InitStorage();UpdateLoadButtons();InitShare();RestoreCharaName();" class="vsc-initialized">
 		<table width="800">
 			<tbody><tr>
 				<td>
@@ -101,7 +101,7 @@
 							<hr noshade="" size="1" color="#cccccc">
 
 							キャラ名
-							<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力"><br>
+							<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力" oninput="SaveCharaName()"><br>
 							
 							<hr noshade="" size="1" color="#cccccc">
 
