@@ -2,6 +2,97 @@
 var DefaultSaveString = null;
 
 //------------------------------------------------------------------------------
+//	スロット管理用定数・変数
+//------------------------------------------------------------------------------
+var SlotCountKey	= "godichara_slotcount";	//	スロット数保存キー
+var MinSlotCount	= 3;						//	最小（基本）スロット数
+var SlotKeyPrefix	= "godichara";				//	スロットデータキー接頭辞
+
+//------------------------------------------------------------------------------
+//	関数名		：	スロット数取得処理
+//	機能説明	：	localStorageから現在のスロット数を取得する。
+//	戻り値		：	スロット数（最小 MinSlotCount 以上）
+//------------------------------------------------------------------------------
+function GetSlotCount()
+{
+	var Count = MinSlotCount;
+	try {
+		var Value = parseInt( localStorage.getItem( SlotCountKey ), 10 );
+		if( !isNaN( Value ) && Value > MinSlotCount ){
+			Count = Value;
+		}
+	} catch( e ) {
+		;
+	}
+	return Count;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	スロット数保存処理
+//	パラメータ	：	Count	スロット数
+//------------------------------------------------------------------------------
+function SetSlotCount( Count )
+{
+	try {
+		if( Count <= MinSlotCount ){
+			localStorage.removeItem( SlotCountKey );
+		} else {
+			localStorage.setItem( SlotCountKey, String( Count ) );
+		}
+	} catch( e ) {
+		;
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	スロット初期化処理
+//	機能説明	：	保存済みスロット数に応じてスロットUIを描画する。
+//	備考		：	body onload から呼び出すこと。
+//------------------------------------------------------------------------------
+function InitSlots()
+{
+	RenderSlots();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	スロット描画処理
+//	機能説明	：	現在のスロット数ぶんのセーブ／ロードUIを生成する。
+//	備考		：	#slotcontainer 要素へ描画する。
+//------------------------------------------------------------------------------
+function RenderSlots()
+{
+	var Container = document.getElementById( "slotcontainer" );
+	if( !Container ){
+		return;
+	}
+
+	var Count = GetSlotCount();
+	var Html = "";
+
+	for( var Slot = 1; Slot <= Count; ++Slot ){
+		var Key = SlotKeyPrefix + Slot;
+		Html += ""
+			+ "<span class=\"slotgroup\">"
+			+ "<span id=\"slotname" + Slot + "\">キャラ" + Slot + "</span>"
+			+ "<input type=\"button\" value=\"セーブ\" onclick=\"SaveChara('" + Key + "')\">"
+			+ "<input type=\"button\" id=\"loadbtn" + Slot + "\" value=\"ロード\" onclick=\"LoadChara('" + Key + "')\">"
+			+ "</span> ";
+	}
+
+	Container.innerHTML = Html;
+
+	//	ロードボタン有効化状態・ラベル更新
+	UpdateLoadButtons();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	スロット追加処理
+//	機能説明	：	スロット数を1つ増やして再描画する。
+//------------------------------------------------------------------------------
+function AddSlot()
+{
+	var Count = GetSlotCount();
+	SetSlotCount( Count + 1 );
+	RenderSlots();
+}
+
+//------------------------------------------------------------------------------
 //	関数名		：	ストレージ機能初期化処理
 //	機能説明	：	フォームの初期値からセーブ文字列を作成し保持する。
 //	パラメータ	：	なし
@@ -93,9 +184,22 @@ function SaveChara( SaveKey )
 	//	初期値セーブの場合、セーブ情報を削除する
 	if( SaveString == DefaultSaveString && CharaName == "" ){
 
-		//	セーブデータがない場合は何もしない
-		if( ReadSaveData( SaveKey ) == null ){
+		//	スロット番号取得（"godichara3" → 3）
+		var Slot = parseInt( SaveKey.replace( SlotKeyPrefix, "" ), 10 );
+		var IsAddedSlot = ( !isNaN( Slot ) && Slot > MinSlotCount );
+
+		//	基本スロットでデータがない場合は何もしない
+		if( !IsAddedSlot && ReadSaveData( SaveKey ) == null ){
 			alert( "初期値のためセーブしませんでした。\n" );
+			return;
+		}
+
+		if( IsAddedSlot ){
+			//	追加スロットの場合はスロット自体を削除する
+			if( confirm( "初期値のため、この追加スロットを削除します。よろしいですか？\n" ) == false ){
+				return;
+			}
+			RemoveSlot( Slot );
 			return;
 		}
 
@@ -156,13 +260,13 @@ function SaveChara( SaveKey )
 //------------------------------------------------------------------------------
 function UpdateLoadButtons()
 {
-	//	ロードボタン群（DOM順にスロット1～3へ対応）
-	var aLoad = ToElementArray( document.chara.load );
+	var Count = GetSlotCount();
 
-	for( var Slot = 1; Slot <= 3; ++Slot ){
-		if( aLoad[ Slot - 1 ] ){
-			//	セーブデータの有無で有効・無効を切り替え
-			aLoad[ Slot - 1 ].disabled = ( ReadSaveData( "godichara" + Slot ) == null );
+	for( var Slot = 1; Slot <= Count; ++Slot ){
+		//	ロードボタンの有効・無効をセーブデータ有無で切り替え
+		var LoadBtn = document.getElementById( "loadbtn" + Slot );
+		if( LoadBtn ){
+			LoadBtn.disabled = ( ReadSaveData( SlotKeyPrefix + Slot ) == null );
 		}
 
 		//	スロットラベルへセーブ済みキャラ名を表示
@@ -172,6 +276,41 @@ function UpdateLoadButtons()
 			Label.innerText = ( CharaName != "" ) ? CharaName : "キャラ" + Slot;
 		}
 	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	スロット削除処理
+//	機能説明	：	指定した追加スロットを削除し、後続スロットのデータを
+//					前へ詰めて連番を維持する。基本スロットは削除しない。
+//	パラメータ	：	Slot	削除するスロット番号
+//------------------------------------------------------------------------------
+function RemoveSlot( Slot )
+{
+	var Count = GetSlotCount();
+
+	//	基本スロット、範囲外は削除しない
+	if( Slot <= MinSlotCount || Slot > Count ){
+		return;
+	}
+
+	try {
+		//	後続スロットのデータを1つ前へ詰める
+		for( var i = Slot; i < Count; ++i ){
+			var Next = localStorage.getItem( SlotKeyPrefix + ( i + 1 ) );
+			if( Next != null ){
+				localStorage.setItem( SlotKeyPrefix + i, Next );
+			} else {
+				localStorage.removeItem( SlotKeyPrefix + i );
+			}
+		}
+		//	末尾スロットのデータを削除
+		localStorage.removeItem( SlotKeyPrefix + Count );
+	} catch( e ) {
+		;
+	}
+
+	//	スロット数を1つ減らして再描画
+	SetSlotCount( Count - 1 );
+	RenderSlots();
 }
 //------------------------------------------------------------------------------
 //	関数名		：	セーブ済みキャラ名取得処理

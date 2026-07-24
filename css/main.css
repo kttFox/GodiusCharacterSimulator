@@ -51,6 +51,14 @@ div.sub{
 	padding:4px 8px;
 	font-family:"ＭＳ ゴシック";
 }
+div.sub input[type="button"]{
+	margin:2px 4px;
+}
+span.slotgroup{
+	display:inline-block;
+	white-space:nowrap;
+}
+
 div.set{
 	background-color:#fafafa;
 	border-left:1px solid #aaaaaa;

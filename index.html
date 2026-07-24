@@ -75,7 +75,7 @@
 		</script>
 		<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 	</head>
-	<body onload="FormReset();InitStorage();UpdateLoadButtons();InitShare();RestoreCharaName();" class="vsc-initialized">
+	<body onload="FormReset();InitStorage();InitSlots();InitShare();RestoreCharaName();" class="vsc-initialized">
 		<table width="800">
 			<tbody><tr>
 				<td>
@@ -83,19 +83,8 @@
 						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
-
-								<span id="slotname1">キャラ1</span>
-								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara1&#39;)">
-								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara1&#39;)">
-
-								<span id="slotname2">キャラ2</span>
-								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara2&#39;)">
-								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara2&#39;)">
-
-								<span id="slotname3">キャラ3</span>
-								<input type="button" name="save" value="セーブ" onclick="SaveChara(&#39;godichara3&#39;)">
-								<input type="button" name="load" value="ロード" onclick="LoadChara(&#39;godichara3&#39;)">
-
+								<span id="slotcontainer"></span>
+								<input type="button" value="スロット追加" onclick="AddSlot()">
 							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
@@ -2254,8 +2243,9 @@
 
 						<li>キャラデータセーブ機能</li>
 						<ul>
-							<li>3キャラ分の入力情報をセーブボタンで保存し、ロードボタンで読み込みます。</li>
-							<li>ブラウザのCookie設定がオンになっていない場合は動作保証外とします。</li>
+							<li>キャラの入力情報をセーブボタンで保存し、ロードボタンで読み込みます。</li>
+							<li>「スロット追加」ボタンでセーブスロットを任意の数だけ増やせます。スロット数はブラウザに保存され、次回以降も維持されます。</li>
+							<li>追加したスロット（4番目以降）を初期値のままセーブすると、確認のうえそのスロット自体が削除されます（後続スロットは繰り上がります）。基本の3スロットは初期値でセーブするとデータのみ削除され、スロットは残ります。</li>
 						</ul>
 					</ol>
 
