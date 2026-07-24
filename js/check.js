@@ -39,9 +39,8 @@ function CheckInputItemBlank( Lv, Hp, Mp, Sp, Str, Int, Dex, Agr, Vit, Men, Skil
 		Err = "スキル9";
 	} else if( Skill10 == "" ) {
 		Err = "スキル10";
-	} else if( Balance == "" ) {
-		Err = "残玉";
 	}
+	//	残玉は空欄でも処理を続行するため、空欄チェック対象外とする
 	return Err;
 }
 

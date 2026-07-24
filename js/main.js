@@ -83,6 +83,13 @@ function CharaMain( Silent )
 		return;
 	}
 
+	//	残玉が空欄の場合は保有想定の値を設定する
+	//	（保有想定＝現在Lvまでの獲得玉＋初期ボーナス－現構成の必要玉数：realtime.jsのCalcNeedTamaと同一）
+	if( Balance == "" ) {
+		var ExpectResult = ( typeof CalcNeedTama == "function" ) ? CalcNeedTama() : null;
+		Balance = ( ExpectResult != null ) ? ExpectResult.diff : 0;
+	}
+
 	//	HP、MP、SPが空欄の場合
 	//	職業ごとの平均値を設定する
 	if( Hp == "" ) {
