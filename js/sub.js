@@ -255,166 +255,22 @@ function ChangeSkill( Obj )
 		//	力の玉の差
 		var DifTama = 0;
 
-		//	スキルアップ
-		var Mode = document.chara.mode;
+		//	スキルアップは併用方式（レベル17までは確率期待値、18以降は固定）で
+		//	消費する力の玉を算出する。（const.js の SKILL_HYBRID_TAMA を使用）
+		var Before = eval( BeforeSkill );
 
-		//	固定制スキルアップの場合
-		if( Mode && Mode[0].checked ) {
+		//	範囲補正（1～SKILL_MAX）
+		if( Skill  < 1 ) { Skill  = 1; }
+		if( Skill  > SKILL_MAX ) { Skill  = SKILL_MAX; }
+		if( Before < 1 ) { Before = 1; }
+		if( Before > SKILL_MAX ) { Before = SKILL_MAX; }
 
-			//	スキル増加時
-			if( Skill > BeforeSkill ) {
-				var MAX = Skill;
-				var MIN = BeforeSkill;
+		//	変更前後の累計必要玉数（レベル1からの累計）
+		var NeedBefore = SKILL_HYBRID_TAMA[ Before - 1 ];
+		var NeedAfter  = SKILL_HYBRID_TAMA[ Skill  - 1 ];
 
-				//	差分取得ループ
-				for( i = MIN; i < MAX; i++ ) {
-					if( i >= 1 && i <= 9 ) {
-						DifTama -= 2;
-					} else if( i >= 10 && i <= 14 ) {
-						DifTama -= 3;
-					} else if( i >= 15 && i <= 19 ) {
-						DifTama -= 5;
-					} else if( i >= 20 && i <= 24 ) {
-						DifTama -= 10;
-					} else if( i >= 25 && i <= 29 ) {
-						DifTama -= 15;
-					} else {
-						DifTama -= 20;
-					}
-				}
-
-			//	スキル減少時
-			} else if( Skill < BeforeSkill ) {
-				var MAX = BeforeSkill;
-				var MIN = Skill;
-			
-				//	差分取得ループ
-				for( i = MIN; i < MAX; i++ ) {
-					if( i >= 1 && i <= 9 ) {
-						DifTama += 2;
-					} else if( i >= 10 && i <= 14 ) {
-						DifTama += 3;
-					} else if( i >= 15 && i <= 19 ) {
-						DifTama += 5;
-					} else if( i >= 20 && i <= 24 ) {
-						DifTama += 10;
-					} else if( i >= 25 && i <= 29 ) {
-						DifTama += 15;
-					} else {
-						DifTama += 20;
-					}
-				}
-			}
-		}
-
-		//	確率制スキルアップの場合
-		else if( Mode && Mode[1].checked ) {
-
-			var Per01 = document.chara.per01.value;
-			var Per05 = document.chara.per05.value;
-			var Per10 = document.chara.per10.value;
-			var Per15 = document.chara.per15.value;
-			var Per20 = document.chara.per20.value;
-			var Per26 = document.chara.per26.value;
-			var Per31 = document.chara.per31.value;
-
-			//	スキル増加時
-			if( Skill > BeforeSkill ) {
-				var MAX = Skill;
-				var MIN = BeforeSkill;
-
-				//	差分取得ループ
-				for( i = MIN; i < MAX; i++ ) {
-					var Flg = 0;			//	成功フラグ
-
-					while( Flg == 0 ) {
-						//	力の玉消費
-						DifTama--;
-
-						if( i >= 1 && i <= 4 ) {
-							//	スキルアップ成功
-							if( Math.random()*100 < Per01 ) {
-								Flg = 1;
-							}
-						} else if( i >= 5 && i <= 9 ) {
-							if( Math.random()*100 < Per05 ) {
-								Flg = 1;
-							}
-						} else if( i >= 10 && i <= 14 ) {
-							if( Math.random()*100 < Per10 ) {
-								Flg = 1;
-							}
-						} else if( i >= 15 && i <= 19 ) {
-							if( Math.random()*100 < Per15 ) {
-								Flg = 1;
-							}
-						} else if( i >= 20 && i <= 25 ) {
-							if( Math.random()*100 < Per20 ) {
-								Flg = 1;
-							}
-						} else if( i >= 26 && i <= 29 ) {
-							if( Math.random()*100 < Per26 ) {
-								Flg = 1;
-							}
-						} else {
-							if( Math.random()*100 < Per31 ) {
-								Flg = 1;
-							}
-						}
-					}
-				}
-
-			//	スキル減少時
-			} else if( Skill < BeforeSkill ) {
-				var MAX = BeforeSkill;
-				var MIN = Skill;
-
-				//	差分取得ループ
-				for( i = MIN; i < MAX; i++ ) {
-					var Flg = 0;			//	成功フラグ
-
-					while( Flg == 0 ) {
-						//	力の玉消費
-						DifTama++;
-
-						if( i >= 1 && i <= 4 ) {
-
-							//	スキルアップ成功
-							if( Math.random()*100 < Per01 ) {
-								Flg = 1;
-							}
-						} else if( i >= 5 && i <= 9 ) {
-							if( Math.random()*100 < Per05 ) {
-								Flg = 1;
-							}
-						} else if( i >= 10 && i <= 14 ) {
-							if( Math.random()*100 < Per10 ) {
-								Flg = 1;
-							}
-						} else if( i >= 15 && i <= 19 ) {
-							if( Math.random()*100 < Per15 ) {
-								Flg = 1;
-							}
-						} else if( i >= 20 && i <= 25 ) {
-							if( Math.random()*100 < Per20 ) {
-								Flg = 1;
-							}
-						} else if( i >= 26 && i <= 29 ) {
-							if( Math.random()*100 < Per26 ) {
-								Flg = 1;
-							}
-						} else {
-							if( Math.random()*100 < Per31 ) {
-								Flg = 1;
-							}
-						}
-					}
-				}
-			}
-		} else {
-			//	差分取得
-			DifTama = BeforeSkill - Skill;
-		}
+		//	増加なら消費（マイナス）、減少なら返却（プラス）
+		DifTama = Math.round( NeedBefore - NeedAfter );
 
 		//	残玉＋差分の玉
 		Tama += DifTama;
