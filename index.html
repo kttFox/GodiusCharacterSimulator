@@ -76,7 +76,7 @@
 		<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 	</head>
 	<body onload="FormReset();InitStorage();InitSlots();InitShare();RestoreCharaName();" class="vsc-initialized">
-		<table width="800">
+		<table width="850">
 			<tbody><tr>
 				<td>
 					<form name="chara">
@@ -94,6 +94,7 @@
 							
 							<hr noshade="" size="1" color="#cccccc">
 
+							<div id="basicblock">
 							Ｌｖ
 							<select name="lv" onfocus="FocusLv()" onchange="ChangeLv()">
 								<option value="1">1</option>
@@ -352,7 +353,7 @@
 								<option value="253">AG154</option>
 								<option value="254">AG155</option>
 								<option value="255">AG156</option>
-							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('lv',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('lv',1)">　　
+							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('lv',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('lv',1)">　
 
 							主職業
 							<select name="job" onchange="ChangeSkillMenuByJob()">
@@ -370,19 +371,22 @@
 								<option value="鍛">鍛治屋</option>
 								<option value="鳥">バード</option>
 							</select>
-							<br>
+							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
+							<div id="resourceblock">
 							ＨＰ
-							<input type="text" name="hp" maxlength="3" size="5"><span id="avghp" class="avgval"></span>
+							<input type="text" name="hp" maxlength="3"><span id="avghp" class="avgval"></span>
 							ＭＰ
-							<input type="text" name="mp" maxlength="3" size="5"><span id="avgmp" class="avgval"></span>
+							<input type="text" name="mp" maxlength="3"><span id="avgmp" class="avgval"></span>
 							ＳＰ
-							<input type="text" name="sp" maxlength="3" size="5"><span id="avgsp" class="avgval"></span><br>
+							<input type="text" name="sp" maxlength="3"><span id="avgsp" class="avgval"></span>
+							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
+							<div id="paramblock">
 							<input type="button" value="パラALL15" onclick="ChangeParameterAll(15)">　
 							<input type="button" value="パラALL20" onclick="ChangeParameterAll(20)">　
 							<input type="button" value="パラALL25" onclick="ChangeParameterAll(25)">　
@@ -391,7 +395,7 @@
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							ＳＴＲ　
+							ＳＴＲ
 							<select name="str" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -489,7 +493,7 @@
 								<option value="99">99</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('str',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('str',1)">　　　
 							
-							ＡＧＲ　
+							ＡＧＲ
 							<select name="agr" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -587,7 +591,7 @@
 								<option value="99">99</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('agr',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('agr',1)">　　　
 							
-							ＤＥＸ　
+							ＤＥＸ
 							<select name="dex" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -685,7 +689,7 @@
 								<option value="99">99</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('dex',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('dex',1)"><br>
 							
-							ＩＮＴ　
+							ＩＮＴ
 							<select name="int" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -783,7 +787,7 @@
 								<option value="99">99</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('int',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('int',1)">　　　
 							
-							ＶＩＴ　
+							ＶＩＴ
 							<select name="vit" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -881,7 +885,7 @@
 								<option value="99">99</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('vit',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('vit',1)">　　　
 							
-							ＭＥＮ　
+							ＭＥＮ
 							<select name="men" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 								<option value="6">6</option>
 								<option value="7">7</option>
@@ -977,8 +981,8 @@
 								<option value="97">97</option>
 								<option value="98">98</option>
 								<option value="99">99</option>
-							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('men',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('men',1)">　　　
-
+							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('men',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('men',1)">
+							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
@@ -1327,7 +1331,7 @@
 								<option value="30">30</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('skill10',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('skill10',1)">
 
-							残玉
+							　残玉
 							<input type="text" name="balance" maxlength="3" size="1" value="" onblur="CheckBalanceValue()"><input type="button" value="－" class="stepbtn" onclick="StepNumber('balance',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepNumber('balance',1)"><span id="expectbalance" class="avgval"></span><br>
 
 							<div id="needtama" style="margin:4px 0; padding:4px; border:1px solid #cccccc; background-color:#f8f8f8; font-size:90%;"></div>

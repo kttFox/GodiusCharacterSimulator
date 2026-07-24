@@ -20,9 +20,16 @@ div.title span:first-child{
 #extra input{
 	vertical-align:middle;
 }
+
 #extra img{
-	margin-right:4px;
+	margin-left:6px;
+	margin-right:6px;
 }
+
+#extra #extra_song input{
+	margin-left:3px;
+}
+
 label.magiclabel{
 	cursor:pointer;
 	display:inline-block;
@@ -39,7 +46,7 @@ div.main{
 	border-left:1px solid #aaaaaa;
 	border-right:1px solid #888888;
 	border-bottom:1px solid #888888;
-	padding:8px;
+	padding:12px 16px;
 	font-family:"ＭＳ ゴシック";
 }
 div.sub{
@@ -53,6 +60,17 @@ div.sub{
 }
 div.sub input[type="button"]{
 	margin:2px 4px;
+}
+#basicblock select{
+	width:90px;
+}
+
+#resourceblock input{
+	width:70px;
+}
+
+#paramblock select{
+	width:60px;
 }
 span.slotgroup{
 	display:inline-block;
@@ -123,7 +141,7 @@ span.skill {
 	display: inline-block;
 	height: 20px;
 	line-height: 20px;
-	margin-left: 14px;	/* スキルブロック間の間隔 */
+	margin-left: 10px;	/* スキルブロック間の間隔 */
 }
 /* 行頭のスキル（hr直後・br直後）は間隔を適用しない */
 hr + span.skill,
@@ -136,7 +154,7 @@ span.skill img {
 	vertical-align: middle;
 }
 select[name^="skill"] {
-	width: 37px;
+	width: 45px;
 }
 
 /* 全セレクトボックスの高さを20pxに統一・中央揃え */
