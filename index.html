@@ -11,18 +11,36 @@
 	<meta http-equiv="Pragma" content="no-cache">
 	<meta http-equiv="Cache-Control" content="no-cache">
 	<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
-	<link rel="stylesheet" href="./css/main.css" type="text/css">
-	<script type="text/javascript" src="./js/const.js"></script>
-	<script type="text/javascript" src="./js/main.js"></script>
-	<script type="text/javascript" src="./js/sub.js"></script>
-	<script type="text/javascript" src="./js/check.js"></script>
-	<script type="text/javascript" src="./js/select.js"></script>
-	<script type="text/javascript" src="./js/disp.js"></script>
-	<script type="text/javascript" src="./js/calc.js"></script>
-	<script type="text/javascript" src="./js/extra.js"></script>
-	<script type="text/javascript" src="./js/storage.js"></script>
-	<script type="text/javascript" src="./js/realtime.js"></script>
-	<script type="text/javascript" src="./js/share.js"></script>
+	<!-- CSS/JS は毎回タイムスタンプを付けて読み込み、ブラウザキャッシュを無効化する -->
+	<script>
+		(function() {
+			var v = "?_=" + Date.now();
+			var css = ["./css/main.css"];
+			// 依存関係があるため読み込み順は変更しないこと
+			var js = [
+				"./js/const.js",
+				"./js/main.js",
+				"./js/sub.js",
+				"./js/check.js",
+				"./js/select.js",
+				"./js/disp.js",
+				"./js/calc.js",
+				"./js/extra.js",
+				"./js/storage.js",
+				"./js/realtime.js",
+				"./js/share.js"
+			];
+			var html = "";
+			for (var i = 0; i < css.length; i++) {
+				html += '<link rel="stylesheet" type="text/css" href="' + css[i] + v + '">';
+			}
+			for (var j = 0; j < js.length; j++) {
+				// document.write で出力した外部スクリプトは記述順に同期実行される
+				html += '<script type="text/javascript" src="' + js[j] + v + '"><\/script>';
+			}
+			document.write(html);
+		})();
+	</script>
 	<style>
 		div.title {
 			display: flex;
