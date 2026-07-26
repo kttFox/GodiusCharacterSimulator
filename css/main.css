@@ -65,7 +65,7 @@ div.sub input[type="button"]{
 	width:90px;
 }
 
-#resourceblock input{
+#resourceblock input[type="text"]{
 	width:70px;
 }
 
@@ -121,6 +121,23 @@ textarea{
 	margin-left: 4px;
 	color: #666666;
 	font-size: 90%;
+}
+
+/* 課金衣装チェックボックスとラベルを縦中央揃え */
+label.costume {
+	display: inline-flex;
+	align-items: center;
+	/* 行の高さいっぱいをクリック範囲にする */
+	height: 24px;
+	padding: 0 4px;
+	/* 位置を1px下げる */
+	position: relative;
+	top: 1px;
+}
+label.costume input[type="checkbox"] {
+	width: 14px;
+	height: 14px;
+	margin: 0 4px 0 0;
 }
 
 /* 取得魔法チェックボックス（火炎・冷凍・援護・聖）を大きく表示 */

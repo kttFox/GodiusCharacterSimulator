@@ -237,9 +237,10 @@ function UpdateAverageHpMpSp()
 		return;
 	}
 
-	AvgHp.innerHTML = "（平均" + GetAverageHp( Job, Lv ) + "）";
-	AvgMp.innerHTML = "（平均" + GetAverageMp( Job, Lv ) + "）";
-	AvgSp.innerHTML = "（平均" + GetAverageSp( Job, Lv ) + "）";
+	//	（課金衣装がONの場合、平均値にも＋５％を反映する）
+	AvgHp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) + "）";
+	AvgMp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) + "）";
+	AvgSp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) + "）";
 }
 
 //	リアルタイム一括更新処理
@@ -280,7 +281,7 @@ function InitNeedTamaWatcher()
 	}
 
 	//	チェックボックス・ラジオ系（取得魔法、戦士・剣闘士スキル、ドーピング、スキルアイコン選択）
-	var Groups = [ f.fire, f.ice, f.magical, f.holy, f.warrior, f.gladiator, f.doping, f.skill ];
+	var Groups = [ f.fire, f.ice, f.magical, f.holy, f.warrior, f.gladiator, f.doping, f.skill, f.costume ];
 	for( i = 0; i < Groups.length; i++ ) {
 		var Group = ToElementArray( Groups[i] );
 		for( var k = 0; k < Group.length; k++ ) {

@@ -5,6 +5,9 @@ var INITIAL_STATS = { str: 6, int: 6, agr: 6, dex: 6, vit: 6, men: 6 };
 //	初期化時にもらえる力の玉（全職業共通）
 var INITIAL_TAMA = 36;
 
+//	課金衣装装備時の最大HP/MP/SP倍率（＋５％）
+var COSTUME_RATE = 1.05;
+
 //	スキルアップテーブル（レベルi→i+1の成功率[%]と固定上げ玉数）
 //	添字0がレベル1→2。レベル30以降は暫定値（成功率5%、固定20玉）。
 var SKILL_UP_TABLE = [
