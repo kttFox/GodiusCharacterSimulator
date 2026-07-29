@@ -644,7 +644,7 @@ function AdjustDecimalPoint( InValue )
 //	関数名		：	課金衣装ボーナス適用処理
 //	機能説明	：	課金衣装チェックボックスがONの場合、最大HP/MP/SPを５％増加させる。
 //	パラメータ	：	Value	元の値
-//	戻り値		：	補正後の値（小数点以下切り捨て）
+//	戻り値		：	補正後の値（小数点以下切り上げ）
 function ApplyCostumeBonus( Value )
 {
 	var Costume = document.chara.costume;
@@ -652,7 +652,7 @@ function ApplyCostumeBonus( Value )
 		return Value;
 	}
 
-	return Math.floor( Number( Value ) * COSTUME_RATE );
+	return Math.ceil( Number( Value ) * COSTUME_RATE );
 }
 //------------------------------------------------------------------------------
 function GetAverageHp( Job, Lv )
