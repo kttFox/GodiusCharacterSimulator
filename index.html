@@ -4,7 +4,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Godius Eternal War キャラクターシミュレーター</title>
+	<title>Godius キャラシミュレーター</title>
 
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="Content-Style-Type" content="text/css">
@@ -118,7 +118,7 @@
 			<tr>
 				<td>
 					<form name="chara">
-						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.6.1</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.7</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 								<span id="slotcontainer"></span>
@@ -1370,10 +1370,10 @@
 								<option value="30">30</option>
 							</select><input type="button" value="－" class="stepbtn" onclick="StepSelect('skill10',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('skill10',1)">
 
-							　残玉
+							<span style="margin-left:10px;">残玉</span>
 							<input type="text" name="balance" maxlength="3" size="1" value="" onblur="CheckBalanceValue()"><input type="button" value="－" class="stepbtn" onclick="StepNumber('balance',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepNumber('balance',1)"><span id="expectbalance" class="avgval"></span><br>
 
-							<div id="needtama" style="margin:4px 0; padding:4px; border:1px solid #cccccc; background-color:#f8f8f8; font-size:90%;"></div>
+							<div id="needtama" style="margin:4px 0; padding:4px 6px; border:1px solid #cccccc; background-color:#f8f8f8; font-size:90%;"></div>
 
 							<hr noshade="" size="1" color="#cccccc">
 

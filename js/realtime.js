@@ -31,13 +31,14 @@ function CalcNeedTama()
 	//	スキル必要玉数（併用方式：17まで確率(期待値)・18以降固定、無効スキルは値1＝0玉）
 	//	あわせて最大スキルLvを取得（スキルLvはキャラLvの半分までのため、到達可能Lv判定に使用）
 	var SkillNeedTama = 0;
-	var MaxSkill = 1;
+	var MaxSkill = 0;
 	for( var i = 1; i <= 10; i++ ) {
 		var SkillVal = parseInt( f[ "skill" + i ].value, 10 );
 		if( isNaN( SkillVal ) || SkillVal < 1 || SkillVal > SKILL_MAX ) {
 			SkillVal = 1;
 		}
-		if( !f[ "skill" + i ].disabled && SkillVal > MaxSkill ) {
+		//	値1＝スキル未設定（無効）のため、Lv制約の対象外とする
+		if( !f[ "skill" + i ].disabled && SkillVal > 1 && SkillVal > MaxSkill ) {
 			MaxSkill = SkillVal;
 		}
 		SkillNeedTama += SKILL_HYBRID_TAMA[ SkillVal - 1 ];
@@ -148,19 +149,20 @@ function UpdateNeedTama()
 		ExpectBalance.innerHTML = "（保有想定：約" + r.diff + "玉）";
 	}
 
-	var ReachMsg = ( r.reachLv > 0 )
-		? "Lv" + r.reachLv + "以上で実現可能"
-		: "Lv" + r.maxLv + "まででは実現不可";
-
-	var DiffMsg = ( r.diff >= 0 )
-		? "現在Lv" + r.lv + "では" + r.diff + "玉余ります"
-		: "現在Lv" + r.lv + "では" + ( r.diff * -1 ) + "玉不足しています";
+	//	残玉が入力されている場合は、保有想定との差分で損得を表示する
+	var BalanceVal = ( document.chara && document.chara.balance ) ? String( document.chara.balance.value ).replace( /^\s+|\s+$/g, "" ) : "";
+	var DiffMsg = "平均的にLv" + r.reachLv + "以上で実現可能です";
+	if( BalanceVal != "" && !isNaN( BalanceVal ) ) {
+		var SonToku = Number( BalanceVal ) - r.diff;
+		DiffMsg = ( SonToku >= 0 )
+			? "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + SonToku + "玉得をしています"
+			: "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + ( SonToku * -1 ) + "玉損をしています";
+	}
 
 	Area.innerHTML =
-		"★必要玉数シミュレーター<br>" +
 		"必要合計：<b>約" + r.total + "玉</b>" +
 		"（パラ" + r.para + "玉／スキル約" + r.skill + "玉［17まで確率・18以降固定］／魔法" + r.magic + "玉）<br>" +
-		"平均的に" + ReachMsg + "、" + DiffMsg;
+		DiffMsg;
 }
 
 //	コンボボックス増減処理
@@ -205,7 +207,7 @@ function StepNumber( Name, Dir )
 	}
 
 	Value += Dir;
-	if( Value < 0 ) {
+	if( "balance" != Name && Value < 0 ) {
 		Value = 0;
 	}
 	Obj.value = Value;
