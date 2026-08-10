@@ -491,6 +491,12 @@ function SetFormValue( SaveValue )
 	SetExtraMagic( aHoly[8],      SaveValue[118], SaveValue[119] );	//	パワーシールド
 	SetExtraMagic( aWarrior[0],   SaveValue[120], SaveValue[121] );	//	戦士スキル
 	SetExtraMagic( aGladiator[0], SaveValue[122], SaveValue[123] );	//	剣闘士スキル
+
+	//	課金衣装（インデックス124）
+	//	旧セーブデータには存在しないため、undefinedの場合は未選択とする
+	if( document.chara.costume ) {
+		document.chara.costume.checked = ( String( unescape( SaveValue[124] ) ) == "true" );
+	}
 }
 //------------------------------------------------------------------------------
 //	関数名		：	追加取得魔法復元処理
@@ -654,6 +660,9 @@ function GetFormValue( SaveValue )
 	SaveValue[121]= aWarrior[0]   ? aWarrior[0].disabled   : true;
 	SaveValue[122]= aGladiator[0] ? aGladiator[0].checked  : false;	//	剣闘士スキル
 	SaveValue[123]= aGladiator[0] ? aGladiator[0].disabled : true;
+
+	//	課金衣装
+	SaveValue[124]= document.chara.costume ? document.chara.costume.checked : false;
 }
 //------------------------------------------------------------------------------
 //	キャラ名自動保存用キー
