@@ -1085,13 +1085,6 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 			//	0.25秒経過
 			Second += 0.25;
 
-			//	永久ループ対策
-			if( Second == 10000 ){
-				//	10000秒＝約3時間ループしても永久が設定されない場合は異常とする
-				SongTime[i] = "ERROR";
-				break;
-			}
-
 			//	1秒経過
 			if( Second % 1 == 0 ){
 				//	維持MP、SP消費
@@ -1182,6 +1175,13 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 					//	次レコード
 					break;
 				}
+			}
+
+			//	永久ループ対策
+			if( Second == 10000 ){
+				//	10000秒＝約3時間ループしたら永久とする
+				SongTime[i] = "永久";
+				break;
 			}
 		}
 	}
