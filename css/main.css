@@ -21,14 +21,7 @@ div.title span:first-child{
 	vertical-align:middle;
 }
 
-#extra img{
-	margin-left:6px;
-	margin-right:6px;
-}
 
-#extra #extra_song input{
-	margin-left:3px;
-}
 
 label.magiclabel{
 	cursor:pointer;
@@ -114,6 +107,7 @@ textarea{
 	font-size: 70%;
 	box-sizing: border-box;
 	vertical-align: middle;
+	margin:0 0 0 2px !important;
 }
 
 /* HP/MP/SP平均値表示 */
@@ -188,4 +182,91 @@ img[src*="/magical"],
 img[src*="/holy"],
 img[src*="/skill_"] {
 	vertical-align: middle;
+}
+
+/* 呪文(歌)の詠唱時間：アイコン＋成功率の見出し部と行の折り返し制御 */
+.song_head {
+	display: inline-block;
+	width: 75px;
+	white-space: nowrap;
+	vertical-align: top;
+	line-height: 1.3;
+}
+/* 呪文名（アイコンの右に表示・アイコンと上下中央揃え） */
+.song_name {
+	margin-left: 4px;
+	vertical-align: middle;
+}
+.song_head img {
+	vertical-align: middle;
+}
+#extra_song {
+	margin-top: 6px;
+	white-space: nowrap;
+	overflow-x: auto;
+
+	textarea[name^="songtime"] {
+		width: 70px;
+		box-sizing: border-box;
+		margin-top: 2px;
+		margin-left: 3px;
+		height: 2.9em;
+		line-height: 1.3;
+		padding: 1px 2px;
+		resize: none;
+		overflow: hidden;
+		/* 「なし」「1点」などのラベルと上端を揃える */
+		vertical-align: top;
+		/* textareaのUA既定はmonospaceのため、inputと同じ指定に揃える */
+		font-family: Arial, sans-serif;
+	}
+}
+
+/* 呪文(歌)の成功率は2行目に右揃えで表示 */
+.song_per {
+	display: block;
+	text-align: right;
+}
+
+/* 呪文(歌)の成功率欄は幅を詰める */
+input[name^="songper"] {
+	width: 45px;
+	box-sizing: border-box;
+	text-align: right;
+}
+
+/* 呪文(歌)は1呪文ごとにグループ化し、上下に余白を設ける */
+.song_group {
+	margin-bottom: 8px;
+}
+
+/* 呪文(歌)：回復の歌の増加値入力を右端に配置 */
+.song_kaihuku {
+	float: right;
+}
+
+/* 呪文(歌)：回復の歌チェックボックスとラベルを上下中央揃え */
+.song_kaihuku label {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+}
+.song_kaihuku label input[type="checkbox"] {
+	margin: 0 4px 0 0;
+	vertical-align: middle;
+}
+
+/* 呪文(歌)：ラベルと時間欄をまとめたセル。
+   flexコンテナにするとタグ間の改行由来の空白が無視される */
+.song_group {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+.song_group > * {
+	/* 幅が縮まないようにする */
+	flex: none;
+}
+.song_cell {
+	white-space: nowrap;
 }

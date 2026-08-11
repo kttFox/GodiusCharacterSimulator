@@ -409,211 +409,91 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		document.chara.songper06.disabled = false;
 		document.chara.songper07.disabled = false;
 
-		//	詠唱時間定義テーブル
-		//							[0]勇気		[1]卑怯		[2]恐怖		[3]盲目		[4]回復		[5]不治		[6]沈黙
-		var SongTime			=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
-		var SongTimeAcc1		=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
-		var SongTimeAcc2		=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
-		var SongTimeAcc3		=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
-		var SongTimeKaihuku		=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
-		var SongTimeFuji		=	[["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"],	["00:00"]];
+		//	詠唱時間定義テーブル(MP切れ／SP切れ)
+		//	キー：入力項目名の接尾辞、値：[MP切れ時間配列, SP切れ時間配列]
+		var SongTimeList = [
+			//	接尾辞		回復アクセ	回復の歌	不治の歌
+			["",			0,			0,			0],
+			["acc1",		1,			0,			0],
+			["acc2",		2,			0,			0],
+			["acc3",		3,			0,			0],
+			["kaihuku",		0,			1,			0],
+			["fuji",		0,			0,			1]
+		];
+
+		//	回復の歌による回復量の増加値（入力欄。未設定時は5）
+		var KaihukuUp = 5;
+		if( document.chara.songkaihukuup ){
+			KaihukuUp = document.chara.songkaihukuup.value - 0;
+		}
+
+		//	回復の歌を全体へ適用するか（チェックONの場合、全条件へ回復の歌の効果を反映）
+		var KaihukuAll = 0;
+		if( document.chara.songkaihukuall && document.chara.songkaihukuall.checked ){
+			KaihukuAll = 1;
+		}
 
 		//	呪文詠唱時間設定
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTime, 0, 0, 0 );
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeAcc1, 1, 0, 0 );
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeAcc2, 2, 0, 0 );
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeAcc3, 3, 0, 0 );
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeKaihuku, 0, 1, 0 );
-		GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeFuji, 0, 0, 1 );
+		for( var s = 0; s < SongTimeList.length; ++s ){
 
-		document.chara.songtime01.value = SongTime[0];
-		document.chara.songtime02.value = SongTime[1];
-		document.chara.songtime03.value = SongTime[2];
-		document.chara.songtime04.value = SongTime[3];
-		document.chara.songtime05.value = SongTime[4];
-		document.chara.songtime06.value = SongTime[5];
-		document.chara.songtime07.value = SongTime[6];
-		document.chara.songtime01acc1.value = SongTimeAcc1[0];
-		document.chara.songtime02acc1.value = SongTimeAcc1[1];
-		document.chara.songtime03acc1.value = SongTimeAcc1[2];
-		document.chara.songtime04acc1.value = SongTimeAcc1[3];
-		document.chara.songtime05acc1.value = SongTimeAcc1[4];
-		document.chara.songtime06acc1.value = SongTimeAcc1[5];
-		document.chara.songtime07acc1.value = SongTimeAcc1[6];
-		document.chara.songtime01acc2.value = SongTimeAcc2[0];
-		document.chara.songtime02acc2.value = SongTimeAcc2[1];
-		document.chara.songtime03acc2.value = SongTimeAcc2[2];
-		document.chara.songtime04acc2.value = SongTimeAcc2[3];
-		document.chara.songtime05acc2.value = SongTimeAcc2[4];
-		document.chara.songtime06acc2.value = SongTimeAcc2[5];
-		document.chara.songtime07acc2.value = SongTimeAcc2[6];
-		document.chara.songtime01acc3.value = SongTimeAcc3[0];
-		document.chara.songtime02acc3.value = SongTimeAcc3[1];
-		document.chara.songtime03acc3.value = SongTimeAcc3[2];
-		document.chara.songtime04acc3.value = SongTimeAcc3[3];
-		document.chara.songtime05acc3.value = SongTimeAcc3[4];
-		document.chara.songtime06acc3.value = SongTimeAcc3[5];
-		document.chara.songtime07acc3.value = SongTimeAcc3[6];
-		document.chara.songtime01kaihuku.value = SongTimeKaihuku[0];
-		document.chara.songtime02kaihuku.value = SongTimeKaihuku[1];
-		document.chara.songtime03kaihuku.value = SongTimeKaihuku[2];
-		document.chara.songtime04kaihuku.value = SongTimeKaihuku[3];
-		document.chara.songtime05kaihuku.value = SongTimeKaihuku[4];
-		document.chara.songtime06kaihuku.value = SongTimeKaihuku[5];
-		document.chara.songtime07kaihuku.value = SongTimeKaihuku[6];
-		document.chara.songtime01fuji.value = SongTimeFuji[0];
-		document.chara.songtime02fuji.value = SongTimeFuji[1];
-		document.chara.songtime03fuji.value = SongTimeFuji[2];
-		document.chara.songtime04fuji.value = SongTimeFuji[3];
-		document.chara.songtime05fuji.value = SongTimeFuji[4];
-		document.chara.songtime06fuji.value = SongTimeFuji[5];
-		document.chara.songtime07fuji.value = SongTimeFuji[6];
-		document.chara.songtime01.disabled = false;
-		document.chara.songtime02.disabled = false;
-		document.chara.songtime03.disabled = false;
-		document.chara.songtime04.disabled = false;
-		document.chara.songtime05.disabled = false;
-		document.chara.songtime06.disabled = false;
-		document.chara.songtime07.disabled = false;
-		document.chara.songtime01acc1.disabled = false;
-		document.chara.songtime02acc1.disabled = false;
-		document.chara.songtime03acc1.disabled = false;
-		document.chara.songtime04acc1.disabled = false;
-		document.chara.songtime05acc1.disabled = false;
-		document.chara.songtime06acc1.disabled = false;
-		document.chara.songtime07acc1.disabled = false;
-		document.chara.songtime01acc2.disabled = false;
-		document.chara.songtime02acc2.disabled = false;
-		document.chara.songtime03acc2.disabled = false;
-		document.chara.songtime04acc2.disabled = false;
-		document.chara.songtime05acc2.disabled = false;
-		document.chara.songtime06acc2.disabled = false;
-		document.chara.songtime07acc2.disabled = false;
-		document.chara.songtime01acc3.disabled = false;
-		document.chara.songtime02acc3.disabled = false;
-		document.chara.songtime03acc3.disabled = false;
-		document.chara.songtime04acc3.disabled = false;
-		document.chara.songtime05acc3.disabled = false;
-		document.chara.songtime06acc3.disabled = false;
-		document.chara.songtime07acc3.disabled = false;
-		document.chara.songtime01kaihuku.disabled = false;
-		document.chara.songtime02kaihuku.disabled = false;
-		document.chara.songtime03kaihuku.disabled = false;
-		document.chara.songtime04kaihuku.disabled = false;
-		document.chara.songtime05kaihuku.disabled = false;
-		document.chara.songtime06kaihuku.disabled = false;
-		document.chara.songtime07kaihuku.disabled = false;
-		document.chara.songtime01fuji.disabled = false;
-		document.chara.songtime02fuji.disabled = false;
-		document.chara.songtime03fuji.disabled = false;
-		document.chara.songtime04fuji.disabled = false;
-		document.chara.songtime05fuji.disabled = false;
-		document.chara.songtime06fuji.disabled = false;
-		document.chara.songtime07fuji.disabled = false;
+			//	詠唱時間取得
+			var SongTimeMp = ["00:00","00:00","00:00","00:00","00:00","00:00","00:00"];
+			var SongTimeSp = ["00:00","00:00","00:00","00:00","00:00","00:00","00:00"];
+			//	全体適用ONの場合は回復の歌ありとして計算する
+			var Kaihuku = SongTimeList[s][2];
+			if( KaihukuAll == 1 ){
+				Kaihuku = 1;
+			}
+
+			GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeMp, SongTimeSp,
+							  SongTimeList[s][1], Kaihuku, SongTimeList[s][3], KaihukuUp );
+
+			//	呪文数分ループ
+			for( var n = 0; n <= 6; ++n ){
+
+				//	項目名作成(例：songtime01acc1)
+				var Name = "songtime0" + ( n + 1 ) + SongTimeList[s][0];
+
+				//	先に切れる方の末尾に要因(m：MP切れ、s：SP切れ)を付与
+				var StrMp = SongTimeMp[n];
+				var StrSp = SongTimeSp[n];
+				var SecMp = GetSongTimeSecond( StrMp );
+				var SecSp = GetSongTimeSecond( StrSp );
+
+				//	永久の場合は付与しない
+				if( StrMp != "永久" && SecMp <= SecSp ){
+					StrMp += "m";
+				}
+				if( StrSp != "永久" && SecSp <= SecMp ){
+					StrSp += "s";
+				}
+
+				//	1行目：MP切れ時間、2行目：SP切れ時間
+				document.chara[Name].value = StrMp + "\n" + StrSp;
+				document.chara[Name].disabled = false;
+			}
+		}
 	}
 
 	//	呪文スキルなしの場合
 	else{
 		//	セクション非表示
 		document.getElementById("extra_song_sec").style.display = "none";
-		document.chara.songper01.value = "0.0";
-		document.chara.songper02.value = "0.0";
-		document.chara.songper03.value = "0.0";
-		document.chara.songper04.value = "0.0";
-		document.chara.songper05.value = "0.0";
-		document.chara.songper06.value = "0.0";
-		document.chara.songper07.value = "0.0";
-		document.chara.songtime01.value = "00:00";
-		document.chara.songtime02.value = "00:00";
-		document.chara.songtime03.value = "00:00";
-		document.chara.songtime04.value = "00:00";
-		document.chara.songtime05.value = "00:00";
-		document.chara.songtime06.value = "00:00";
-		document.chara.songtime07.value = "00:00";
-		document.chara.songtime01acc1.value = "00:00";
-		document.chara.songtime02acc1.value = "00:00";
-		document.chara.songtime03acc1.value = "00:00";
-		document.chara.songtime04acc1.value = "00:00";
-		document.chara.songtime05acc1.value = "00:00";
-		document.chara.songtime06acc1.value = "00:00";
-		document.chara.songtime07acc1.value = "00:00";
-		document.chara.songtime01acc2.value = "00:00";
-		document.chara.songtime02acc2.value = "00:00";
-		document.chara.songtime03acc2.value = "00:00";
-		document.chara.songtime04acc2.value = "00:00";
-		document.chara.songtime05acc2.value = "00:00";
-		document.chara.songtime06acc2.value = "00:00";
-		document.chara.songtime07acc2.value = "00:00";
-		document.chara.songtime01acc3.value = "00:00";
-		document.chara.songtime02acc3.value = "00:00";
-		document.chara.songtime03acc3.value = "00:00";
-		document.chara.songtime04acc3.value = "00:00";
-		document.chara.songtime05acc3.value = "00:00";
-		document.chara.songtime06acc3.value = "00:00";
-		document.chara.songtime07acc3.value = "00:00";
-		document.chara.songtime01kaihuku.value = "00:00";
-		document.chara.songtime02kaihuku.value = "00:00";
-		document.chara.songtime03kaihuku.value = "00:00";
-		document.chara.songtime04kaihuku.value = "00:00";
-		document.chara.songtime05kaihuku.value = "00:00";
-		document.chara.songtime06kaihuku.value = "00:00";
-		document.chara.songtime07kaihuku.value = "00:00";
-		document.chara.songtime01fuji.value = "00:00";
-		document.chara.songtime02fuji.value = "00:00";
-		document.chara.songtime03fuji.value = "00:00";
-		document.chara.songtime04fuji.value = "00:00";
-		document.chara.songtime05fuji.value = "00:00";
-		document.chara.songtime06fuji.value = "00:00";
-		document.chara.songtime07fuji.value = "00:00";
-		document.chara.songper01.disabled = true;
-		document.chara.songper02.disabled = true;
-		document.chara.songper03.disabled = true;
-		document.chara.songper04.disabled = true;
-		document.chara.songper05.disabled = true;
-		document.chara.songper06.disabled = true;
-		document.chara.songper07.disabled = true;
-		document.chara.songtime01.disabled = true;
-		document.chara.songtime02.disabled = true;
-		document.chara.songtime03.disabled = true;
-		document.chara.songtime04.disabled = true;
-		document.chara.songtime05.disabled = true;
-		document.chara.songtime06.disabled = true;
-		document.chara.songtime07.disabled = true;
-		document.chara.songtime01acc1.disabled = true;
-		document.chara.songtime02acc1.disabled = true;
-		document.chara.songtime03acc1.disabled = true;
-		document.chara.songtime04acc1.disabled = true;
-		document.chara.songtime05acc1.disabled = true;
-		document.chara.songtime06acc1.disabled = true;
-		document.chara.songtime07acc1.disabled = true;
-		document.chara.songtime01acc2.disabled = true;
-		document.chara.songtime02acc2.disabled = true;
-		document.chara.songtime03acc2.disabled = true;
-		document.chara.songtime04acc2.disabled = true;
-		document.chara.songtime05acc2.disabled = true;
-		document.chara.songtime06acc2.disabled = true;
-		document.chara.songtime07acc2.disabled = true;
-		document.chara.songtime01acc3.disabled = true;
-		document.chara.songtime02acc3.disabled = true;
-		document.chara.songtime03acc3.disabled = true;
-		document.chara.songtime04acc3.disabled = true;
-		document.chara.songtime05acc3.disabled = true;
-		document.chara.songtime06acc3.disabled = true;
-		document.chara.songtime07acc3.disabled = true;
-		document.chara.songtime01kaihuku.disabled = true;
-		document.chara.songtime02kaihuku.disabled = true;
-		document.chara.songtime03kaihuku.disabled = true;
-		document.chara.songtime04kaihuku.disabled = true;
-		document.chara.songtime05kaihuku.disabled = true;
-		document.chara.songtime06kaihuku.disabled = true;
-		document.chara.songtime07kaihuku.disabled = true;
-		document.chara.songtime01fuji.disabled = true;
-		document.chara.songtime02fuji.disabled = true;
-		document.chara.songtime03fuji.disabled = true;
-		document.chara.songtime04fuji.disabled = true;
-		document.chara.songtime05fuji.disabled = true;
-		document.chara.songtime06fuji.disabled = true;
-		document.chara.songtime07fuji.disabled = true;
+		//	呪文数分ループ
+		for( var n = 0; n <= 6; ++n ){
+
+			//	成功率初期化
+			document.chara["songper0" + ( n + 1 )].value = "0.0";
+			document.chara["songper0" + ( n + 1 )].disabled = true;
+
+			//	詠唱時間初期化(接尾辞分ループ)
+			var ClearList = [ "", "acc1", "acc2", "acc3", "kaihuku", "fuji" ];
+			for( var c = 0; c < ClearList.length; ++c ){
+				var ClearName = "songtime0" + ( n + 1 ) + ClearList[c];
+				document.chara[ClearName].value = "00:00\n00:00";
+				document.chara[ClearName].disabled = true;
+			}
+		}
 	}
 
 	//	錬金スキルありの場合
@@ -984,6 +864,26 @@ function GetExtraSongPercent( Skill, Men, SongPer )
 	}
 }
 //------------------------------------------------------------------------------
+//	関数名		：	呪文詠唱時間秒数変換処理
+//	機能説明	：	「分:秒」形式の詠唱時間を秒数へ変換して返す。
+//	パラメータ	：	String	詠唱時間文字列（「00:00」または「永久」）
+//	戻り値		：	秒数（「永久」の場合は最大値）
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function GetSongTimeSecond( String )
+{
+	//	永久の場合は最大値を返す
+	if( String == "永久" ){
+		return Number.MAX_VALUE;
+	}
+
+	//	分と秒に分解
+	var Time = String.split( ":" );
+
+	//	秒数へ変換
+	return ( Time[0] - 0 ) * 60 + ( Time[1] - 0 );
+}
+//------------------------------------------------------------------------------
 //	関数名		：	呪文詠唱時間取得処理
 //	機能説明	：	呪文発動時における詠唱時間を返す。
 //	パラメータ	：	Skill		呪文スキル
@@ -998,16 +898,12 @@ function GetExtraSongPercent( Skill, Men, SongPer )
 //	戻り値		：	なし
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, Kaihuku, Fuji )
+function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp, Accessory, Kaihuku, Fuji, KaihukuUp )
 {
 	//	変数宣言
 	var Mp = 0;											//	MP(計算用)
 	var Sp = 0;											//	SP(計算用)
 	var Second = 0;										//	経過秒
-	var Minute = 0;										//	経過分
-	var StrSecond = 0;									//	経過秒(文字列)
-	var StrMinute = 0;									//	経過分(文字列)
-	var String = "00:00";								//	経過時間(文字列)
 	var MpUp = MpOrg / 10;								//	1回あたりのMP回復量
 	var SpUp = SpOrg / 10;								//	1回あたりのSP回復量
 	var MpUpSec = GetRegenerationSecond( Men );			//	MP自動回復秒数取得
@@ -1024,6 +920,35 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 		[20,		20,		6,		7]					//	[6]沈黙
 	];
 
+	//	経過秒を「分:秒」形式の文字列へ変換する
+	function FormatTime( Sec )
+	{
+		//	秒数切り捨て
+		Sec = Math.floor( Sec );
+
+		//	分および秒設定
+		var Minute = Math.floor( Sec / 60 );
+		var Rest = Sec % 60;
+		var String = "";
+
+		//	詠唱時間文字列作成
+		if( ( Minute + "" ).length == 1 ){
+			String = "0" + Minute + ":";
+		}
+		else{
+			String = Minute + ":";
+		}
+
+		if( ( Rest + "" ).length == 1 ){
+			String += "0" + Rest;
+		}
+		else{
+			String += Rest;
+		}
+
+		return String;
+	}
+
 	//	不治の歌ありの場合、回復量0とする
 	if( Fuji == 1 ){
 		MpUp = 0;
@@ -1035,7 +960,6 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 	//	回復アクセありの場合
 	if( Accessory >= 1 && Accessory <= 3 ){
 		MpUp += ( Accessory - 0 ) * 3;
-		SpUp += ( Accessory - 0 ) * 3;
 	}
 
 	//	MP、SPの回復量が30より大きい場合、30とする
@@ -1048,8 +972,8 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 
 	//	回復の歌ありの場合
 	if( Kaihuku == 1 ){
-		MpUp += 5;
-		SpUp += 5;
+		MpUp += KaihukuUp;
+		SpUp += KaihukuUp;
 	}
 
 	//	呪文（歌）の詠唱中は回復量が半分になる（端数処理なし、小数点を含めて計算）
@@ -1068,15 +992,29 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 		Sp = SpOrg;
 		var NextMpTime = MpUpSec;	//	次回MP回復時刻
 		var NextSpTime = SpUpSec;	//	次回SP回復時刻
+		var MpEnd = 0;				//	MP切れ確定フラグ
+		var SpEnd = 0;				//	SP切れ確定フラグ
 
 		//	呪文発動
 		Mp -= SongTable[i][0];
 		Sp -= SongTable[i][1];
 
-		//	発動と同時にストップする場合
-		if( Mp <= 0 || Sp <= 0 ){
+		//	発動と同時にMPがストップする場合
+		if( Mp <= 0 ){
 			//	０秒を設定
-			SongTime[i] = "00:00";
+			SongTimeMp[i] = "00:00";
+			MpEnd = 1;
+		}
+
+		//	発動と同時にSPがストップする場合
+		if( Sp <= 0 ){
+			//	０秒を設定
+			SongTimeSp[i] = "00:00";
+			SpEnd = 1;
+		}
+
+		//	MP、SPともに確定済の場合は次の呪文へ
+		if( MpEnd == 1 && SpEnd == 1 ){
 			continue;
 		}
 
@@ -1087,51 +1025,29 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 
 			//	1秒経過
 			if( Second % 1 == 0 ){
-				//	維持MP、SP消費
-				Mp -= SongTable[i][2];
-				Sp -= SongTable[i][3];
+				//	維持MP、SP消費(確定済のものは計算対象外)
+				if( MpEnd == 0 ){
+					Mp -= SongTable[i][2];
+				}
+				if( SpEnd == 0 ){
+					Sp -= SongTable[i][3];
+				}
 			}
 
-			//	呪文が切れた場合
-			if( Mp <= 0 || Sp <= 0 ){
+			//	MPが切れた場合
+			if( MpEnd == 0 && Mp <= 0 ){
+				SongTimeMp[i] = FormatTime( Second );
+				MpEnd = 1;
+			}
 
-				//	秒数切り捨て
-				Second = Math.floor( Second );
+			//	SPが切れた場合
+			if( SpEnd == 0 && Sp <= 0 ){
+				SongTimeSp[i] = FormatTime( Second );
+				SpEnd = 1;
+			}
 
-				//	分および秒設定
-				Minute = Math.floor( Second / 60 );
-				StrMinute = Minute + "";
-
-				Second = Second % 60;
-				StrSecond = Second + "";
-
-				//	詠唱時間文字列作成
-				if( StrMinute.length == 1 ){
-					String = "0" + Minute + ":";
-				}
-				if( StrMinute.length == 2 ){
-					String = Minute + ":";
-				}
-
-				if( StrSecond.length == 1 ){
-					String += "0" + Second;
-				}
-				if( StrSecond.length == 2 ){
-					String += Second;
-				}
-
-				//	切れ要因付与(m：MP切れ、s：SP切れ)
-				if( Mp <= 0 ){
-					String += "m";
-				}
-				if( Sp <= 0 ){
-					String += "s";
-				}
-
-				//	テーブルへ設定
-				SongTime[i] = String;
-
-				//	次の呪文へ
+			//	MP、SPともに確定した場合
+			if( MpEnd == 1 && SpEnd == 1 ){
 				break;
 			}
 
@@ -1140,39 +1056,50 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 			//	 次回回復時刻を累積して経過分をまとめて回復する)
 			if( MpUpSec > 0 ){
 				while( Second + 0.0001 >= NextMpTime ){
-					Mp += MpUp;
-					NextMpTime += MpUpSec;
+					if( MpEnd == 0 ){
+						Mp += MpUp;
 
-					//	上限超過時は最大を設定
-					if( Mp >= MpOrg ){
-						Mp = MpOrg;
+						//	上限超過時は最大を設定
+						if( Mp >= MpOrg ){
+							Mp = MpOrg;
+						}
 					}
+					NextMpTime += MpUpSec;
 				}
 			}
 
 			//	SP回復
 			if( SpUpSec > 0 ){
 				while( Second + 0.0001 >= NextSpTime ){
-					Sp += SpUp;
-					NextSpTime += SpUpSec;
+					if( SpEnd == 0 ){
+						Sp += SpUp;
 
-					//	上限超過時は最大を設定
-					if( Sp >= SpOrg ){
-						Sp = SpOrg;
+						//	上限超過時は最大を設定
+						if( Sp >= SpOrg ){
+							Sp = SpOrg;
+						}
 					}
+					NextSpTime += SpUpSec;
 				}
 			}
 
 			//	AQ判定(15秒単位経過時点)
 			if( Second % 15 == 0 ){
 
-				//	現在MPが呪文発動直後のMP以上、かつ
-				//	現在SPが呪文発動直後のSP以上の場合
-				if( Mp >= MpOrg - SongTable[i][0] && Sp >= SpOrg - SongTable[i][1] ){
-					//	永久とする
-					SongTime[i] = "永久";
+				//	現在MPが呪文発動直後のMP以上の場合、永久とする
+				if( MpEnd == 0 && Mp >= MpOrg - SongTable[i][0] ){
+					SongTimeMp[i] = "永久";
+					MpEnd = 1;
+				}
 
-					//	次レコード
+				//	現在SPが呪文発動直後のSP以上の場合、永久とする
+				if( SpEnd == 0 && Sp >= SpOrg - SongTable[i][1] ){
+					SongTimeSp[i] = "永久";
+					SpEnd = 1;
+				}
+
+				//	MP、SPともに確定した場合
+				if( MpEnd == 1 && SpEnd == 1 ){
 					break;
 				}
 			}
@@ -1180,7 +1107,12 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTime, Accessory, K
 			//	永久ループ対策
 			if( Second == 10000 ){
 				//	10000秒＝約3時間ループしたら永久とする
-				SongTime[i] = "永久";
+				if( MpEnd == 0 ){
+					SongTimeMp[i] = "永久";
+				}
+				if( SpEnd == 0 ){
+					SongTimeSp[i] = "永久";
+				}
 				break;
 			}
 		}

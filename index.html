@@ -118,7 +118,7 @@
 			<tr>
 				<td>
 					<form name="chara">
-						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.7</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.8</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 								<span id="slotcontainer"></span>
@@ -2131,72 +2131,116 @@
 								</div>
 
 								<div id="extra_song_sec" style="display:block">
-									呪文 (成功率・詠唱時間 (回復アクセ／影響歌) )<br>
+									呪文 (成功率・詠唱時間 ／上段：MP切れ、下段：SP切れ)
+									<span class="song_kaihuku"><label><input type="checkbox" name="songkaihukuall" onchange="UpdateRealtimeAll()">回復の歌(スキル+MEN/5)</label> <select name="songkaihukuup" onchange="UpdateRealtimeAll()"><option value="1">～5 (+1)</option><option value="2">～10 (+2)</option><option value="3">～15 (+3)</option><option value="4">～20 (+4)</option><option value="5" selected="selected">～25 (+5)</option><option value="6">～30 (+6)</option><option value="7">～35 (+7)</option><option value="8">～40 (+8)</option><option value="9">～45 (+9)</option><option value="10">～50 (+10)</option><option value="11">～55 (+11)</option><option value="12">～60 (+12)</option><option value="13">～63 (+13)</option></select><input type="button" value="－" class="stepbtn" onclick="StepSelect('songkaihukuup',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepSelect('songkaihukuup',1)"></span><br>
 									<div id="extra_song" style="display:block">
-										<img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4" title="勇気の歌 初期MP5 SP10 維持MP4 SP4"><input type="text" name="songper01" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime01" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime01acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime01acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime01acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime01kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime01fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song02.gif" alt="卑怯者の歌 初期MP6 SP11 維持MP4 SP5" title="卑怯者の歌 初期MP6 SP11 維持MP4 SP5"><input type="text" name="songper02" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime02" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime02acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime02acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime02acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime02kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime02fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song03.gif" alt="恐怖の歌 初期MP7 SP15 維持MP4 SP4" title="恐怖の歌 初期MP7 SP15 維持MP4 SP4"><input type="text" name="songper03" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime03" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime03acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime03acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime03acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime03kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime03fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song04.gif" alt="盲目の歌 初期MP20 SP25 維持MP6 SP6" title="盲目の歌 初期MP20 SP25 維持MP6 SP6"><input type="text" name="songper04" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime04" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime04acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime04acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime04acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime04kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime04fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song05.gif" alt="回復の歌 初期MP10 SP15 維持MP5 SP4" title="回復の歌 初期MP10 SP15 維持MP5 SP4"><input type="text" name="songper05" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime05" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime05acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime05acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime05acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime05kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime05fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song06.gif" alt="不治の歌 初期MP12 SP17 維持MP5 SP4" title="不治の歌 初期MP12 SP17 維持MP5 SP4"><input type="text" name="songper06" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime06" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime06acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime06acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime06acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime06kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime06fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
-										<img src="./img/song07.gif" alt="沈黙の歌 初期MP20 SP20 維持MP6 SP7" title="沈黙の歌 初期MP20 SP20 維持MP6 SP7"><input type="text" name="songper07" value="0.0" maxlength="3" size="5" disabled="disabled" readonly>%
-										なし<input type="text" name="songtime07" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										1点<input type="text" name="songtime07acc1" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										2点<input type="text" name="songtime07acc2" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										3点<input type="text" name="songtime07acc3" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										回復<input type="text" name="songtime07kaihuku" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										不治<input type="text" name="songtime07fuji" value="00:00" maxlength="7" size="5" disabled="disabled" readonly>
-										<br>
-
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song01.gif" alt="勇気の歌 初期MP5 SP10 維持MP4 SP4" title="勇気の歌 初期MP5 SP10 維持MP4 SP4"><span class="song_name">勇気</span><span class="song_per"><input type="text" name="songper01" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime01" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime01acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime01acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime01acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime01kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime01fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
 									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song02.gif" alt="卑怯者の歌 初期MP6 SP11 維持MP4 SP5" title="卑怯者の歌 初期MP6 SP11 維持MP4 SP5"><span class="song_name">卑怯者</span><span class="song_per"><input type="text" name="songper02" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime02" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime02acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime02acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime02acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime02kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime02fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song03.gif" alt="恐怖の歌 初期MP7 SP15 維持MP4 SP4" title="恐怖の歌 初期MP7 SP15 維持MP4 SP4"><span class="song_name">恐怖</span><span class="song_per"><input type="text" name="songper03" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime03" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime03acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime03acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime03acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime03kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime03fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song04.gif" alt="盲目の歌 初期MP20 SP25 維持MP6 SP6" title="盲目の歌 初期MP20 SP25 維持MP6 SP6"><span class="song_name">盲目</span><span class="song_per"><input type="text" name="songper04" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime04" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime04acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime04acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime04acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime04kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime04fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song05.gif" alt="回復の歌 初期MP10 SP15 維持MP5 SP4" title="回復の歌 初期MP10 SP15 維持MP5 SP4"><span class="song_name">回復</span><span class="song_per"><input type="text" name="songper05" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime05" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime05acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime05acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime05acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime05kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime05fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song06.gif" alt="不治の歌 初期MP12 SP17 維持MP5 SP4" title="不治の歌 初期MP12 SP17 維持MP5 SP4"><span class="song_name">不治</span><span class="song_per"><input type="text" name="songper06" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime06" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime06acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime06acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime06acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime06kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime06fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+									<div class="song_group">
+										<span class="song_head"><img src="./img/song07.gif" alt="沈黙の歌 初期MP20 SP20 維持MP6 SP7" title="沈黙の歌 初期MP20 SP20 維持MP6 SP7"><span class="song_name">沈黙</span><span class="song_per"><input type="text" name="songper07" value="0.0" disabled="disabled" readonly>%</span></span>
+										<span class="song_cell">アクセなし<textarea name="songtime07" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">1点<textarea name="songtime07acc1" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">2点<textarea name="songtime07acc2" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">3点<textarea name="songtime07acc3" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">回復<textarea name="songtime07kaihuku" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+										<span class="song_cell">不治<textarea name="songtime07fuji" rows="2" wrap="off" disabled="disabled" readonly>00:00
+00:00</textarea></span>
+									</div>
+								</div>
+								</div>
 
 									<hr noshade="" size="1" color="#cccccc">
 
