@@ -293,7 +293,7 @@ function InitNeedTamaWatcher()
 
 	//	プログラムから値を書き換える既存関数をラップし、実行後に表示を更新する
 	//	（初期化、一括変更、リセット、ロード、魔法クリック、セット装備）
-	var WrapFuncs = [ "CharaSub", "ChangeParameterAll", "FormReset", "LoadChara", "ClickMagic",
+	var WrapFuncs = [ "CharaSub", "FormReset", "LoadChara", "ClickMagic",
 		"SelectBaronSet", "SelectDiamondSet", "SelectFightingGodSet", "SelectLightPrince",
 		"SelectOnslaughtSet", "SelectRaydanSet", "SelectSkandaSet", "SelectSolidSet", "SelectSteelSet" ];
 	for( i = 0; i < WrapFuncs.length; i++ ) {
