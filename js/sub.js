@@ -191,7 +191,7 @@ function ChangeParameter( Obj )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -211,7 +211,7 @@ function ChangeParameter( Obj )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -366,7 +366,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -386,7 +386,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -407,7 +407,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -427,7 +427,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -448,7 +448,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -468,7 +468,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -489,7 +489,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -509,7 +509,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -530,7 +530,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -550,7 +550,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
@@ -571,7 +571,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama -= 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 4;
+					DifTama -= 5;
 				} else {
 					DifTama -= 5;
 				}
@@ -591,7 +591,7 @@ function ChangeParameterAll( Value )
 				} else if( i >= 20 && i <= 24 ) {
 					DifTama += 4;
 				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 4;
+					DifTama += 5;
 				} else {
 					DifTama += 5;
 				}
