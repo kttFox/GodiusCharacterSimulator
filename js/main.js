@@ -305,7 +305,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
@@ -320,7 +320,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
@@ -335,7 +335,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
@@ -350,7 +350,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
@@ -365,7 +365,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
@@ -380,7 +380,7 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 		} else if( i >= 21 && i <= 25 ) {
 			ParaUseTama += 4;
 		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 4;
+			ParaUseTama += 5;
 		} else if( i >= 31 && i <= 99 ) {
 			ParaUseTama += 5;
 		}
