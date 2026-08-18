@@ -288,103 +288,14 @@ function GetUseParaTama( Job, Str, Int, Agr, Dex, Vit, Men, ParaUseTama )
 {
 	//	職業別初期パラメータ取得（const.js）
 	var InitStats = GetInitialStats( Job );
-	var FirstStr = InitStats.str;
-	var FirstInt = InitStats.int;
-	var FirstAgr = InitStats.agr;
-	var FirstDex = InitStats.dex;
-	var FirstVit = InitStats.vit;
-	var FirstMen = InitStats.men;
 
-	//	パラメータ使用玉数取得処理
-	//	STR
-	for( i = FirstStr; i <= Str; i++ ) {
-		if( i > FirstStr && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
-
-	//	INT
-	for( i = FirstInt; i <= Int; i++ ) {
-		if( i > FirstInt && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
-
-	//	AGR
-	for( i = FirstAgr; i <= Agr; i++ ) {
-		if( i > FirstAgr && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
-
-	//	DEX
-	for( i = FirstDex; i <= Dex; i++ ) {
-		if( i > FirstDex && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
-
-	//	VIT
-	for( i = FirstVit; i <= Vit; i++ ) {
-		if( i > FirstVit && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
-
-	//	MEN
-	for( i = FirstMen; i <= Men; i++ ) {
-		if( i > FirstMen && i <= 15 ) {
-			ParaUseTama += 1;
-		} else if( i >= 16 && i <= 20 ) {
-			ParaUseTama += 3;
-		} else if( i >= 21 && i <= 25 ) {
-			ParaUseTama += 4;
-		} else if( i >= 26 && i <= 30 ) {
-			ParaUseTama += 5;
-		} else if( i >= 31 && i <= 99 ) {
-			ParaUseTama += 5;
-		}
-	}
+	//	各パラメータの初期値→現在値の必要玉数を合算（const.js の GetParaTamaRange を使用）
+	ParaUseTama += GetParaTamaRange( InitStats.str, Str );
+	ParaUseTama += GetParaTamaRange( InitStats.int, Int );
+	ParaUseTama += GetParaTamaRange( InitStats.agr, Agr );
+	ParaUseTama += GetParaTamaRange( InitStats.dex, Dex );
+	ParaUseTama += GetParaTamaRange( InitStats.vit, Vit );
+	ParaUseTama += GetParaTamaRange( InitStats.men, Men );
 
 	return ParaUseTama;
 }

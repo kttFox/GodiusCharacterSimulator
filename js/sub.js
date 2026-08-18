@@ -169,54 +169,13 @@ function ChangeParameter( Obj )
 	if( IsTamaLink() ) {
 
 		//	パラメータの設定
-		var Parameter =  eval( Obj.value );
+		var Parameter = eval( Obj.value );
 
 		//	力の玉の設定
 		var Tama = eval( document.chara.balance.value );
 
-		//	力の玉の差
-		var DifTama = 0;
-
-		//	パラメータ増加時
-		if( Parameter > BeforeParameter ) {
-			var MAX = Parameter;
-			var MIN = BeforeParameter;
-
-			//	差分取得ループ
-			for( i = MIN; i < MAX; i++ ) {
-				if( i >= 6 && i <= 14 ) {
-					DifTama -= 1;
-				} else if( i >= 15 && i <= 19 ) {
-					DifTama -= 3;
-				} else if( i >= 20 && i <= 24 ) {
-					DifTama -= 4;
-				} else if( i >= 25 && i <= 29 ) {
-					DifTama -= 5;
-				} else {
-					DifTama -= 5;
-				}
-			}
-
-		//	パラメータ減少時
-		} else if( Parameter < BeforeParameter ) {
-			var MAX = BeforeParameter;
-			var MIN = Parameter;
-		
-			//	差分取得ループ
-			for( i = MIN; i < MAX; i++ ) {
-				if( i >= 6 && i <= 14 ) {
-					DifTama += 1;
-				} else if( i >= 15 && i <= 19 ) {
-					DifTama += 3;
-				} else if( i >= 20 && i <= 24 ) {
-					DifTama += 4;
-				} else if( i >= 25 && i <= 29 ) {
-					DifTama += 5;
-				} else {
-					DifTama += 5;
-				}
-			}
-		}
+		//	力の玉の差（const.js の GetParaTamaRange を使用。増加なら消費、減少なら返却）
+		var DifTama = -GetParaTamaRange( BeforeParameter, Parameter );
 
 		//	残玉＋差分の玉
 		Tama += DifTama;
@@ -228,6 +187,7 @@ function ChangeParameter( Obj )
 		BeforeParameter = Parameter;
 	}
 }
+
 //	スキル差による力の玉増減処理（フォーカス時）
 //	戻り値：なし
 function FocusSkill( Obj )

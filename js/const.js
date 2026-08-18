@@ -92,3 +92,47 @@ function GetInitialStats( Job )
 {
 	return INITIAL_STATS;
 }
+
+//	パラメータ上昇コストテーブル（上昇後の値 → 必要な力の玉）
+//	例：値を25→26に上げる場合は PARA_TAMA_TABLE の 26 の区分（5玉）を使用する。
+var PARA_TAMA_TABLE = [
+	{ max: 15, tama: 1 },	//	 ～15
+	{ max: 20, tama: 3 },	//	16～20
+	{ max: 25, tama: 4 },	//	21～25
+	{ max: 99, tama: 5 }	//	26～
+];
+
+//	パラメータ1ポイント上昇コスト取得処理
+//	パラメータ	：	Value	上昇後のパラメータ値
+//	戻り値		：	必要な力の玉数
+function GetParaTamaCost( Value )
+{
+	for( var _i = 0; _i < PARA_TAMA_TABLE.length; _i++ ) {
+		if( Value <= PARA_TAMA_TABLE[ _i ].max ) {
+			return PARA_TAMA_TABLE[ _i ].tama;
+		}
+	}
+	return PARA_TAMA_TABLE[ PARA_TAMA_TABLE.length - 1 ].tama;
+}
+
+//	パラメータ区間コスト取得処理
+//	パラメータ	：	From	変更前のパラメータ値
+//				：	To		変更後のパラメータ値
+//	戻り値		：	From→To に必要な力の玉数（To < From の場合は負値＝返却分）
+function GetParaTamaRange( From, To )
+{
+	var _tama = 0;
+	var _from = eval( From );
+	var _to = eval( To );
+
+	if( _to > _from ) {
+		for( var _v = _from + 1; _v <= _to; _v++ ) {
+			_tama += GetParaTamaCost( _v );
+		}
+	} else if( _to < _from ) {
+		for( var _v = _to + 1; _v <= _from; _v++ ) {
+			_tama -= GetParaTamaCost( _v );
+		}
+	}
+	return _tama;
+}
