@@ -593,6 +593,49 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		document.chara.oq01.disabled = true;
 		document.chara.oq02.disabled = true;
 	}
+
+	//	おまけ情報表示制御処理
+	SetExtraVisible();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	おまけ情報表示制御処理
+//	機能説明	：	表示中のセクションが無い場合、おまけ情報全体を非表示にする。
+//	パラメータ	：	なし
+//	戻り値		：	なし
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function SetExtraVisible()
+{
+	//	変数宣言
+	var Extra = document.getElementById("extra");				//	おまけ情報
+	var SecList = Extra.querySelectorAll("[id$='_sec']");		//	セクションリスト
+	var Visible = false;										//	表示フラグ
+
+	//	セクション分ループ
+	for( var i = 0; i < SecList.length; i++ ){
+		//	非表示の場合
+		if( SecList[i].style.display == "none" ){
+			//	区切り線非表示
+			SecList[i].classList.remove("extra_sep");
+			continue;
+		}
+
+		//	先頭の表示セクション以外に区切り線を表示
+		if( Visible ){
+			SecList[i].classList.add("extra_sep");
+		}
+		else{
+			SecList[i].classList.remove("extra_sep");
+		}
+
+		//	表示フラグ設定
+		Visible = true;
+	}
+
+	//	おまけ情報表示設定
+	Extra.style.display = Visible ? "block" : "none";
+	//	区切り線表示設定
+	document.getElementById("extra_hr").style.display = Visible ? "block" : "none";
 }
 //------------------------------------------------------------------------------
 //	関数名		：	魔法発動率取得処理

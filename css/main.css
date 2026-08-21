@@ -20,6 +20,33 @@ div.title span:first-child{
 #extra input{
 	vertical-align:middle;
 }
+/*	魔法アイコン1セット (ソースの空白ではなく margin で余白を確保)	*/
+#extra_fire,
+#extra_ice,
+#extra_holy,
+#extra_magical,
+#extra_alchemy,
+#extra_oq{
+	font-size:0;	/*	span 間の空白を無効化	*/
+}
+span.magic_item{
+	display:inline-block;
+	font-size:15px;
+	margin-right:10px;
+}
+span.magic_item img{
+	margin-right:4px;
+}
+/*	入力欄の横幅	*/
+span.magic_item input{
+	width:60px;
+	box-sizing:border-box;
+	text-align:right;
+}
+/*	成功率と消費MPの間隔	*/
+span.magic_item input + input{
+	margin-left:6px;
+}
 
 
 
@@ -269,4 +296,16 @@ input[name^="songper"] {
 }
 .song_cell {
 	white-space: nowrap;
+}
+
+/*	おまけ情報セクション区切り線	*/
+#extra > div.extra_sep{
+	border-top: 1px solid #cccccc;
+	margin-top: 8px;
+	padding-top: 8px;
+}
+
+/*	おまけ情報下余白	*/
+#extra{
+	padding-bottom: 6px;
 }
