@@ -112,23 +112,36 @@
 	<script data-goatcounter="https://kttFox.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 
-<body onload="FormReset();InitStorage();InitSlots();InitShare();RestoreCharaName();" class="vsc-initialized">
+<body onload="FormReset();InitSlots();RestoreCurrentSlot();InitShare();RestoreCharaName();" class="vsc-initialized">
 	<table width="850">
 		<tbody>
 			<tr>
 				<td>
 					<form name="chara">
-						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.9.1</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.10</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 								<span id="slotcontainer"></span>
-								<input type="button" value="スロット追加" onclick="AddSlot()">
+								<span class="slotbuttons">
+									<input type="button" class="slotmove" value="＜" title="使用中のキャラスロットを前へ移動" onclick="MoveCurrentSlot(-1)"><!--
+									 --><input type="button" class="slotmove" value="＞" title="使用中のキャラスロットを後ろへ移動" onclick="MoveCurrentSlot(1)">
+									<input type="button" value="キャラ追加" onclick="AddSlot()">
+								</span>
 							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
-							キャラ名
-							<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力" oninput="SaveCharaName()"><br>
+							<div class="charanamerow">
+								<span class="charanameleft">
+									キャラ名
+									<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力" oninput="SaveCharaName()">
+									<input type="button" value="セーブ" onclick="SaveCurrentChara()">
+								</span>
+								<span class="charanameright">
+									<input type="button" value="URLからロード" onclick="LoadFromUrlInput()">
+									<input type="button" value="削除" onclick="DeleteCurrentChara()">
+								</span>
+							</div>
 
 							<hr noshade="" size="1" color="#cccccc">
 
@@ -2136,11 +2149,15 @@
 							<li>呪文時間詠唱時間はラグや環境により実際の時間と異なる場合があります。</li>
 						</ul>
 
-						<li>キャラデータセーブ機能</li>
+						<li>キャラスロット機能</li>
 						<ul>
-							<li>キャラの入力情報をセーブで保存し、ロードで読み込みます。</li>
+							<li>キャラの入力情報をスロットへ保存します。</br>スロット名を選択すると、そのスロットへ切り替えて内容を復元します。</li>
+							<li>選択中のスロットは枠が強調表示され、そのスロットを使用している状態になります。</li>
+							<li>「セーブ」で使用中のスロットへ保存します。</li>
+							<li>「削除」で使用中のスロットを削除します。</li>
+							<li>「URLからロード」で共有URLを入力し、その内容を復元します。</li>
 							<li>「スロット追加」でセーブスロットを任意の数だけ増やせます。</li>
-							<li>初期値の状態でセーブすると、スロットを削除します。。</br>基本の3スロットはデータのみ削除され、スロットは残ります。</li>
+							<li>「＜」「＞」で使用中スロットの並び順を変更できます。</li>
 						</ul>
 					</ol>
 

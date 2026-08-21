@@ -81,6 +81,14 @@ div.sub{
 div.sub input[type="button"]{
 	margin:2px 4px;
 }
+span.slotbuttons{
+	display:inline-block;
+	white-space:nowrap;
+}
+div.sub input[type="button"].slotmove{
+	margin-left:1px;
+	margin-right:1px;
+}
 #basicblock select{
 	width:90px;
 }
@@ -92,9 +100,43 @@ div.sub input[type="button"]{
 #paramblock select{
 	width:60px;
 }
+
+#slotcontainer{
+	margin: 0 10px 0 0;
+}
+
 span.slotgroup{
 	display:inline-block;
 	white-space:nowrap;
+	padding:0 2px;
+	border:1px solid #aaaaaa;
+	border-radius:3px;
+}
+span.slotgroup span.slotlabel{
+	cursor:pointer;
+	padding:2px 6px;
+}
+span.slotgroup:hover{
+	background-color:#dddddd;
+}
+span.slotgroup.current span.slotlabel{
+	text-decoration:none;
+}
+span.slotgroup.current{
+	background-color:#ffeeaa;
+	border-color:#cc9900;
+}
+span.slotgroup.current:hover{
+	background-color:#ffdd77;
+}
+span.slotgroup.current span.slotlabel{
+	font-weight:bold;
+}
+
+div.charanamerow{
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
 }
 
 div.set{

@@ -1,12 +1,10 @@
-//	フォーム初期値セーブ文字列（初期値セーブ判定用）
-var DefaultSaveString = null;
-
 //------------------------------------------------------------------------------
 //	スロット管理用定数・変数
 //------------------------------------------------------------------------------
 var SlotCountKey	= "godichara_slotcount";	//	スロット数保存キー
 var MinSlotCount	= 3;						//	最小（基本）スロット数
 var SlotKeyPrefix	= "godichara";				//	スロットデータキー接頭辞
+var CurrentSlotKey	= "godichara_currentslot";	//	使用中スロット保存キー
 
 //------------------------------------------------------------------------------
 //	関数名		：	スロット数取得処理
@@ -21,10 +19,55 @@ function GetSlotCount()
 		if( !isNaN( Value ) && Value > MinSlotCount ){
 			Count = Value;
 		}
+
+		//	スロット数保存キーが失われている場合に備え、
+		//	実際にセーブデータが存在する最大スロット番号まで復元する
+		var DataCount = GetMaxSavedSlot();
+		if( DataCount > Count ){
+			Count = DataCount;
+		}
 	} catch( e ) {
 		;
 	}
 	return Count;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	最大セーブ済みスロット番号取得処理
+//	機能説明	：	localStorage内のスロットデータキーを走査し、
+//					セーブデータが存在する最大のスロット番号を取得する。
+//	戻り値		：	スロット番号（存在しない場合は0）
+//------------------------------------------------------------------------------
+function GetMaxSavedSlot()
+{
+	var Max = 0;
+
+	try {
+		for( var i = 0; i < localStorage.length; ++i ){
+			var Key = localStorage.key( i );
+			if( Key == null || Key.indexOf( SlotKeyPrefix ) != 0 ){
+				continue;
+			}
+
+			//	接頭辞以降が数値のみのキーをスロットデータとみなす
+			var Suffix = Key.substring( SlotKeyPrefix.length );
+			if( Suffix == "" || /[^0-9]/.test( Suffix ) ){
+				continue;
+			}
+
+			//	データが空のキーは対象外
+			if( ReadSaveData( Key ) == null ){
+				continue;
+			}
+
+			var Slot = parseInt( Suffix, 10 );
+			if( !isNaN( Slot ) && Slot > Max ){
+				Max = Slot;
+			}
+		}
+	} catch( e ) {
+		;
+	}
+	return Max;
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スロット数保存処理
@@ -41,6 +84,46 @@ function SetSlotCount( Count )
 	} catch( e ) {
 		;
 	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット取得処理
+//	機能説明	：	localStorageから現在使用中のスロット番号を取得する。
+//	戻り値		：	スロット番号（範囲外の場合は1）
+//------------------------------------------------------------------------------
+function GetCurrentSlot()
+{
+	var Slot = 1;
+	try {
+		var Value = parseInt( localStorage.getItem( CurrentSlotKey ), 10 );
+		if( !isNaN( Value ) && Value >= 1 && Value <= GetSlotCount() ){
+			Slot = Value;
+		}
+	} catch( e ) {
+		;
+	}
+	return Slot;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット保存処理
+//	パラメータ	：	Slot	スロット番号
+//------------------------------------------------------------------------------
+function SetCurrentSlot( Slot )
+{
+	try {
+		localStorage.setItem( CurrentSlotKey, String( Slot ) );
+	} catch( e ) {
+		;
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット選択処理
+//	機能説明	：	使用中スロットを切り替え、表示を更新する。
+//	パラメータ	：	Slot	スロット番号
+//------------------------------------------------------------------------------
+function SelectSlot( Slot )
+{
+	SetCurrentSlot( Slot );
+	UpdateSlotLabels();
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スロット初期化処理
@@ -69,17 +152,15 @@ function RenderSlots()
 	for( var Slot = 1; Slot <= Count; ++Slot ){
 		var Key = SlotKeyPrefix + Slot;
 		Html += ""
-			+ "<span class=\"slotgroup\">"
-			+ "<span id=\"slotname" + Slot + "\">キャラ" + Slot + "</span>"
-			+ "<input type=\"button\" value=\"セーブ\" onclick=\"SaveChara('" + Key + "')\">"
-			+ "<input type=\"button\" id=\"loadbtn" + Slot + "\" value=\"ロード\" onclick=\"LoadChara('" + Key + "')\">"
+			+ "<span class=\"slotgroup\" id=\"slotgroup" + Slot + "\">"
+			+ "<span class=\"slotlabel\" id=\"slotname" + Slot + "\" onclick=\"LoadChara('" + Key + "')\">キャラ" + Slot + "</span>"
 			+ "</span> ";
 	}
 
 	Container.innerHTML = Html;
 
-	//	ロードボタン有効化状態・ラベル更新
-	UpdateLoadButtons();
+	//	スロットラベル更新
+	UpdateSlotLabels();
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スロット追加処理
@@ -89,43 +170,12 @@ function AddSlot()
 {
 	var Count = GetSlotCount();
 	SetSlotCount( Count + 1 );
+
+	//	追加したスロットを使用中スロットとする
+	SetCurrentSlot( Count + 1 );
 	RenderSlots();
 }
 
-//------------------------------------------------------------------------------
-//	関数名		：	ストレージ機能初期化処理
-//	機能説明	：	フォームの初期値からセーブ文字列を作成し保持する。
-//	パラメータ	：	なし
-//	戻り値		：	なし
-//	備考		：	body onload から FormReset() の後に呼び出すこと
-//------------------------------------------------------------------------------
-function InitStorage()
-{
-	DefaultSaveString = BuildSaveString();
-}
-//------------------------------------------------------------------------------
-//	関数名		：	セーブ文字列作成処理
-//	機能説明	：	フォームの現在値からセーブデータ文字列を作成する。
-//	パラメータ	：	なし
-//	戻り値		：	セーブデータ文字列（キャラ名は含まない）
-//	備考		：	なし
-//------------------------------------------------------------------------------
-function BuildSaveString()
-{
-	var SaveValue = new Array();
-
-	//	フォーム情報取得処理
-	GetFormValue( SaveValue );
-
-	//	キャラ名スロット（インデックス111）はプレースホルダとして空文字を設定
-	//	（実際のキャラ名は SaveChara() で設定する）
-	if( SaveValue[111] == undefined ){
-		SaveValue[111] = "";
-	}
-
-	//	配列をセーブ文字列へ結合
-	return JoinSaveValue( SaveValue );
-}
 //------------------------------------------------------------------------------
 //	関数名		：	セーブ配列結合処理
 //	機能説明	：	セーブ配列を "%00" 区切りのセーブ文字列へ結合する。
@@ -178,48 +228,6 @@ function SaveChara( SaveKey )
 	//	キャラ名取得
 	var CharaName = document.chara.charaname ? document.chara.charaname.value : "";
 
-	//	セーブ文字列作成処理（キャラ名なし）
-	SaveString = BuildSaveString();
-
-	//	初期値セーブの場合、セーブ情報を削除する
-	if( SaveString == DefaultSaveString && CharaName == "" ){
-
-		//	スロット番号取得（"godichara3" → 3）
-		var Slot = parseInt( SaveKey.replace( SlotKeyPrefix, "" ), 10 );
-		var IsAddedSlot = ( !isNaN( Slot ) && Slot > MinSlotCount );
-
-		//	基本スロットでデータがない場合は何もしない
-		if( !IsAddedSlot && ReadSaveData( SaveKey ) == null ){
-			alert( "初期値のためセーブしませんでした。\n" );
-			return;
-		}
-
-		if( IsAddedSlot ){
-			//	追加スロットの場合はスロット自体を削除する
-			if( confirm( "初期値のため、この追加スロットを削除します。よろしいですか？\n" ) == false ){
-				return;
-			}
-			RemoveSlot( Slot );
-			return;
-		}
-
-		//	確認メッセージ
-		if( confirm( "初期値のため、このスロットのセーブ情報を削除します。よろしいですか？\n" ) == false ){
-			return;
-		}
-
-		//	セーブデータ削除
-		try {
-			localStorage.removeItem( SaveKey );
-		} catch( e ) {
-			;
-		}
-
-		//	ロードボタン有効化状態更新処理
-		UpdateLoadButtons();
-		return;
-	}
-
 	//	確認メッセージ
 	var ConfirmMsg = ( CharaName != "" ) ? "「" + CharaName + "」をセーブします。よろしいですか？\n" : "セーブします。よろしいですか？\n";
 	var ReturnValue = confirm( ConfirmMsg );
@@ -246,36 +254,156 @@ function SaveChara( SaveKey )
 		return;
 	}
 
-	//	ロードボタン有効化状態更新処理
-	UpdateLoadButtons();
+	//	スロットラベル更新処理
+	UpdateSlotLabels();
 }
 //------------------------------------------------------------------------------
-//	関数名		：	ロードボタン有効化状態更新処理
-//	機能説明	：	各スロットのセーブデータ有無を確認し、
-//					データがないスロットのロードボタンを無効化する。
-//					また、スロットラベルへセーブ済みキャラ名を表示する。
+//	関数名		：	スロットラベル更新処理
+//	機能説明	：	スロットラベルへセーブ済みキャラ名を表示し、
+//					使用中スロットを強調表示する。
 //	パラメータ	：	なし
 //	戻り値		：	なし
-//	備考		：	ページ読み込み時、およびセーブ後に呼び出す。
+//	備考		：	ページ読み込み時、セーブ後、スロット切替後に呼び出す。
 //------------------------------------------------------------------------------
-function UpdateLoadButtons()
+function UpdateSlotLabels()
 {
-	var Count = GetSlotCount();
+	var Count		= GetSlotCount();
+	var CurrentSlot	= GetCurrentSlot();
 
 	for( var Slot = 1; Slot <= Count; ++Slot ){
-		//	ロードボタンの有効・無効をセーブデータ有無で切り替え
-		var LoadBtn = document.getElementById( "loadbtn" + Slot );
-		if( LoadBtn ){
-			LoadBtn.disabled = ( ReadSaveData( SlotKeyPrefix + Slot ) == null );
-		}
-
 		//	スロットラベルへセーブ済みキャラ名を表示
 		var Label = document.getElementById( "slotname" + Slot );
 		if( Label ){
 			var CharaName = GetSavedCharaName( Slot );
 			Label.innerText = ( CharaName != "" ) ? CharaName : "キャラ" + Slot;
 		}
+
+		//	使用中スロットを強調表示
+		var Group = document.getElementById( "slotgroup" + Slot );
+		if( Group ){
+			if( Slot == CurrentSlot ){
+				Group.className = "slotgroup current";
+			} else {
+				Group.className = "slotgroup";
+			}
+		}
 	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット移動処理
+//	機能説明	：	使用中スロットのデータを隣のスロットと入れ替え、
+//					使用中スロットを移動先へ移す。
+//	パラメータ	：	Direction	移動方向（-1：前へ／1：後ろへ）
+//	戻り値		：	なし
+//	備考		：	移動先が範囲外の場合は何もしない。
+//------------------------------------------------------------------------------
+function MoveCurrentSlot( Direction )
+{
+	var Count	= GetSlotCount();
+	var Slot	= GetCurrentSlot();
+	var Next	= Slot + Direction;
+
+	//	範囲外の場合は移動しない
+	if( Next < 1 || Next > Count ){
+		return;
+	}
+
+	var SlotKey = SlotKeyPrefix + Slot;
+	var NextKey = SlotKeyPrefix + Next;
+
+	try {
+		//	データを入れ替える（データなしは削除）
+		var SlotData = localStorage.getItem( SlotKey );
+		var NextData = localStorage.getItem( NextKey );
+
+		if( NextData != null ){
+			localStorage.setItem( SlotKey, NextData );
+		} else {
+			localStorage.removeItem( SlotKey );
+		}
+
+		if( SlotData != null ){
+			localStorage.setItem( NextKey, SlotData );
+		} else {
+			localStorage.removeItem( NextKey );
+		}
+	} catch( e ) {
+		;
+	}
+
+	//	使用中スロットを移動先へ移し、再描画
+	SetCurrentSlot( Next );
+	RenderSlots();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット復元処理
+//	機能説明	：	使用中スロットのセーブ情報をフォームへ復元する。
+//	備考		：	body onload から InitSlots() の後に呼び出すこと。
+//					データがない場合は何もしない（初期値のまま）。
+//------------------------------------------------------------------------------
+function RestoreCurrentSlot()
+{
+	var SaveKey = SlotKeyPrefix + GetCurrentSlot();
+
+	//	セーブデータがない場合は復元しない
+	if( ReadSaveData( SaveKey ) == null ){
+		return;
+	}
+
+	//	セーブ情報取得処理
+	LoadChara( SaveKey );
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロットセーブ処理
+//	機能説明	：	現在使用中のスロットへセーブする。
+//------------------------------------------------------------------------------
+function SaveCurrentChara()
+{
+	SaveChara( SlotKeyPrefix + GetCurrentSlot() );
+}
+//------------------------------------------------------------------------------
+//	関数名		：	使用中スロット削除処理
+//	機能説明	：	現在使用中のスロットのセーブ情報を削除する。
+//					追加スロットの場合はスロット自体を削除する。
+//------------------------------------------------------------------------------
+function DeleteCurrentChara()
+{
+	var Slot		= GetCurrentSlot();
+	var SaveKey		= SlotKeyPrefix + Slot;
+	var IsAddedSlot	= ( Slot > MinSlotCount );
+
+	//	データがない基本スロットは削除対象なし
+	if( !IsAddedSlot && ReadSaveData( SaveKey ) == null ){
+		alert( "削除するデータが存在しません。\n" );
+		return;
+	}
+
+	if( IsAddedSlot ){
+		//	追加スロットの場合はスロット自体を削除する
+		if( confirm( "この追加スロットを削除します。よろしいですか？\n" ) == false ){
+			return;
+		}
+
+		//	使用中スロットを前のスロットへ移す
+		SetCurrentSlot( Slot - 1 );
+		RemoveSlot( Slot );
+		return;
+	}
+
+	//	確認メッセージ
+	if( confirm( "このスロットのセーブ情報を削除します。よろしいですか？\n" ) == false ){
+		return;
+	}
+
+	//	セーブデータ削除
+	try {
+		localStorage.removeItem( SaveKey );
+	} catch( e ) {
+		;
+	}
+
+	//	スロットラベル更新処理
+	UpdateSlotLabels();
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スロット削除処理
@@ -343,9 +471,22 @@ function LoadChara( SaveKey )
 	//	セーブデータ読み込み処理
 	var SaveString = ReadSaveData( SaveKey );
 
-	//	データなしの場合
+	//	データなしの場合は、そのスロットへ切り替えてフォームを初期値へ戻す
 	if( SaveString == null ){
-		alert( "データが存在しません。\n" );
+		var EmptySlot = parseInt( SaveKey.replace( SlotKeyPrefix, "" ), 10 );
+		if( !isNaN( EmptySlot ) ){
+			SetCurrentSlot( EmptySlot );
+			UpdateSlotLabels();
+		}
+
+		//	フォーム初期化処理
+		FormReset();
+
+		//	キャラ名クリア（自動保存も更新）
+		if( document.chara.charaname ){
+			document.chara.charaname.value = "";
+			SaveCharaName();
+		}
 		return;
 	}
 
@@ -354,6 +495,13 @@ function LoadChara( SaveKey )
 
 	//	フォーム情報設定処理
 	SetFormValue( SaveValue )
+
+	//	ロードしたスロットを使用中スロットとする
+	var LoadSlot = parseInt( SaveKey.replace( SlotKeyPrefix, "" ), 10 );
+	if( !isNaN( LoadSlot ) ){
+		SetCurrentSlot( LoadSlot );
+		UpdateSlotLabels();
+	}
 
 	//	キャラ名復元（旧データはキャラ名なしのため空欄とする）
 	if( document.chara.charaname ){
@@ -638,7 +786,7 @@ function GetFormValue( SaveValue )
 	SaveValue[109]= document.chara.doping[3].checked;
 	SaveValue[110]= document.chara.doping[4].checked;
 
-	//	インデックス111はキャラ名スロット（SaveChara/BuildSaveStringで設定）
+	//	インデックス111はキャラ名スロット（SaveCharaで設定）
 
 	//	後から追加された取得魔法・スキル（インデックス112以降）
 	//	※旧セーブデータには存在しないため、SetFormValue側でundefined考慮すること
