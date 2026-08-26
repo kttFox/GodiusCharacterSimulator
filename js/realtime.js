@@ -203,7 +203,8 @@ function StepNumber( Name, Dir )
 
 	var Value = parseInt( Obj.value, 10 );
 	if( isNaN( Value ) ) {
-		Value = 0;
+		//	HP/MP/SPが空欄の場合は平均値を基準とする
+		Value = GetStepBaseHpMpSp( Name );
 	}
 
 	Value += Dir;
@@ -214,6 +215,34 @@ function StepNumber( Name, Dir )
 
 	//	リアルタイム更新を発火させる
 	Obj.dispatchEvent( new Event( "change" ) );
+}
+
+//	HP/MP/SP増減基準値取得処理
+//	機能説明	：	HP/MP/SPが空欄の場合の増減基準値（現在の職業・Lvの平均値）を返す。
+//	パラメータ	：	Name	フォーム項目名
+//	戻り値		：	基準値（対象外・算出不可の場合は0）
+function GetStepBaseHpMpSp( Name )
+{
+	var f = document.chara;
+	var Job = f.job.value;
+	var Lv = parseInt( f.lv.value, 10 );
+
+	if( isNaN( Lv ) ) {
+		return 0;
+	}
+
+	var Average = 0;
+	if( "hp" == Name ) {
+		Average = GetAverageHp( Job, Lv );
+	} else if( "mp" == Name ) {
+		Average = GetAverageMp( Job, Lv );
+	} else if( "sp" == Name ) {
+		Average = GetAverageSp( Job, Lv );
+	} else {
+		return 0;
+	}
+
+	return Number( ApplyCostumeBonus( Average ) );
 }
 
 //	HP/MP/SP平均値表示更新処理
@@ -240,9 +269,9 @@ function UpdateAverageHpMpSp()
 	}
 
 	//	（課金衣装がONの場合、平均値にも＋５％を反映する）
-	AvgHp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) + "）";
-	AvgMp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) + "）";
-	AvgSp.innerHTML = "（平均" + ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) + "）";
+	AvgHp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) + ")";
+	AvgMp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) + ")";
+	AvgSp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) + ")";
 }
 
 //	リアルタイム一括更新処理

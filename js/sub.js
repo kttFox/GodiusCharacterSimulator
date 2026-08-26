@@ -109,10 +109,16 @@ function CharaSub()
 	}
 }
 
+//	HP/MP/SP増減用　前回レベル
+var BeforeLvHpMpSp = "";
+
 //	レベル差による力の玉増減処理（フォーカス時）
 //	戻り値：なし
 function FocusLv()
 {
+	//	HP/MP/SP増減用に、フォーカス時のレベルを保持する（残玉連動とは無関係）
+	BeforeLvHpMpSp = document.chara.lv.value;
+
 	//	残玉連動ONの場合のみ処理を行う
 	if( IsTamaLink() ) {
 		//	フォーカス時のレベルを前回レベルに設定
@@ -148,6 +154,60 @@ function ChangeLv()
 		//	前回レベルに現在レベルを設定
 		BeforeLv = Lv;
 	}
+
+	//	レベル差によるHP/MP/SP増減処理
+	ChangeHpMpSpByLv();
+}
+
+//	レベル差によるHP/MP/SP増減処理
+//	機能説明	：	HP/MP/SPが入力済みの場合、レベル変化に伴う平均値の差分だけ
+//					各値を増減させる。
+//	戻り値		：	なし
+function ChangeHpMpSpByLv()
+{
+	var f = document.chara;
+	var Lv = parseInt( f.lv.value, 10 );
+	var Before = parseInt( BeforeLvHpMpSp, 10 );
+
+	//	レベルが不正、または変化していない場合は処理を行わない
+	if( isNaN( Lv ) || isNaN( Before ) || Lv == Before ) {
+		BeforeLvHpMpSp = f.lv.value;
+		return;
+	}
+
+	var Job = f.job.value;
+	var Targets = [
+		{ Obj: f.hp, Func: GetAverageHp },
+		{ Obj: f.mp, Func: GetAverageMp },
+		{ Obj: f.sp, Func: GetAverageSp }
+	];
+
+	for( var i = 0; i < Targets.length; i++ ) {
+		var Obj = Targets[i].Obj;
+
+		//	未入力の場合は対象外
+		if( !Obj || Obj.value == "" ) {
+			continue;
+		}
+
+		var Value = parseInt( Obj.value, 10 );
+		if( isNaN( Value ) ) {
+			continue;
+		}
+
+		//	平均値の差分（課金衣装ONの場合はボーナス込みで比較）
+		var Dif = Number( ApplyCostumeBonus( Targets[i].Func( Job, Lv ) ) )
+				- Number( ApplyCostumeBonus( Targets[i].Func( Job, Before ) ) );
+
+		Value += Dif;
+		if( Value < 0 ) {
+			Value = 0;
+		}
+		Obj.value = Value;
+	}
+
+	//	前回レベルに現在レベルを設定
+	BeforeLvHpMpSp = f.lv.value;
 }
 
 //	パラメータ差による力の玉増減処理（フォーカス時）

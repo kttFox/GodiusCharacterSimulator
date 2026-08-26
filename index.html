@@ -118,7 +118,7 @@
 			<tr>
 				<td>
 					<form name="chara">
-						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.10</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
+						<div class="title"><span>■Godius Eternal War キャラクターシミュレーター v1.11</span><span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()"></span><span id="counter"></span></div>
 						<div class="main">
 							<div class="sub">
 								<span id="slotcontainer"></span>
@@ -271,11 +271,11 @@
 
 							<div id="resourceblock">
 								ＨＰ
-								<input type="text" name="hp" maxlength="3"><span id="avghp" class="avgval"></span>
+								<input type="text" name="hp"><input type="button" value="－" class="stepbtn" onclick="StepNumber('hp',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepNumber('hp',1)"><span id="avghp" class="avgval"></span>
 								ＭＰ
-								<input type="text" name="mp" maxlength="3"><span id="avgmp" class="avgval"></span>
+								<input type="text" name="mp"><input type="button" value="－" class="stepbtn" onclick="StepNumber('mp',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepNumber('mp',1)"><span id="avgmp" class="avgval"></span>
 								ＳＰ
-								<input type="text" name="sp" maxlength="3"><span id="avgsp" class="avgval"></span>
+								<input type="text" name="sp"><input type="button" value="－" class="stepbtn" onclick="StepNumber('sp',-1)"><input type="button" value="＋" class="stepbtn" onclick="StepNumber('sp',1)"><span id="avgsp" class="avgval"></span>
 								　<label class="costume" title="課金衣装の最大HP/MP/SP 5%増加"><input type="checkbox" name="costume">課金衣装+5%</label>
 							</div>
 

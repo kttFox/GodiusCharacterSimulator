@@ -93,6 +93,10 @@ function CharaMain( Silent )
 	//	HP、MP、SPが空欄の場合
 	//	職業ごとの平均値を設定する
 	//	（課金衣装がONの場合、最大HP/MP/SPを５％増加させる）
+	var HpInputed = ( Hp != "" );	//	HPが入力済みかどうか
+	var MpInputed = ( Mp != "" );	//	MPが入力済みかどうか
+	var SpInputed = ( Sp != "" );	//	SPが入力済みかどうか
+
 	if( Hp == "" ) {
 		Hp = ApplyCostumeBonus( GetAverageHp( Job, Lv ) );
 		if( !Silent ) {
@@ -259,6 +263,10 @@ function CharaMain( Silent )
 
 	//	診断結果出力
 	CharaResultMsg = GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTama, Result_FormatTama, ParaUseTama, MagicUseTama, SkillUseTama, SkillSuccess, InitSontoku, Lv );
+
+	//	HP/MP/SPが入力されている場合、平均値との差分を出力
+	CharaResultMsg += GetAverageDiffMessage( Job, Lv, Hp, Mp, Sp, HpInputed, MpInputed, SpInputed );
+
 	document.chara.result.value = CharaResultMsg;
 
 	//	最大スキルLv（無効スキルは1のため影響しない）
@@ -455,6 +463,7 @@ function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 	var CharaDataSkillMsg = GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, SkillNum )
 
 	CharaDataMsg = 
+		"--------------------------------------------------------\n" +
 		"Lv" + Lv + "　" +
 		JobPair + "\n" +
 		"HP" + Hp + "　" +
@@ -501,11 +510,70 @@ function GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTam
 		"スキルにつぎ込んだ玉が" + SkillUseTama + "玉っぽいです。\n"+
 		"よって現時点でスキル成功率を単純計算すると" + SkillSuccess + "%です。\n\n"+
 		InitSontoku+
-		"\n"+
-		"--------------------------------------------------------\n";
+		"\n";
 	return CharaResultMessage;
 }
 
+//------------------------------------------------------------------------------
+//	関数名		：	平均値差分メッセージ作成処理
+//	機能説明	：	HP/MP/SPが入力されている場合、職業・Lvごとの平均値との
+//					差分（＋－）をメッセージとして返す。
+//	パラメータ	：	Job				主職業
+//					Lv				レベル
+//					Hp～Sp			HP、MP、SP
+//					HpInputed～SpInputed	各値が入力済みかどうか
+//	戻り値		：	平均値差分メッセージ（対象がない場合は空文字）
+//	備考		：	課金衣装ONの場合は平均値に５％ボーナスを適用して比較する。
+//------------------------------------------------------------------------------
+function GetAverageDiffMessage( Job, Lv, Hp, Mp, Sp, HpInputed, MpInputed, SpInputed )
+{
+	var Message = "";
+	var Lines = [];
+
+	if( HpInputed ) {
+		Lines.push( "HP" + GetAverageDiffText( Hp, ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) ) );
+	}
+	if( MpInputed ) {
+		Lines.push( "MP" + GetAverageDiffText( Mp, ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) ) );
+	}
+	if( SpInputed ) {
+		Lines.push( "SP" + GetAverageDiffText( Sp, ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) ) );
+	}
+
+	//	入力なしの場合は出力しない
+	if( Lines.length == 0 ){
+		return "";
+	}
+
+	//	課金衣装ONの場合は文言を追加
+	var Costume = document.chara.costume;
+	var CostumeText = ( Costume && Costume.checked ) ? "ステータス(課金衣装 有り)" : "ステータス";
+
+	Message =
+		CostumeText + "は " + Lines.join( "　" ) + " です。\n" +
+		"\n";
+
+	return Message;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	平均値差分文字列作成処理
+//	機能説明	：	実値と平均値の差を「＋n」「－n」形式の文字列で返す。
+//	パラメータ	：	Value	実値
+//					Average	平均値
+//	戻り値		：	差分文字列
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function GetAverageDiffText( Value, Average )
+{
+	var Diff = Number( Value ) - Number( Average );
+
+	if( Diff > 0 ){
+		return "+" + Diff + "(平均" + Average + ")";
+	} else if( Diff < 0 ){
+		return "-" + Math.abs( Diff ) + "(平均" + Average + ")";
+	}
+	return "±0(平均" + Average + ")";
+}
 //------------------------------------------------------------------------------
 //	関数名		：	小数点以下補正処理
 //	機能説明	：	HP、MP、SP上がり率が小数点第６位より大きい場合、
