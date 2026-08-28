@@ -225,7 +225,7 @@ function CharaMain( Silent )
 
 	//	スキル成功率の設定
 	if( SkillUseTama > 0 ){
-		SkillSuccess = ( ( Number( Skill1 ) + Number( Skill2 ) + Number( Skill3 ) + Number( Skill4 )+ Number( Skill5 ) + Number( Skill6 ) + Number( Skill7 ) + Number( Skill8 ) + Number( Skill9 ) + Number( Skill10 ) - SkillNum ) / SkillUseTama * 100 ).toFixed( 5 );
+		SkillSuccess = ( ( Number( Skill1 ) + Number( Skill2 ) + Number( Skill3 ) + Number( Skill4 )+ Number( Skill5 ) + Number( Skill6 ) + Number( Skill7 ) + Number( Skill8 ) + Number( Skill9 ) + Number( Skill10 ) - SkillNum ) / SkillUseTama * 100 ).toFixed( 1 );
 	}
 	//	スキルに玉を使っていない場合、スキル成功率を０％とする
 	else{
@@ -481,7 +481,7 @@ function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		"VIT" + Vit + "　" +
 		"MEN" + Men + "\n" +
 		CharaDataSkillMsg +
-		"残玉" + Balance + "\n";
+		"残玉" + Number( Balance ).toFixed( 1 ) + "\n";
 
 	return CharaDataMsg;
 }
@@ -512,8 +512,8 @@ function GetResultMessage( Job, Result_Hp, Result_Mp, Result_Sp, Result_TotalTam
 		"（このLVで初期化すると" + Result_FormatTama + "玉を取得する事が出来ます。）\n"+
 		"その内訳としてパラメータに使った玉が" + ParaUseTama + "玉で、\n"+
 		"魔法に使った玉が" + MagicUseTama + "玉、\n"+
-		"スキルにつぎ込んだ玉が" + SkillUseTama + "玉っぽいです。\n"+
-		"よって現時点でスキル成功率を単純計算すると" + SkillSuccess + "%です。\n\n"+
+		"スキルにつぎ込んだ玉が" + Number( SkillUseTama ).toFixed( 1 ) + "玉っぽいです。\n"+
+		"よって現時点でスキル成功率を単純計算すると" + SkillSuccess + "%です。\n"+
 		InitSontoku+
 		"\n";
 	return CharaResultMessage;

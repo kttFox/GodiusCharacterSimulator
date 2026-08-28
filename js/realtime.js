@@ -43,7 +43,7 @@ function CalcNeedTama()
 		}
 		SkillNeedTama += SKILL_HYBRID_TAMA[ SkillVal - 1 ];
 	}
-	SkillNeedTama = Math.ceil( SkillNeedTama );
+	//	期待値のため小数のまま保持する（表示時に小数第1位へ丸める）
 
 	//	魔法必要玉数（職業ルールはキャラ診断と同一）
 	var MagicNeedTama = 0;
@@ -146,7 +146,7 @@ function UpdateNeedTama()
 
 	//	現在保有しているはずの玉数（現在Lvまでの獲得玉＋職業ボーナス－現構成の必要玉数）
 	if( ExpectBalance ) {
-		ExpectBalance.innerHTML = "（保有想定：約" + r.diff + "玉）";
+		ExpectBalance.innerHTML = "(保有想定：約" + r.diff.toFixed( 1 ) + "玉)";
 	}
 
 	//	残玉が入力されている場合は、保有想定との差分で損得を表示する
@@ -155,13 +155,13 @@ function UpdateNeedTama()
 	if( BalanceVal != "" && !isNaN( BalanceVal ) ) {
 		var SonToku = Number( BalanceVal ) - r.diff;
 		DiffMsg = ( SonToku >= 0 )
-			? "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + SonToku + "玉得をしています"
-			: "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + ( SonToku * -1 ) + "玉損をしています";
+			? "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + SonToku.toFixed( 1 ) + "玉得をしています"
+			: "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + ( SonToku * -1 ).toFixed( 1 ) + "玉損をしています";
 	}
 
 	Area.innerHTML =
-		"必要合計：<b>約" + r.total + "玉</b>" +
-		"（パラ" + r.para + "玉／スキル約" + r.skill + "玉［17まで確率・18以降固定］／魔法" + r.magic + "玉）<br>" +
+		"必要合計：<b>約" + r.total.toFixed( 1 ) + "玉</b>" +
+		"（パラ" + r.para + "玉／スキル約" + r.skill.toFixed( 1 ) + "玉［17まで確率・18以降固定］／魔法" + r.magic + "玉）<br>" +
 		DiffMsg;
 }
 
