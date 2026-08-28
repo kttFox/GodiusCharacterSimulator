@@ -467,13 +467,17 @@ function GetCharaDataMessage( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 	//	キャラ情報スキルメッセージ作成処理
 	var CharaDataSkillMsg = GetCharaDataSkillMessage( Job, SideJob, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Skill7, Skill8, Skill9, Skill10, SkillNum )
 
-	CharaDataMsg = 
+	//	課金衣装ONの場合はHP/MP/SP行の右側に文言を追加
+	var Costume = document.chara.costume;
+	var CostumeText = ( Costume && Costume.checked ) ? "　課金衣装+5%" : "";
+
+	CharaDataMsg =
 		"--------------------------------------------------------\n" +
 		"Lv" + Lv + "　" +
 		JobPair + "\n" +
 		"HP" + Hp + "　" +
 		"MP" + Mp + "　" +
-		"SP" + Sp + "\n" +
+		"SP" + Sp + CostumeText + "\n" +
 		"STR" + Str + "　" +
 		"INT" + Int + "　" +
 		"DEX" + Dex + "　" +
@@ -552,10 +556,9 @@ function GetAverageDiffMessage( Job, Lv, Hp, Mp, Sp, HpInputed, MpInputed, SpInp
 
 	//	課金衣装ONの場合は文言を追加
 	var Costume = document.chara.costume;
-	var CostumeText = ( Costume && Costume.checked ) ? "ステータス(課金衣装 有り)" : "ステータス";
+	var CostumeText = ( Costume && Costume.checked ) ? "(課金衣装+5%)" : "";
 
-	Message =
-		CostumeText + "は " + Lines.join( "　" ) + " です。\n" +
+	Message = "ステータスは平均より " + Lines.join( "　" ) + " です。" + CostumeText + "\n" +
 		"\n";
 
 	return Message;
