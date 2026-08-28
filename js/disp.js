@@ -86,7 +86,9 @@ function ChangeSkillMenuByJob()
 
 					//	スキル文言変更（ホバー時にスキル名称を表示）
 					StrInner = document.getElementById("id_skill" + j);
-					StrInner.innerHTML = "<img src=\"./img/skill" + SkillTable[i][j] + ".gif\" title=\"" + SkillName + "\" alt=\"" + SkillName + "\" />";
+					StrInner.src = "./img/skill" + SkillTable[i][j] + ".gif";
+					StrInner.title = SkillName;
+					StrInner.alt = SkillName;
 				}
 			}
 			break;

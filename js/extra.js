@@ -374,6 +374,10 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		document.chara.holyper10.disabled = true;
 	}
 
+	//	魔法グループ表示切替（火・氷・援護・聖のいずれかがある場合のみ表示）
+	document.getElementById("extra_magic_grp").style.display =
+		( SkillList[7] != 0 || SkillList[8] != 0 || SkillList[9] != 0 || SkillList[10] != 0 ) ? "block" : "none";
+
 	//	呪文スキルありの場合
 	if( SkillList[11] != 0 ){
 
@@ -1301,3 +1305,4 @@ function GetRegenerationSecond( Para )
 
 	return Sec;
 }
+

@@ -20,31 +20,39 @@ div.title span:first-child{
 #extra input{
 	vertical-align:middle;
 }
-/*	魔法アイコン1セット (ソースの空白ではなく margin で余白を確保)	*/
+/*	魔法アイコン1セット (flex 行で構成・余白は margin で確保)	*/
 #extra_fire,
 #extra_ice,
 #extra_holy,
 #extra_magical,
 #extra_alchemy,
 #extra_oq{
-	font-size:0;	/*	span 間の空白を無効化	*/
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	row-gap:2px;
 }
-span.magic_item{
-	display:inline-block;
-	font-size:15px;
+.magic_item{
+	display:flex;
+	align-items:center;
 	margin-right:10px;
 }
-span.magic_item img{
+/*	flex内で強制改行するためのダミー要素	*/
+.magicbreak{
+	flex-basis:100%;
+	height:0;
+}
+.magic_item img{
 	margin-right:4px;
 }
 /*	入力欄の横幅	*/
-span.magic_item input{
+.magic_item input{
 	width:60px;
 	box-sizing:border-box;
 	text-align:right;
 }
 /*	成功率と消費MPの間隔	*/
-span.magic_item input + input{
+.magic_item input + input{
 	margin-left:6px;
 }
 
@@ -82,15 +90,25 @@ div.sub input[type="button"]{
 	margin:2px 4px;
 }
 span.slotbuttons{
-	display:inline-block;
+	display:inline-flex;
+	align-items:center;
 	white-space:nowrap;
+}
+/*	「キャラ追加」ボタンだけ左に間隔を空ける	*/
+span.slotbuttons > input[type="button"]:not(.slotmove){
+	margin-left:12px;
 }
 div.sub input[type="button"].slotmove{
 	margin-left:1px;
 	margin-right:1px;
 }
+#basicblock{
+	display:flex;
+	align-items:flex-end;
+}
 #basicblock select{
 	width:90px;
+	margin-left:8px;
 }
 
 #resourceblock input[type="text"]{
@@ -160,7 +178,7 @@ a:hover{
 	color:#003399;
 	text-decoration:underline;
 }
-span.skill{
+.skillrow{
 	color:#003366;
 }
 textarea{
@@ -189,6 +207,7 @@ textarea{
 /* 課金衣装チェックボックスとラベルを縦中央揃え */
 label.costume {
 	display: inline-flex;
+	margin-left: 16px;
 	align-items: center;
 	/* 行の高さいっぱいをクリック範囲にする */
 	height: 24px;
@@ -216,22 +235,76 @@ input[type="checkbox"][name="gladiator"] {
 	vertical-align: middle;
 }
 
-/* スキルアイコン（16×16）・スキルLvセレクト（37×20）を中央揃え */
-span.skill {
-	display: inline-block;
-	height: 20px;
+/* HP/MP/SP・パラメーターも flex 行で構成 */
+#resourceblock,
+#paramblock {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+#paramblock {
+	row-gap: 1px;
+	padding-bottom: 3px;
+}
+#resourceblock {
+	padding-bottom: 2px;
+}
+.statrow {
+	display: flex;
+	align-items: center;
 	line-height: 20px;
-	margin-left: 10px;	/* スキルブロック間の間隔 */
 }
-/* 行頭のスキル（hr直後・br直後）は間隔を適用しない */
-hr + span.skill,
-br + span.skill {
-	margin-left: 0;
+/* ラベル（ＨＰ／ＳＴＲ等）と入力欄の間隔 */
+.statrow > select,
+.statrow > input[type="text"] {
+	margin-left: 8px;
 }
-span.skill img {
+/* 項目間の間隔 */
+#resourceblock .statrow {
+	margin-right: 8px;
+}
+#paramblock .statrow {
+	margin-right: 56px;
+}
+/* flex内で強制改行するためのダミー要素 */
+.statbreak {
+	flex-basis: 100%;
+	height: 0;
+}
+
+/* スキルアイコン（16×16）・スキルLvセレクト（37×20）を中央揃え */
+#skillarea {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	row-gap: 2px;
+}
+.skillrow {
+	display: flex;
+	align-items: center;
+	line-height: 20px;
+	margin-left: 18px;	/* スキルブロック間の間隔 */
+}
+/* スキルアイコン（16×16）とLvセレクトの間隔 */
+.skillrow img {
 	width: 16px;
 	height: 16px;
+	margin-right: 8px;
 	vertical-align: middle;
+}
+/* 行頭のスキル（先頭・改行直後）は間隔を適用しない */
+.skillrow:first-child,
+.skillbreak + .skillrow {
+	margin-left: 0;
+}
+/* flex内で強制改行するためのダミー要素 */
+.skillbreak {
+	flex-basis: 100%;
+	height: 0;
+}
+/* 「残玉」ラベルと入力欄の間隔 */
+#skillrow_balance > span:first-child {
+	margin-right: 3px;
 }
 select[name^="skill"] {
 	width: 45px;
@@ -255,11 +328,12 @@ img[src*="/skill_"] {
 
 /* 呪文(歌)の詠唱時間：アイコン＋成功率の見出し部と行の折り返し制御 */
 .song_head {
-	display: inline-block;
 	width: 75px;
 	white-space: nowrap;
-	vertical-align: top;
 	line-height: 1.3;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
 /* 呪文名（アイコンの右に表示・アイコンと上下中央揃え） */
 .song_name {
@@ -293,8 +367,10 @@ img[src*="/skill_"] {
 
 /* 呪文(歌)の成功率は2行目に右揃えで表示 */
 .song_per {
-	display: block;
-	text-align: right;
+	flex-basis: 100%;
+	height: 22px;
+	display: flex;
+	justify-content: flex-end;
 }
 
 /* 呪文(歌)の成功率欄は幅を詰める */
@@ -312,10 +388,14 @@ input[name^="songper"] {
 /* 呪文(歌)：回復の歌の増加値入力を右端に配置 */
 .song_kaihuku {
 	float: right;
+	display: flex;
+	align-items: center;
+	padding-top: 1px;
 }
 
 /* 呪文(歌)：回復の歌チェックボックスとラベルを上下中央揃え */
 .song_kaihuku label {
+	margin-right: 8px;
 	display: inline-flex;
 	align-items: center;
 	vertical-align: middle;
@@ -338,10 +418,13 @@ input[name^="songper"] {
 }
 .song_cell {
 	white-space: nowrap;
+	/* ラベルと時間欄の間にソースの改行由来の空白を入れない */
+	display: flex;
+	align-items: flex-start;
 }
 
 /*	おまけ情報セクション区切り線	*/
-#extra > div.extra_sep{
+#extra div.extra_sep{
 	border-top: 1px solid #cccccc;
 	margin-top: 8px;
 	padding-top: 8px;
