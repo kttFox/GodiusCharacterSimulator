@@ -203,8 +203,8 @@ function StepNumber( Name, Dir )
 
 	var Value = parseInt( Obj.value, 10 );
 	if( isNaN( Value ) ) {
-		//	HP/MP/SPが空欄の場合は平均値を基準とする
-		Value = GetStepBaseHpMpSp( Name );
+		//	HP/MP/SP・残玉が空欄の場合は基準値（平均値／保有想定）を基準とする
+		Value = GetStepBaseValue( Name );
 	}
 
 	Value += Dir;
@@ -217,15 +217,23 @@ function StepNumber( Name, Dir )
 	Obj.dispatchEvent( new Event( "change" ) );
 }
 
-//	HP/MP/SP増減基準値取得処理
-//	機能説明	：	HP/MP/SPが空欄の場合の増減基準値（現在の職業・Lvの平均値）を返す。
+//	増減基準値取得処理
+//	機能説明	：	テキストボックスが空欄の場合の増減基準値を返す。
+//				HP/MP/SPは現在の職業・Lvの平均値、残玉は保有想定の玉数を基準とする。
 //	パラメータ	：	Name	フォーム項目名
 //	戻り値		：	基準値（対象外・算出不可の場合は0）
-function GetStepBaseHpMpSp( Name )
+function GetStepBaseValue( Name )
 {
 	var f = document.chara;
 	var Job = f.job.value;
 	var Lv = parseInt( f.lv.value, 10 );
+
+	//	残玉は保有想定（現在Lvまでの獲得玉＋職業ボーナス－現構成の必要玉数）を基準とする
+	if( "balance" == Name ) {
+		var r = CalcNeedTama();
+		//	保有想定は期待値のため小数となる。入力欄には整数を設定する
+		return ( r != null ) ? Math.round( r.diff ) : 0;
+	}
 
 	if( isNaN( Lv ) ) {
 		return 0;

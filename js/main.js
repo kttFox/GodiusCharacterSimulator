@@ -83,6 +83,9 @@ function CharaMain( Silent )
 		return;
 	}
 
+	//	残玉が入力済みかどうか（未入力の場合は損得を表示しない）
+	var BalanceInputed = ( Balance != "" );
+
 	//	残玉が空欄の場合は保有想定の値を設定する
 	//	（保有想定＝現在Lvまでの獲得玉＋初期ボーナス－現構成の必要玉数：realtime.jsのCalcNeedTamaと同一）
 	if( Balance == "" ) {
@@ -246,19 +249,21 @@ function CharaMain( Silent )
 	//	本人消費量－基準消費量（併用方式：レベル17まで確率(期待値)・18以降固定）
 	SonToku = SkillUseTama - SkillHybridTama;
 
-	//	損得判定
+	//	損得判定（残玉が未入力の場合は判定できないため表示しない）
 	//	損
-	if( SonToku < 0 ) {
+	if( !BalanceInputed ) {
+
+	} else if( SonToku < 0 ) {
 		SonToku *= -1;
-		InitSontoku += "尚、このキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「損」するっぽいです。\n";
+		InitSontoku += "\nこのキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「損」するっぽいです。\n";
 
 	//	得
 	} else if( SonToku > 0 ) {
-		InitSontoku += "尚、このキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「得」するっぽいです。\n";
+		InitSontoku += "\nこのキャラを初期化すると" + SonToku.toFixed( 1 ) + "玉程度「得」するっぽいです。\n";
 
 	//	損得なし
 	} else {
-		InitSontoku += "尚、このキャラを初期化しても、玉は変動しないっぽいです。\n";
+		InitSontoku += "\nこのキャラを初期化しても、玉は変動しないっぽいです。\n";
 	}
 
 	//	診断結果出力
