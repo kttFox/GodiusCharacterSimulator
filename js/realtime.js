@@ -274,6 +274,40 @@ function UpdateAverageHpMpSp()
 	AvgSp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) + ")";
 }
 
+//	課金衣装ON/OFF時のHP/MP/SP増減処理
+//	機能説明	：	HP/MP/SPが入力済みの場合、課金衣装のON/OFFに合わせて
+//					その値を＋５％／－５％する。
+//	戻り値		：	なし
+function ApplyCostumeToHpMpSp()
+{
+	var f = document.chara;
+	var Costume = f.costume;
+	if( !Costume ) {
+		return;
+	}
+
+	var Targets = [ f.hp, f.mp, f.sp ];
+	for( var i = 0; i < Targets.length; i++ ) {
+		var Target = Targets[i];
+		if( !Target || Target.value == "" ) {
+			continue;
+		}
+
+		var Value = Number( Target.value );
+		if( isNaN( Value ) ) {
+			continue;
+		}
+
+		//	ONの場合は＋５％、OFFの場合は元の値へ戻す
+		//	（切り上げの逆算は切り捨てとなるため、ON/OFFを繰り返しても値はずれない）
+		if( Costume.checked ) {
+			Target.value = Math.ceil( Value * COSTUME_RATE );
+		} else {
+			Target.value = Math.floor( Value / COSTUME_RATE );
+		}
+	}
+}
+
 //	リアルタイム一括更新処理
 //	機能説明	：	必要玉数表示、キャラ診断（サイレント）、装備試算、平均値表示を更新する。
 //	戻り値		：	なし
@@ -312,6 +346,11 @@ function InitNeedTamaWatcher()
 	}
 
 	//	チェックボックス・ラジオ系（取得魔法、戦士・剣闘士スキル、ドーピング、スキルアイコン選択）
+	//	課金衣装はHP/MP/SPの値自体を増減させてから再計算する
+	if( f.costume ) {
+		f.costume.addEventListener( "change", ApplyCostumeToHpMpSp );
+	}
+
 	var Groups = [ f.fire, f.ice, f.magical, f.holy, f.warrior, f.gladiator, f.doping, f.skill, f.costume ];
 	for( i = 0; i < Groups.length; i++ ) {
 		var Group = ToElementArray( Groups[i] );
