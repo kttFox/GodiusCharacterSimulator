@@ -434,3 +434,7 @@ input[name^="songper"] {
 #extra{
 	padding-bottom: 6px;
 }
+
+ul{
+	margin-bottom: 10px;
+}
