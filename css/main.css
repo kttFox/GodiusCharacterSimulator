@@ -326,7 +326,7 @@ img[src*="/skill_"] {
 	vertical-align: middle;
 }
 
-/* 呪文(歌)の詠唱時間：アイコン＋成功率の見出し部と行の折り返し制御 */
+/* 歌の持続時間：アイコン＋成功率の見出し部と行の折り返し制御 */
 .song_head {
 	width: 75px;
 	white-space: nowrap;
@@ -335,7 +335,7 @@ img[src*="/skill_"] {
 	flex-wrap: wrap;
 	align-items: center;
 }
-/* 呪文名（アイコンの右に表示・アイコンと上下中央揃え） */
+/* 歌名（アイコンの右に表示・アイコンと上下中央揃え） */
 .song_name {
 	margin-left: 4px;
 	vertical-align: middle;
@@ -365,7 +365,7 @@ img[src*="/skill_"] {
 	}
 }
 
-/* 呪文(歌)の成功率は2行目に右揃えで表示 */
+/* 歌の成功率は2行目に右揃えで表示 */
 .song_per {
 	flex-basis: 100%;
 	height: 22px;
@@ -373,19 +373,19 @@ img[src*="/skill_"] {
 	justify-content: flex-end;
 }
 
-/* 呪文(歌)の成功率欄は幅を詰める */
+/* 歌の成功率欄は幅を詰める */
 input[name^="songper"] {
 	width: 45px;
 	box-sizing: border-box;
 	text-align: right;
 }
 
-/* 呪文(歌)は1呪文ごとにグループ化し、上下に余白を設ける */
+/* 歌は1曲ごとにグループ化し、上下に余白を設ける */
 .song_group {
 	margin-bottom: 8px;
 }
 
-/* 呪文(歌)：回復の歌の増加値入力を右端に配置 */
+/* 歌：回復の歌の増加値入力を右端に配置 */
 .song_kaihuku {
 	float: right;
 	display: flex;
@@ -393,7 +393,7 @@ input[name^="songper"] {
 	padding-top: 1px;
 }
 
-/* 呪文(歌)：回復の歌チェックボックスとラベルを上下中央揃え */
+/* 歌：回復の歌チェックボックスとラベルを上下中央揃え */
 .song_kaihuku label {
 	margin-right: 8px;
 	display: inline-flex;
@@ -405,7 +405,7 @@ input[name^="songper"] {
 	vertical-align: middle;
 }
 
-/* 呪文(歌)：ラベルと時間欄をまとめたセル。
+/* 歌：ラベルと時間欄をまとめたセル。
    flexコンテナにするとタグ間の改行由来の空白が無視される */
 .song_group {
 	display: flex;

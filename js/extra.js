@@ -34,7 +34,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 			0,					//	[8]氷
 			0,					//	[9]援護
 			0,					//	[10]聖
-			0,					//	[11]呪文
+			0,					//	[11]歌
 			0,					//	[12]錬金
 			0,					//	[13]応急
 			0					//	[14]EOR
@@ -378,13 +378,13 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 	document.getElementById("extra_magic_grp").style.display =
 		( SkillList[7] != 0 || SkillList[8] != 0 || SkillList[9] != 0 || SkillList[10] != 0 ) ? "block" : "none";
 
-	//	呪文スキルありの場合
+	//	歌スキルありの場合
 	if( SkillList[11] != 0 ){
 
 		//	セクション表示
 		document.getElementById("extra_song_sec").style.display = "block";
 
-		//	呪文定義テーブル
+		//	歌定義テーブル
 		var SongPer = [
 			//	固有値	成功率
 			[-2,		0],		//	[0]勇気
@@ -396,7 +396,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 			[14,		0]		//	[6]沈黙
 		];
 
-		//	呪文発動率設定
+		//	歌発動率設定
 		GetExtraSongPercent( SkillList[11], Men, SongPer );
 		document.chara.songper01.value = SongPer[0][1];
 		document.chara.songper02.value = SongPer[1][1];
@@ -413,7 +413,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		document.chara.songper06.disabled = false;
 		document.chara.songper07.disabled = false;
 
-		//	詠唱時間定義テーブル(MP切れ／SP切れ)
+		//	持続時間定義テーブル(MP切れ／SP切れ)
 		//	キー：入力項目名の接尾辞、値：[MP切れ時間配列, SP切れ時間配列]
 		var SongTimeList = [
 			//	接尾辞		回復アクセ	回復の歌	不治の歌
@@ -437,10 +437,10 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 			KaihukuAll = 1;
 		}
 
-		//	呪文詠唱時間設定
+		//	歌持続時間設定
 		for( var s = 0; s < SongTimeList.length; ++s ){
 
-			//	詠唱時間取得
+			//	持続時間取得
 			var SongTimeMp = ["00:00","00:00","00:00","00:00","00:00","00:00","00:00"];
 			var SongTimeSp = ["00:00","00:00","00:00","00:00","00:00","00:00","00:00"];
 			//	全体適用ONの場合は回復の歌ありとして計算する
@@ -452,7 +452,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 			GetExtraSongTime( SkillList[11], Mp, Sp, Men, Vit, SongTimeMp, SongTimeSp,
 							  SongTimeList[s][1], Kaihuku, SongTimeList[s][3], KaihukuUp );
 
-			//	呪文数分ループ
+			//	歌数分ループ
 			for( var n = 0; n <= 6; ++n ){
 
 				//	項目名作成(例：songtime01acc1)
@@ -479,18 +479,18 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		}
 	}
 
-	//	呪文スキルなしの場合
+	//	歌スキルなしの場合
 	else{
 		//	セクション非表示
 		document.getElementById("extra_song_sec").style.display = "none";
-		//	呪文数分ループ
+		//	歌数分ループ
 		for( var n = 0; n <= 6; ++n ){
 
 			//	成功率初期化
 			document.chara["songper0" + ( n + 1 )].value = "0.0";
 			document.chara["songper0" + ( n + 1 )].disabled = true;
 
-			//	詠唱時間初期化(接尾辞分ループ)
+			//	持続時間初期化(接尾辞分ループ)
 			var ClearList = [ "", "acc1", "acc2", "acc3", "kaihuku", "fuji" ];
 			for( var c = 0; c < ClearList.length; ++c ){
 				var ClearName = "songtime0" + ( n + 1 ) + ClearList[c];
@@ -878,11 +878,11 @@ function GetExtraMpCost( Lv, MagicMpTable)
 	}
 }
 //------------------------------------------------------------------------------
-//	関数名		：	呪文発動率取得処理
-//	機能説明	：	呪文発動時における成功率を返す。
-//	パラメータ	：	Skill	呪文スキル
+//	関数名		：	歌発動率取得処理
+//	機能説明	：	歌発動時における成功率を返す。
+//	パラメータ	：	Skill	歌スキル
 //					Men		MEN
-//					SongPer	呪文成功率設定配列
+//					SongPer	歌成功率設定配列
 //	戻り値		：	なし
 //	備考		：	なし
 //------------------------------------------------------------------------------
@@ -894,7 +894,7 @@ function GetExtraSongPercent( Skill, Men, SongPer )
 	//	MEN / 5 切り捨て
 	Men = Math.floor( Men / 5 );
 
-	//	呪文分ループ
+	//	歌分ループ
 	for( var i = 0; i <= 6; ++i ){
 
 		//	成功率設定
@@ -911,9 +911,9 @@ function GetExtraSongPercent( Skill, Men, SongPer )
 	}
 }
 //------------------------------------------------------------------------------
-//	関数名		：	呪文詠唱時間秒数変換処理
-//	機能説明	：	「分:秒」形式の詠唱時間を秒数へ変換して返す。
-//	パラメータ	：	String	詠唱時間文字列（「00:00」または「永久」）
+//	関数名		：	歌持続時間秒数変換処理
+//	機能説明	：	「分:秒」形式の持続時間を秒数へ変換して返す。
+//	パラメータ	：	String	持続時間文字列（「00:00」または「永久」）
 //	戻り値		：	秒数（「永久」の場合は最大値）
 //	備考		：	なし
 //------------------------------------------------------------------------------
@@ -931,14 +931,14 @@ function GetSongTimeSecond( String )
 	return ( Time[0] - 0 ) * 60 + ( Time[1] - 0 );
 }
 //------------------------------------------------------------------------------
-//	関数名		：	呪文詠唱時間取得処理
-//	機能説明	：	呪文発動時における詠唱時間を返す。
-//	パラメータ	：	Skill		呪文スキル
+//	関数名		：	歌持続時間取得処理
+//	機能説明	：	歌発動時における持続時間を返す。
+//	パラメータ	：	Skill		歌スキル
 //					MpOrg		MP
 //					SpOrg		SP
 //					Men			MEN
 //					Vit			VIT
-//					SongTime	呪文詠唱時間設定配列
+//					SongTime	歌持続時間設定配列
 //					Accessory	回復アクセ（0点～3点）
 //					Kaihuku		回復の歌影響フラグ（1：回復影響あり、0：回復影響なし）
 //					Fuji		不治の歌影響フラグ（1：不治影響あり、0：不治影響なし）
@@ -978,7 +978,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 		var Rest = Sec % 60;
 		var String = "";
 
-		//	詠唱時間文字列作成
+		//	持続時間文字列作成
 		if( ( Minute + "" ).length == 1 ){
 			String = "0" + Minute + ":";
 		}
@@ -1023,14 +1023,11 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 		SpUp += KaihukuUp;
 	}
 
-	//	呪文（歌）の詠唱中は回復量が半分になる（端数処理なし、小数点を含めて計算）
+	//	歌の持続中は回復量が半分になる
 	MpUp = MpUp / 2;
 	SpUp = SpUp / 2;
 
-	MpUpSec -= 0;
-	SpUpSec -= 0;
-
-	//	呪文数分ループ
+	//	歌数分ループ
 	for( var i = 0; i <= 6; ++i ){
 
 		//	初期化
@@ -1042,7 +1039,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 		var MpEnd = 0;				//	MP切れ確定フラグ
 		var SpEnd = 0;				//	SP切れ確定フラグ
 
-		//	呪文発動
+		//	歌発動
 		Mp -= SongTable[i][0];
 		Sp -= SongTable[i][1];
 
@@ -1060,18 +1057,18 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 			SpEnd = 1;
 		}
 
-		//	MP、SPともに確定済の場合は次の呪文へ
+		//	MP、SPともに確定済の場合は次の歌へ
 		if( MpEnd == 1 && SpEnd == 1 ){
 			continue;
 		}
 
-		//	0.25秒ループ(4ループで1秒)
+		//	時間刻みループ(1秒を1/64で分割。2進数で正確に表せる値のため剰余判定も誤差なし)
 		while( 1 ){
-			//	0.25秒経過
-			Second += 0.25;
+			//	1刻み経過
+			Second += 1 / 64;
 
-			//	1秒経過
-			if( Second % 1 == 0 ){
+			//	1秒経過(発動後3秒間は維持MP、SPを消費しない)
+			if( Second % 1 == 0 && 3 < Second){
 				//	維持MP、SP消費(確定済のものは計算対象外)
 				if( MpEnd == 0 ){
 					Mp -= SongTable[i][2];
@@ -1099,7 +1096,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 			}
 
 			//	MP回復
-			//	(0.25秒刻みとの剰余判定では回復周期が割り切れず判定漏れするため、
+			//	(時間刻みとの剰余判定では回復周期が割り切れず判定漏れするため、
 			//	 次回回復時刻を累積して経過分をまとめて回復する)
 			if( MpUpSec > 0 ){
 				while( Second + 0.0001 >= NextMpTime ){
@@ -1131,15 +1128,15 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 			}
 
 			//	AQ判定(15秒単位経過時点)
-			if( Second % 15 == 0 ){
+			if( Second % 15 == 0 && 3 < Second ){
 
-				//	現在MPが呪文発動直後のMP以上の場合、永久とする
+				//	現在MPが歌発動直後のMP以上の場合、永久とする
 				if( MpEnd == 0 && Mp >= MpOrg - SongTable[i][0] ){
 					SongTimeMp[i] = "永久";
 					MpEnd = 1;
 				}
 
-				//	現在SPが呪文発動直後のSP以上の場合、永久とする
+				//	現在SPが歌発動直後のSP以上の場合、永久とする
 				if( SpEnd == 0 && Sp >= SpOrg - SongTable[i][1] ){
 					SongTimeSp[i] = "永久";
 					SpEnd = 1;
@@ -1234,6 +1231,11 @@ function AdjustPercent( InValue )
 
 	return OutValue;
 }
+
+
+//	MP/SP自然回復の基準秒数（回復段階で割って1回の回復間隔[秒]を得る）
+var REGENERATION_BASE_SECOND = 15.5;
+
 //------------------------------------------------------------------------------
 //	関数名		：	自動回復秒数取得処理
 //	機能説明	：	MEN、またはVITから自然回復までの秒数を返す。
@@ -1246,61 +1248,61 @@ function GetRegenerationSecond( Para )
 	var Sec = 0;
 
 	if( Para >= 95 && Para < 100 ){
-		Sec = 14 / 19;				//	0.74秒
+		Sec = REGENERATION_BASE_SECOND / 19;				//	0.74秒
 	}
 	if( Para >= 90 && Para < 95 ){
-		Sec = 14 / 18;				//	0.78秒
+		Sec = REGENERATION_BASE_SECOND / 18;				//	0.78秒
 	}
 	if( Para >= 85 && Para < 90 ){
-		Sec = 14 / 17;				//	0.82秒
+		Sec = REGENERATION_BASE_SECOND / 17;				//	0.82秒
 	}
 	if( Para >= 80 && Para < 85 ){
-		Sec = 14 / 16;				//	0.88秒
+		Sec = REGENERATION_BASE_SECOND / 16;				//	0.88秒
 	}
 	if( Para >= 75 && Para < 80 ){
-		Sec = 14 / 15;				//	0.93秒
+		Sec = REGENERATION_BASE_SECOND / 15;				//	0.93秒
 	}
 	if( Para >= 70 && Para < 75 ){
-		Sec = 14 / 14;				//	1秒
+		Sec = REGENERATION_BASE_SECOND / 14;				//	1秒
 	}
 	if( Para >= 65 && Para < 70 ){
-		Sec = 14 / 13;				//	1.08秒
+		Sec = REGENERATION_BASE_SECOND / 13;				//	1.08秒
 	}
 	if( Para >= 60 && Para < 65 ){
-		Sec = 14 / 12;				//	1.17秒
+		Sec = REGENERATION_BASE_SECOND / 12;				//	1.17秒
 	}
 	if( Para >= 55 && Para < 60 ){
-		Sec = 14 / 11;				//	1.27秒
+		Sec = REGENERATION_BASE_SECOND / 11;				//	1.27秒
 	}
 	if( Para >= 50 && Para < 55 ){
-		Sec = 14 / 10;				//	1.4秒
+		Sec = REGENERATION_BASE_SECOND / 10;				//	1.4秒
 	}
 	if( Para >= 45 && Para < 50 ){
-		Sec = 14 / 9;				//	1.56秒
+		Sec = REGENERATION_BASE_SECOND / 9;				//	1.56秒
 	}
 	if( Para >= 40 && Para < 45 ){
-		Sec = 14 / 8;				//	1.75秒
+		Sec = REGENERATION_BASE_SECOND / 8;				//	1.75秒
 	}
 	if( Para >= 35 && Para < 40 ){
-		Sec = 14 / 7;				//	2秒
+		Sec = REGENERATION_BASE_SECOND / 7;				//	2秒
 	}
 	if( Para >= 30 && Para < 35 ){
-		Sec = 14 / 6;				//	2.33秒
+		Sec = REGENERATION_BASE_SECOND / 6;				//	2.33秒
 	}
 	if( Para >= 25 && Para < 30 ){
-		Sec = 14 / 5;				//	2.8秒
+		Sec = REGENERATION_BASE_SECOND / 5;				//	2.8秒
 	}
 	if( Para >= 20 && Para < 25 ){
-		Sec = 14 / 4;				//	3.5秒
+		Sec = REGENERATION_BASE_SECOND / 4;				//	3.5秒
 	}
 	if( Para >= 15 && Para < 20 ){
-		Sec = 14 / 3;				//	4.66秒
+		Sec = REGENERATION_BASE_SECOND / 3;				//	4.66秒
 	}
 	if( Para >= 10 && Para < 15 ){
-		Sec = 14 / 2;				//	7秒
+		Sec = REGENERATION_BASE_SECOND / 2;				//	7秒
 	}
 	if( Para >= 6 && Para < 10 ){
-		Sec = 14 / 1;				//	14.0秒
+		Sec = REGENERATION_BASE_SECOND / 1;				//	14.0秒
 	}
 
 	return Sec;

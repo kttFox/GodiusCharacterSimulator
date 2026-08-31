@@ -128,7 +128,7 @@
 					<td>
 						<form name="chara">
 							<div class="title">
-								<span>■Godius Eternal War キャラクターシミュレーター v1.12</span>
+								<span>■Godius Eternal War キャラクターシミュレーター v1.13</span>
 								<span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()" /></span>
 								<span id="counter"></span>
 							</div>
@@ -2210,7 +2210,7 @@
 									</div>
 
 									<div id="extra_song_sec" style="display: block">
-										呪文 (成功率・詠唱時間 ／上段：MP切れ、下段：SP切れ)
+										歌 (成功率・持続時間 ／上段：MP切れ、下段：SP切れ)
 										<span class="song_kaihuku">
 											<label>
 												<input type="checkbox" name="songkaihukuall" onchange="UpdateRealtimeAll()" />
@@ -2684,6 +2684,37 @@
 									</tr>
 								</table>
 								<li>例：15→16に上げる場合は3個、25→26に上げる場合は5個が必要です。</li>
+								<li>パラメーター（ＶＩＴ／ＭＥＮ）による回復間隔は次の値で計算しています。</li>
+								<table border="1" cellspacing="0" cellpadding="3" style="border-collapse: collapse; margin: 3px 0 3px 20px; text-align: center">
+									<tr>
+										<th width="80">パラメータ</th>
+										<th width="100">回復間隔</th>
+									</tr>
+									<tr>
+										<td>6</td>
+										<td>15.50</td>
+									</tr>
+									<tr>
+										<td>10</td>
+										<td>7.75</td>
+									</tr>
+									<tr>
+										<td>15</td>
+										<td>5.17</td>
+									</tr>
+									<tr>
+										<td>20</td>
+										<td>3.88</td>
+									</tr>
+									<tr>
+										<td>25</td>
+										<td>3.10</td>
+									</tr>
+									<tr>
+										<td>30</td>
+										<td>2.58</td>
+									</tr>
+								</table>
 							</ul>
 
 							<li>スキル</li>
@@ -2934,8 +2965,8 @@
 							<li>スキル情報</li>
 							<ul>
 								<li>キャラ診断時、選択した職業に応じて関連スキルの成功率を表示します。</li>
-								<li>呪文時間詠唱時間はラグや環境により実際の時間と異なる場合があります。
-									<br />
+								<li>歌の持続時間はラグや環境により実際の時間と異なる場合があります。<br />
+									歌の発動後３秒間は持続のための消費は発生しません。<br />
 									本作ではＨＰ・ＭＰ・ＳＰに小数以下の値が存在するため、実際の値とは誤差が生じる場合があります。
 								</li>
 							</ul>

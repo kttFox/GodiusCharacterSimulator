@@ -273,10 +273,15 @@ function LoadFromUrlText( Text )
 		}
 
 		//	スキル項目の設定（スキル名からskill番号を特定）
+		//	※旧データは「歌」を「呪文」で保持しているため読み替える
 		var SkillNames = GetShareSkillNames();
 		for( var i = 0; i < SkillNames.length; ++i ){
-			if( Map[ SkillNames[i] ] != undefined ){
-				document.chara[ "skill" + ( i + 1 ) ].value = Map[ SkillNames[i] ];
+			var SkillValue = Map[ SkillNames[i] ];
+			if( SkillValue == undefined && SkillNames[i] == "歌" ){
+				SkillValue = Map[ "呪文" ];
+			}
+			if( SkillValue != undefined ){
+				document.chara[ "skill" + ( i + 1 ) ].value = SkillValue;
 			}
 		}
 
