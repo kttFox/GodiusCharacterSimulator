@@ -1,5 +1,34 @@
-//	フォーム初期値（デフォルト）保持連想配列
-var ShareDefaultValue = null;
+//	フォーム初期値（デフォルト）連想配列
+//	※共有URLへ出力するか否かの判定基準となる固定値。
+//	　現在のフォーム状態に依存させないため定数として保持する。
+//	　値を変更した場合は既存の共有URLの解釈が変わる点に注意すること。
+var ShareDefaultValue = {
+	"lv"		: "1",
+	"hp"		: "",
+	"mp"		: "",
+	"sp"		: "",
+	"str"		: "15",
+	"int"		: "6",
+	"dex"		: "6",
+	"agr"		: "6",
+	"vit"		: "15",
+	"men"		: "15",
+	"balance"	: "",
+	"weapon"	: "0",
+	"weaponp"	: "0",
+	"armor"		: "0",
+	"armorp"	: "0",
+	"shoes"		: "0",
+	"shoesp"	: "0",
+	"shield"	: "0",
+	"ring1"		: "0",
+	"ring2"		: "0",
+	"necklace"	: "0"
+};
+
+//	共有機能初期化済みフラグ
+//	※初期化前のURL書き換えを抑止するために使用する。
+var ShareInitialized = false;
 
 //	共有対象スカラー項目定義（キー名：フォーム項目名）
 var SHARE_SCALAR_KEYS = [
@@ -31,17 +60,11 @@ var SHARE_GROUP_KEYS = {
 //------------------------------------------------------------------------------
 function InitShare()
 {
-	//	スカラー項目の初期値の保持
-	ShareDefaultValue = {};
-	for( var i = 0; i < SHARE_SCALAR_KEYS.length; ++i ){
-		var Name = SHARE_SCALAR_KEYS[i];
-		if( document.chara[ Name ] ){
-			ShareDefaultValue[ Name ] = String( document.chara[ Name ].value );
-		}
-	}
-
 	//	URLからの復元
 	LoadFromUrl();
+
+	//	初期化完了（以降のURL書き換えを許可）
+	ShareInitialized = true;
 }
 //------------------------------------------------------------------------------
 //	関数名		：	現職業スキル名取得処理
@@ -115,7 +138,7 @@ function BuildSharePairs()
 			continue;
 		}
 		var Value = String( document.chara[ Name ].value );
-		if( ShareDefaultValue == null || Value != ShareDefaultValue[ Name ] ){
+		if( Value != ShareDefaultValue[ Name ] ){
 			Pairs.push( Name + ":" + Value );
 		}
 	}
@@ -155,7 +178,8 @@ function BuildSharePairs()
 function UpdateShareUrl()
 {
 	//	初期化前は処理しない
-	if( ShareDefaultValue == null ){
+	//	※URLからの復元前にハッシュ部を上書きしないようにするため。
+	if( !ShareInitialized ){
 		return;
 	}
 
