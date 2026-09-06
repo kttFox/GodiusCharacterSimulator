@@ -47,9 +47,16 @@ var SHARE_GROUP_KEYS = {
 	"聖"	: "holy",
 	"戦技"	: "warrior",
 	"剣技"	: "gladiator",
-	"強化"	: "doping",
-	"課金衣装"	: "costume"
+	"強化"	: "doping"
 };
+
+//	課金衣装の共有キー名
+var SHARE_COSTUME_KEY = "課金衣装";
+
+//	課金衣装の増加率（％）
+//	※今後10％・15％の衣装が追加されることを見越し、
+//	　チェック状態ではなく増加率そのものを共有値とする。
+var SHARE_COSTUME_RATE = 5;
 
 //------------------------------------------------------------------------------
 //	関数名		：	共有機能初期化処理
@@ -163,6 +170,11 @@ function BuildSharePairs()
 		if( Decimal > 0 ){
 			Pairs.push( Key + ":" + Decimal );
 		}
+	}
+
+	//	課金衣装（増加率（％）を出力する。例：課金衣装:5）
+	if( document.chara[ "costume" ] && document.chara[ "costume" ].checked ){
+		Pairs.push( SHARE_COSTUME_KEY + ":" + SHARE_COSTUME_RATE );
 	}
 
 	return Pairs;
@@ -325,6 +337,13 @@ function LoadFromUrlText( Text )
 			for( var i = 0; i < aElements.length; ++i ){
 				aElements[i].checked = ( ( Decimal >> i ) & 1 ) == 1;
 			}
+		}
+
+		//	課金衣装の設定
+		//	※旧データはビット値１で保持しているため、値によらず
+		//	　キーが存在すればON（５％）として扱う。
+		if( Map[ SHARE_COSTUME_KEY ] != undefined && document.chara[ "costume" ] ){
+			document.chara[ "costume" ].checked = true;
 		}
 
 		//	リアルタイム表示更新
