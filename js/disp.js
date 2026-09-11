@@ -86,7 +86,7 @@ function ChangeSkillMenuByJob()
 
 					//	スキル文言変更（ホバー時にスキル名称を表示）
 					StrInner = document.getElementById("id_skill" + j);
-					StrInner.src = "./img/skill" + SkillTable[i][j] + ".gif";
+					StrInner.src = "./img/" + SkillTable[i][j];
 					StrInner.title = SkillName;
 					StrInner.alt = SkillName;
 				}
@@ -421,29 +421,29 @@ function ConvertSkillStringToImage( Skill )
 {
 	//	変換テーブル
 	var	ConvTable = [
-			["剣　　　", "01"],
-			["斧　　　", "02"],
-			["メイス　", "03"],
-			["素手　　", "04"],
-			["回避　　", "05"],
-			["暗殺　　", "06"],
-			["槍　　　", "07"],
-			["罠発見　", "08"],
-			["罠除去　", "09"],
-			["煙幕　　", "10"],
-			["プッシュ", "11"],
-			["火　　　", "12"],
-			["氷　　　", "13"],
-			["援護　　", "14"],
-			["錬金　　", "15"],
-			["応急　　", "16"],
-			["聖　　　", "17"],
-			["裁縫　　", "18"],
-			["修繕　　", "19"],
-			["鍛治　　", "20"],
-			["修理　　", "21"],
-			["歌　　　", "22"],
-			["　　　　", "99"]
+			["剣　　　", "jopskill_000.png"],
+			["斧　　　", "jopskill_001.png"],
+			["メイス　", "jopskill_002.png"],
+			["素手　　", "jopskill_003.png"],
+			["回避　　", "jopskill_004.png"],
+			["暗殺　　", "jopskill_005.png"],
+			["槍　　　", "jopskill_006.png"],
+			["罠発見　", "jopskill_007.png"],
+			["罠除去　", "jopskill_008.png"],
+			["煙幕　　", "jopskill_009.png"],
+			["プッシュ", "jopskill_010.png"],
+			["火　　　", "jopskill_011.png"],
+			["氷　　　", "jopskill_012.png"],
+			["援護　　", "jopskill_013.png"],
+			["錬金　　", "jopskill_014.png"],
+			["応急　　", "jopskill_015.png"],
+			["聖　　　", "jopskill_016.png"],
+			["裁縫　　", "jopskill_017.png"],
+			["修繕　　", "jopskill_018.png"],
+			["鍛治　　", "jopskill_019.png"],
+			["修理　　", "jopskill_020.png"],
+			["歌　　　", "jopskill_021.png"],
+			["　　　　", "skill99.gif"]
 		];
 
 	for( var i = 0; i < 23; ++i ){
