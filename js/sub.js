@@ -10,7 +10,7 @@ function IsTamaLink()
 		return false;
 	}
 	//	非数値の場合は連動しない
-	if( isNaN( Balance - 0 ) ) {
+	if( isNaN( Number( Balance ) ) ) {
 		return false;
 	}
 	//	空欄以外（値が入力されている）とき連動

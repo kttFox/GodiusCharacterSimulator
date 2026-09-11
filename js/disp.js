@@ -248,7 +248,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 	}
 
 	//	残玉
-	var Balance = document.chara.balance.value - 0;
+	var Balance = Number( document.chara.balance.value );
 
 	//	配列サイズ最大値設定
 	var MaxLength = 0;
@@ -305,7 +305,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 					if( Fire[i].checked == true ){
 						//	チェックボックスOFF
 						Fire[i].checked = false;
-						Balance += Fire[i].value - 0;
+						Balance += Number( Fire[i].value );
 					}
 				}
 			}
@@ -319,7 +319,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 					if( Ice[i].checked == true ){
 						//	チェックボックスOFF
 						Ice[i].checked = false;
-						Balance += Ice[i].value - 0;
+						Balance += Number( Ice[i].value );
 					}
 				}
 			}
@@ -345,7 +345,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 					if( Holy[i].checked == true ){
 						//	チェックボックスOFF
 						Holy[i].checked = false;
-						Balance += Holy[i].value - 0;
+						Balance += Number( Holy[i].value );
 					}
 				}
 			}
@@ -372,7 +372,7 @@ function ChangeMagicCheckBox( Job, SideJob )
 					if( Magical[i].checked == true ){
 						//	チェックボックスOFF
 						Magical[i].checked = false;
-						Balance += Magical[i].value - 0;
+						Balance += Number( Magical[i].value );
 					}
 				}
 			}

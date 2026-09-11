@@ -57,25 +57,25 @@ function CalcMain()
 	CheckEquipment( WeaponList );
 
 	//	変数へフォームから取得した値を設定
-	var Lv = document.chara.lv.value - 0;					//	LV
-	var Str = document.chara.str.value - 0;					//	STR
-	var Vit = document.chara.vit.value - 0;					//	VIT
-	var Dex = document.chara.dex.value - 0;					//	DEX
-	var Agr = document.chara.agr.value - 0;					//	AGR
-	var Int = document.chara.int.value - 0;					//	INT
-	var Men = document.chara.men.value - 0;					//	MEN
+	var Lv = Number( document.chara.lv.value );					//	LV
+	var Str = Number( document.chara.str.value );					//	STR
+	var Vit = Number( document.chara.vit.value );					//	VIT
+	var Dex = Number( document.chara.dex.value );					//	DEX
+	var Agr = Number( document.chara.agr.value );					//	AGR
+	var Int = Number( document.chara.int.value );					//	INT
+	var Men = Number( document.chara.men.value );					//	MEN
 	var Job = document.chara.job.value;						//	主職業
 	var SideJob = document.chara.sidejob.value;				//	副業
-	var Weapon = document.chara.weapon.value - 0;			//	武器
-	var WeaponP = document.chara.weaponp.value - 0;			//	武器改造値
-	var Armor = document.chara.armor.value - 0;				//	鎧/服
-	var ArmorP = document.chara.armorp.value - 0;			//	鎧/服改造値
-	var Shoes = document.chara.shoes.value - 0;				//	靴
-	var ShoesP = document.chara.shoesp.value - 0;			//	靴改造値
-	var Shield = document.chara.shield.value - 0;			//	盾
-	var Ring1 = document.chara.ring1.value - 0;				//	指輪１
-	var Ring2 = document.chara.ring2.value - 0;				//	指輪２
-	var Necklace = document.chara.necklace.value - 0;		//	ネクレ
+	var Weapon = Number( document.chara.weapon.value );			//	武器
+	var WeaponP = Number( document.chara.weaponp.value );			//	武器改造値
+	var Armor = Number( document.chara.armor.value );				//	鎧/服
+	var ArmorP = Number( document.chara.armorp.value );			//	鎧/服改造値
+	var Shoes = Number( document.chara.shoes.value );				//	靴
+	var ShoesP = Number( document.chara.shoesp.value );			//	靴改造値
+	var Shield = Number( document.chara.shield.value );			//	盾
+	var Ring1 = Number( document.chara.ring1.value );				//	指輪１
+	var Ring2 = Number( document.chara.ring2.value );				//	指輪２
+	var Necklace = Number( document.chara.necklace.value );		//	ネクレ
 
 	var StrDiv5 = Str / 5;									//	STR / 5
 	var MenDiv5 = Men / 5;									//	MEN / 5
@@ -170,7 +170,7 @@ function CalcMain()
 			if( SkillList[0] != 0 ){
 
 				//	スキル加算
-				SkillList[0] -= 0;
+				SkillList[0] = Number( SkillList[0] );
 				SkillList[0] += WeaponList[Weapon][6];
 
 				//	剣スキル加算
@@ -238,7 +238,7 @@ function CalcMain()
 		//	スキルありの場合
 		if( SkillList[WeaponKindIndex] != 0 ){
 			//	スキル加算
-			SkillList[WeaponKindIndex] -= 0;
+			SkillList[WeaponKindIndex] = Number( SkillList[WeaponKindIndex] );
 			SkillList[WeaponKindIndex] += WeaponList[Weapon][6];
 		}
 
@@ -342,7 +342,7 @@ function CalcMain()
 function CheckEquipment(WeaponList)
 {
 	//	武器種別
-	var Weapon = document.chara.weapon.value - 0;
+	var Weapon = Number( document.chara.weapon.value );
 
 	//	両手武器の場合、盾なしとする
 	if( WeaponList[Weapon][3] == "両手" ){
@@ -1566,7 +1566,7 @@ function GetSkillValue( Job, SideJob, SkillList )
 	//	スキル取得式設定
 	for( var i = 0; i <= 13; ++i ){
 		if( SkillList[i] != 0 ){
-			SkillList[i] = eval( "document.chara.skill" + SkillList[i] + ".value - 0" );
+			SkillList[i] = Number( document.chara[ "skill" + SkillList[i] ].value );
 		}
 	}
 }
@@ -1864,7 +1864,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	//	耐性
 	//-------------------------------------------------------------------
 	//	火耐性
-	Msg += "火耐性:" + (document.chara.taiseif.value - 0) + "\n";
+	Msg += "火耐性:" + Number( document.chara.taiseif.value ) + "\n";
 
 	//	DEX
 	Msg += " (" + (DexDiv5 - 5) + ")DEX" + document.chara.dex.value + "\n";
@@ -1891,7 +1891,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	氷耐性
-	Msg += "氷耐性:" + (document.chara.taiseii.value - 0) + "\n";
+	Msg += "氷耐性:" + Number( document.chara.taiseii.value ) + "\n";
 
 	//	AGR
 	Msg += " (" + (AgrDiv5 - 5) + ")AGR" + document.chara.agr.value + "\n";
@@ -1918,7 +1918,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	聖耐性
-	Msg += "聖耐性:" + (document.chara.taiseih.value - 0) + "\n";
+	Msg += "聖耐性:" + Number( document.chara.taiseih.value ) + "\n";
 
 	//	INT
 	Msg += " (" + IntDiv5 + ")INT" + document.chara.int.value + "\n";
@@ -1945,7 +1945,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	援護耐性
-	Msg += "援護耐性:" + (document.chara.taiseim.value - 0) + "\n";
+	Msg += "援護耐性:" + Number( document.chara.taiseim.value ) + "\n";
 
 	//	MEN
 	Msg += " (" + (MenDiv5 - 5) + ")MEN" + document.chara.men.value + "\n";
@@ -1972,7 +1972,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	病気耐性
-	Msg += "病気耐性:" + (document.chara.taiseis.value - 0) + "\n";
+	Msg += "病気耐性:" + Number( document.chara.taiseis.value ) + "\n";
 
 	//	VIT
 	Msg += " (" + (VitDiv5 - 5) + ")VIT" + document.chara.vit.value + "\n";
@@ -1993,7 +1993,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	毒耐性
-	Msg += "毒耐性:" + (document.chara.taiseip.value - 0) + "\n";
+	Msg += "毒耐性:" + Number( document.chara.taiseip.value ) + "\n";
 
 	//	STR
 	Msg += " (" + (StrDiv5 - 5) + ")STR" + document.chara.str.value + "\n";
@@ -2017,7 +2017,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	//	耐性減
 	//-------------------------------------------------------------------
 	//	火耐性減
-	Msg += "火耐性減:" + (document.chara.taiseigenf.value - 0) + "\n";
+	Msg += "火耐性減:" + Number( document.chara.taiseigenf.value ) + "\n";
 
 	//	武器
 	if( WeaponList[Weapon][7] != 0 ){
@@ -2040,7 +2040,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	氷耐性減
-	Msg += "氷耐性減:" + (document.chara.taiseigeni.value - 0) + "\n";
+	Msg += "氷耐性減:" + Number( document.chara.taiseigeni.value ) + "\n";
 
 	//	武器
 	if( WeaponList[Weapon][8] != 0 ){
@@ -2063,7 +2063,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	聖耐性減
-	Msg += "聖耐性減:" + (document.chara.taiseigenh.value - 0) + "\n";
+	Msg += "聖耐性減:" + Number( document.chara.taiseigenh.value ) + "\n";
 
 	//	指輪1
 	if( Ring1List[Ring1][11] != 0 ){
@@ -2076,7 +2076,7 @@ function SetStatusDetail( Lv, StrDiv5, DexDiv5, AgrDiv5, VitDiv5, MenDiv5, IntDi
 	}
 
 	//	援護耐性減
-	Msg += "援護耐性減:" + (document.chara.taiseigenm.value - 0) + "\n";
+	Msg += "援護耐性減:" + Number( document.chara.taiseigenm.value ) + "\n";
 
 	//	指輪1
 	if( Ring1List[Ring1][12] != 0 ){

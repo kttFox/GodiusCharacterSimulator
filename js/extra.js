@@ -44,334 +44,43 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 	GetSkillValue( Job, SideJob, SkillList );
 
 
-	//	火スキルあり、または氷スキルあり、または援護スキルあり、または聖スキルありの場合
-	if( SkillList[7] != 0 || SkillList[8] != 0 || SkillList[9] != 0 || SkillList[10] != 0 ){
-		//	消費ＭＰ設定テーブル
-		var MagicMpTable = [
-				[0,0,0,0,0,0,0],			//	[0]火
-				[0,0,0,0,0,0,0],			//	[1]氷
-				[0,0,0,0,0,0,0],			//	[2]援護
-				[0,0,0,0,0,0,0,0,0,0]		//	[3]聖
-			];
+	//	魔法系統分ループ（火／氷／援護／聖）
+	for( var m = 0; m < MAGIC_SYSTEMS.length; m++ ){
+		//	魔法系統
+		var System = MAGIC_SYSTEMS[ m ];
+		//	該当系統のスキル
+		var MagicSkill = SkillList[ System.SkillIndex ];
+		//	スキル有無
+		var HasSkill = ( MagicSkill != 0 );
 
-		//	魔法発動率設定テーブル
-		var MagicPerTable = [
-				[0,0,0,0,0,0,0],			//	[0]火
-				[0,0,0,0,0,0,0],			//	[1]氷
-				[0,0,0,0,0,0,0],			//	[2]援護
-				[0,0,0,0,0,0,0,0,0,0]		//	[3]聖
-			];
+		//	発動率・消費ＭＰ取得（スキルありの場合のみ）
+		var PerList = null;
+		var MpList = null;
+		if( HasSkill ){
+			PerList = System.GetPercentList( {
+				Lv: Lv,
+				Int: Int,
+				Skill: MagicSkill
+			} );
+			MpList = System.GetMpCostList( Lv, GetExtraEquipmentMpRate() );
+		}
 
-		//	減少ＭＰ取得処理
-		GetExtraMpCost( Lv, MagicMpTable );
-		
-		//	魔法発動率取得処理
-		GetExtraMagicPercent( Lv, Int, SkillList, MagicPerTable );
-	}
+		//	セクション表示切替
+		document.getElementById( System.SectionId ).style.display = HasSkill ? "block" : "none";
 
-	//	火スキルありの場合
-	if( SkillList[7] != 0 ){
-		//	セクション表示
-		document.getElementById("extra_fire_sec").style.display = "block";
-		//	火炎魔法項目設定
-		document.chara.firemp01.value = MagicMpTable[0][0];
-		document.chara.firemp02.value = MagicMpTable[0][1];
-		document.chara.firemp03.value = MagicMpTable[0][2];
-		document.chara.firemp04.value = MagicMpTable[0][3];
-		document.chara.firemp05.value = MagicMpTable[0][4];
-		document.chara.firemp06.value = MagicMpTable[0][5];
-		document.chara.firemp07.value = MagicMpTable[0][6];
-		document.chara.firemp01.disabled = false;
-		document.chara.firemp02.disabled = false;
-		document.chara.firemp03.disabled = false;
-		document.chara.firemp04.disabled = false;
-		document.chara.firemp05.disabled = false;
-		document.chara.firemp06.disabled = false;
-		document.chara.firemp07.disabled = false;
-		document.chara.fireper01.value = MagicPerTable[0][0];
-		document.chara.fireper02.value = MagicPerTable[0][1];
-		document.chara.fireper03.value = MagicPerTable[0][2];
-		document.chara.fireper04.value = MagicPerTable[0][3];
-		document.chara.fireper05.value = MagicPerTable[0][4];
-		document.chara.fireper06.value = MagicPerTable[0][5];
-		document.chara.fireper07.value = MagicPerTable[0][6];
-		document.chara.fireper01.disabled = false;
-		document.chara.fireper02.disabled = false;
-		document.chara.fireper03.disabled = false;
-		document.chara.fireper04.disabled = false;
-		document.chara.fireper05.disabled = false;
-		document.chara.fireper06.disabled = false;
-		document.chara.fireper07.disabled = false;
-	}
+		//	魔法分ループ
+		for( var i = 0; i < System.MagicList.length; i++ ){
+			//	発動率項目
+			var PerField = document.chara[ System.GetFieldName( "per", i ) ];
+			//	消費ＭＰ項目
+			var MpField = document.chara[ System.GetFieldName( "mp", i ) ];
 
-	//	火スキルなしの場合
-	else{
-		//	セクション非表示
-		document.getElementById("extra_fire_sec").style.display = "none";
-		//	火炎魔法項目初期化
-		document.chara.firemp01.value = "0";
-		document.chara.firemp02.value = "0";
-		document.chara.firemp03.value = "0";
-		document.chara.firemp04.value = "0";
-		document.chara.firemp05.value = "0";
-		document.chara.firemp06.value = "0";
-		document.chara.firemp07.value = "0";
-		document.chara.firemp01.disabled = true;
-		document.chara.firemp02.disabled = true;
-		document.chara.firemp03.disabled = true;
-		document.chara.firemp04.disabled = true;
-		document.chara.firemp05.disabled = true;
-		document.chara.firemp06.disabled = true;
-		document.chara.firemp07.disabled = true;
-		document.chara.fireper01.value = "0.0";
-		document.chara.fireper02.value = "0.0";
-		document.chara.fireper03.value = "0.0";
-		document.chara.fireper04.value = "0.0";
-		document.chara.fireper05.value = "0.0";
-		document.chara.fireper06.value = "0.0";
-		document.chara.fireper07.value = "0.0";
-		document.chara.fireper01.disabled = true;
-		document.chara.fireper02.disabled = true;
-		document.chara.fireper03.disabled = true;
-		document.chara.fireper04.disabled = true;
-		document.chara.fireper05.disabled = true;
-		document.chara.fireper06.disabled = true;
-		document.chara.fireper07.disabled = true;
-	}
-
-	//	氷スキルありの場合
-	if( SkillList[8] != 0 ){
-		//	セクション表示
-		document.getElementById("extra_ice_sec").style.display = "block";
-		//	冷凍魔法項目設定
-		document.chara.icemp01.value = MagicMpTable[1][0];
-		document.chara.icemp02.value = MagicMpTable[1][1];
-		document.chara.icemp03.value = MagicMpTable[1][2];
-		document.chara.icemp04.value = MagicMpTable[1][3];
-		document.chara.icemp05.value = MagicMpTable[1][4];
-		document.chara.icemp06.value = MagicMpTable[1][5];
-		document.chara.icemp07.value = MagicMpTable[1][6];
-		document.chara.icemp01.disabled = false;
-		document.chara.icemp02.disabled = false;
-		document.chara.icemp03.disabled = false;
-		document.chara.icemp04.disabled = false;
-		document.chara.icemp05.disabled = false;
-		document.chara.icemp06.disabled = false;
-		document.chara.icemp07.disabled = false;
-		document.chara.iceper01.value = MagicPerTable[1][0];
-		document.chara.iceper02.value = MagicPerTable[1][1];
-		document.chara.iceper03.value = MagicPerTable[1][2];
-		document.chara.iceper04.value = MagicPerTable[1][3];
-		document.chara.iceper05.value = MagicPerTable[1][4];
-		document.chara.iceper06.value = MagicPerTable[1][5];
-		document.chara.iceper07.value = MagicPerTable[1][6];
-		document.chara.iceper01.disabled = false;
-		document.chara.iceper02.disabled = false;
-		document.chara.iceper03.disabled = false;
-		document.chara.iceper04.disabled = false;
-		document.chara.iceper05.disabled = false;
-		document.chara.iceper06.disabled = false;
-		document.chara.iceper07.disabled = false;
-	}
-
-	//	氷スキルなしの場合
-	else{
-		//	セクション非表示
-		document.getElementById("extra_ice_sec").style.display = "none";
-		//	冷凍魔法項目初期化
-		document.chara.icemp01.value = "0";
-		document.chara.icemp02.value = "0";
-		document.chara.icemp03.value = "0";
-		document.chara.icemp04.value = "0";
-		document.chara.icemp05.value = "0";
-		document.chara.icemp06.value = "0";
-		document.chara.icemp07.value = "0";
-		document.chara.icemp01.disabled = true;
-		document.chara.icemp02.disabled = true;
-		document.chara.icemp03.disabled = true;
-		document.chara.icemp04.disabled = true;
-		document.chara.icemp05.disabled = true;
-		document.chara.icemp06.disabled = true;
-		document.chara.icemp07.disabled = true;
-		document.chara.iceper01.value = "0.0";
-		document.chara.iceper02.value = "0.0";
-		document.chara.iceper03.value = "0.0";
-		document.chara.iceper04.value = "0.0";
-		document.chara.iceper05.value = "0.0";
-		document.chara.iceper06.value = "0.0";
-		document.chara.iceper07.value = "0.0";
-		document.chara.iceper01.disabled = true;
-		document.chara.iceper02.disabled = true;
-		document.chara.iceper03.disabled = true;
-		document.chara.iceper04.disabled = true;
-		document.chara.iceper05.disabled = true;
-		document.chara.iceper06.disabled = true;
-		document.chara.iceper07.disabled = true;
-	}
-
-	//	援護スキルありの場合
-	if( SkillList[9] != 0 ){
-		//	セクション表示
-		document.getElementById("extra_magical_sec").style.display = "block";
-		//	援護魔法項目設定
-		document.chara.magicalmp01.value = MagicMpTable[2][0];
-		document.chara.magicalmp02.value = MagicMpTable[2][1];
-		document.chara.magicalmp03.value = MagicMpTable[2][2];
-		document.chara.magicalmp04.value = MagicMpTable[2][3];
-		document.chara.magicalmp05.value = MagicMpTable[2][4];
-		document.chara.magicalmp06.value = MagicMpTable[2][5];
-		document.chara.magicalmp07.value = MagicMpTable[2][6];
-		document.chara.magicalmp01.disabled = false;
-		document.chara.magicalmp02.disabled = false;
-		document.chara.magicalmp03.disabled = false;
-		document.chara.magicalmp04.disabled = false;
-		document.chara.magicalmp05.disabled = false;
-		document.chara.magicalmp06.disabled = false;
-		document.chara.magicalmp07.disabled = false;
-		document.chara.magicalper01.value = MagicPerTable[2][0];
-		document.chara.magicalper02.value = MagicPerTable[2][1];
-		document.chara.magicalper03.value = MagicPerTable[2][2];
-		document.chara.magicalper04.value = MagicPerTable[2][3];
-		document.chara.magicalper05.value = MagicPerTable[2][4];
-		document.chara.magicalper06.value = MagicPerTable[2][5];
-		document.chara.magicalper07.value = MagicPerTable[2][6];
-		document.chara.magicalper01.disabled = false;
-		document.chara.magicalper02.disabled = false;
-		document.chara.magicalper03.disabled = false;
-		document.chara.magicalper04.disabled = false;
-		document.chara.magicalper05.disabled = false;
-		document.chara.magicalper06.disabled = false;
-		document.chara.magicalper07.disabled = false;
-
-	}
-
-	//	援護スキルなしの場合
-	else{
-		//	セクション非表示
-		document.getElementById("extra_magical_sec").style.display = "none";
-		//	援護魔法項目初期化
-		document.chara.magicalmp01.value = "0";
-		document.chara.magicalmp02.value = "0";
-		document.chara.magicalmp03.value = "0";
-		document.chara.magicalmp04.value = "0";
-		document.chara.magicalmp05.value = "0";
-		document.chara.magicalmp06.value = "0";
-		document.chara.magicalmp07.value = "0";
-		document.chara.magicalmp01.disabled = true;
-		document.chara.magicalmp02.disabled = true;
-		document.chara.magicalmp03.disabled = true;
-		document.chara.magicalmp04.disabled = true;
-		document.chara.magicalmp05.disabled = true;
-		document.chara.magicalmp06.disabled = true;
-		document.chara.magicalmp07.disabled = true;
-		document.chara.magicalper01.value = "0.0";
-		document.chara.magicalper02.value = "0.0";
-		document.chara.magicalper03.value = "0.0";
-		document.chara.magicalper04.value = "0.0";
-		document.chara.magicalper05.value = "0.0";
-		document.chara.magicalper06.value = "0.0";
-		document.chara.magicalper07.value = "0.0";
-		document.chara.magicalper01.disabled = true;
-		document.chara.magicalper02.disabled = true;
-		document.chara.magicalper03.disabled = true;
-		document.chara.magicalper04.disabled = true;
-		document.chara.magicalper05.disabled = true;
-		document.chara.magicalper06.disabled = true;
-		document.chara.magicalper07.disabled = true;
-	}
-
-	//	聖スキルありの場合
-	if( SkillList[10] != 0 ){
-		//	セクション表示
-		document.getElementById("extra_holy_sec").style.display = "block";
-		//	聖魔法項目設定
-		document.chara.holymp01.value = MagicMpTable[3][0];
-		document.chara.holymp02.value = MagicMpTable[3][1];
-		document.chara.holymp03.value = MagicMpTable[3][2];
-		document.chara.holymp04.value = MagicMpTable[3][3];
-		document.chara.holymp05.value = MagicMpTable[3][4];
-		document.chara.holymp06.value = MagicMpTable[3][5];
-		document.chara.holymp07.value = MagicMpTable[3][6];
-		document.chara.holymp08.value = MagicMpTable[3][7];
-		document.chara.holymp09.value = MagicMpTable[3][8];
-		document.chara.holymp10.value = MagicMpTable[3][9];
-		document.chara.holymp01.disabled = false;
-		document.chara.holymp02.disabled = false;
-		document.chara.holymp03.disabled = false;
-		document.chara.holymp04.disabled = false;
-		document.chara.holymp05.disabled = false;
-		document.chara.holymp06.disabled = false;
-		document.chara.holymp07.disabled = false;
-		document.chara.holymp08.disabled = false;
-		document.chara.holymp09.disabled = false;
-		document.chara.holymp10.disabled = false;
-		document.chara.holyper01.value = MagicPerTable[3][0];
-		document.chara.holyper02.value = MagicPerTable[3][1];
-		document.chara.holyper03.value = MagicPerTable[3][2];
-		document.chara.holyper04.value = MagicPerTable[3][3];
-		document.chara.holyper05.value = MagicPerTable[3][4];
-		document.chara.holyper06.value = MagicPerTable[3][5];
-		document.chara.holyper07.value = MagicPerTable[3][6];
-		document.chara.holyper08.value = MagicPerTable[3][7];
-		document.chara.holyper09.value = MagicPerTable[3][8];
-		document.chara.holyper10.value = MagicPerTable[3][9];
-		document.chara.holyper01.disabled = false;
-		document.chara.holyper02.disabled = false;
-		document.chara.holyper03.disabled = false;
-		document.chara.holyper04.disabled = false;
-		document.chara.holyper05.disabled = false;
-		document.chara.holyper06.disabled = false;
-		document.chara.holyper07.disabled = false;
-		document.chara.holyper08.disabled = false;
-		document.chara.holyper09.disabled = false;
-		document.chara.holyper10.disabled = false;
-	}
-
-	//	聖スキルなしの場合
-	else{
-		//	セクション非表示
-		document.getElementById("extra_holy_sec").style.display = "none";
-		//	聖魔法項目初期化
-		document.chara.holymp01.value = "0";
-		document.chara.holymp02.value = "0";
-		document.chara.holymp03.value = "0";
-		document.chara.holymp04.value = "0";
-		document.chara.holymp05.value = "0";
-		document.chara.holymp06.value = "0";
-		document.chara.holymp07.value = "0";
-		document.chara.holymp08.value = "0";
-		document.chara.holymp09.value = "0";
-		document.chara.holymp10.value = "0";
-		document.chara.holymp01.disabled = true;
-		document.chara.holymp02.disabled = true;
-		document.chara.holymp03.disabled = true;
-		document.chara.holymp04.disabled = true;
-		document.chara.holymp05.disabled = true;
-		document.chara.holymp06.disabled = true;
-		document.chara.holymp07.disabled = true;
-		document.chara.holymp08.disabled = true;
-		document.chara.holymp09.disabled = true;
-		document.chara.holymp10.disabled = true;
-		document.chara.holyper01.value = "0.0";
-		document.chara.holyper02.value = "0.0";
-		document.chara.holyper03.value = "0.0";
-		document.chara.holyper04.value = "0.0";
-		document.chara.holyper05.value = "0.0";
-		document.chara.holyper06.value = "0.0";
-		document.chara.holyper07.value = "0.0";
-		document.chara.holyper08.value = "0.0";
-		document.chara.holyper09.value = "0.0";
-		document.chara.holyper10.value = "0.0";
-		document.chara.holyper01.disabled = true;
-		document.chara.holyper02.disabled = true;
-		document.chara.holyper03.disabled = true;
-		document.chara.holyper04.disabled = true;
-		document.chara.holyper05.disabled = true;
-		document.chara.holyper06.disabled = true;
-		document.chara.holyper07.disabled = true;
-		document.chara.holyper08.disabled = true;
-		document.chara.holyper09.disabled = true;
-		document.chara.holyper10.disabled = true;
+			//	項目設定（スキルなしの場合は初期化）
+			PerField.value = HasSkill ? PerList[ i ] : "0.0";
+			MpField.value = HasSkill ? MpList[ i ] : "0";
+			PerField.disabled = !HasSkill;
+			MpField.disabled = !HasSkill;
+		}
 	}
 
 	//	魔法グループ表示切替（火・氷・援護・聖のいずれかがある場合のみ表示）
@@ -428,7 +137,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		//	回復の歌による回復量の増加値（入力欄。未設定時は5）
 		var KaihukuUp = 5;
 		if( document.chara.songkaihukuup ){
-			KaihukuUp = document.chara.songkaihukuup.value - 0;
+			KaihukuUp = Number( document.chara.songkaihukuup.value );
 		}
 
 		//	回復の歌を全体へ適用するか（チェックONの場合、全条件へ回復の歌の効果を反映）
@@ -581,7 +290,7 @@ function GetExtraInformation( Lv, Job, SideJob, Hp, Mp, Sp, Str, Int, Dex, Agr, 
 		//	応急蘇生発動率設定
 		//	応急戦士の部屋 ふうみ様
 		//	http://p.cocot.jp/godius/oq/
-		OqResurrect = ( Lv - 0 + SkillList[13] * 2 + ( ( ( Men - ( Men % 5 ) ) / 5 ) * 2 - 0 ) - 52 ) * 5;
+		OqResurrect = ( Number( Lv ) + SkillList[13] * 2 + ( ( ( Men - ( Men % 5 ) ) / 5 ) * 2 ) - 52 ) * 5;
 		OqResurrect = AdjustPercent( OqResurrect );
 		OqResurrect = OqResurrect.toFixed(1);
 		document.chara.oq02.value = OqResurrect;
@@ -642,240 +351,22 @@ function SetExtraVisible()
 	document.getElementById("extra_hr").style.display = Visible ? "block" : "none";
 }
 //------------------------------------------------------------------------------
-//	関数名		：	魔法発動率取得処理
-//	機能説明	：	各魔法の発動率を取得する
-//	パラメータ	：	Lv				Lv
-//					Int				INT
-//					SkillList		スキルテーブル
-//					MagicPerTable	魔法発動率テーブル
-//	戻り値		：	なし
+//	関数名		：	装備消費ＭＰ減少率取得処理
+//	機能説明	：	装備中の武器による消費ＭＰ減少率を返す。
+//	パラメータ	：	なし
+//	戻り値		：	消費ＭＰ減少率（0～1）
 //	備考		：	なし
 //------------------------------------------------------------------------------
-function GetExtraMagicPercent( Lv, Int, SkillList, MagicPerTable )
+function GetExtraEquipmentMpRate()
 {
-	var Per = 0;								//	発動率
-	var Bonus = 0;								//	発動・安定レベル増減ボーナス
-
-	var RiseTable = [							//	発動レベル定義テーブル(INT15)
-			[1,4,5,10,11,24,32],				//	[0]火
-			[1,5,6,7,22,27,33],					//	[1]氷
-			[5,17,22,30,37,47,68],				//	[2]援護
-			[1,10,14,1,17,23,27,39,58,56],		//	[3]聖
-		];
-
-	var StabTable = [							//	安定レベル定義テーブル(INT15)
-			[11,14,17,23,25,33,44],				//	[0]火
-			[11,15,18,26,31,37,45],				//	[1]氷
-			[14,25,31,40,47,57,77],				//	[2]援護
-			[9,19,25,15,26,31,36,47,67,92]		//	[3]聖
-		];
-
-	//	INTボーナス設定
-	if( Int >= 95 && Int < 100 ){
-		Bonus = -16;
-	}
-	if( Int >= 90 && Int < 95 ){
-		Bonus = -15;
-	}
-	if( Int >= 85 && Int < 90 ){
-		Bonus = -14;
-	}
-	if( Int >= 80 && Int < 85 ){
-		Bonus = -13;
-	}
-	if( Int >= 75 && Int < 80 ){
-		Bonus = -12;
-	}
-	if( Int >= 70 && Int < 75 ){
-		Bonus = -11;
-	}
-	if( Int >= 65 && Int < 70 ){
-		Bonus = -10;
-	}
-	if( Int >= 60 && Int < 65 ){
-		Bonus = -9;
-	}
-	if( Int >= 55 && Int < 60 ){
-		Bonus = -8;
-	}
-	if( Int >= 50 && Int < 55 ){
-		Bonus = -7;
-	}
-	if( Int >= 40 && Int < 50 ){
-		Bonus = -6;
-	}
-	if( Int >= 35 && Int < 40 ){
-		Bonus = -4;
-	}
-	if( Int >= 30 && Int < 35 ){
-		Bonus = -3;
-	}
-	if( Int >= 25 && Int < 30 ){
-		Bonus = -2;
-	}
-	if( Int >= 20 && Int < 25 ){
-		Bonus = -1;
-	}
-	if( Int >= 15 && Int < 20 ){
-		Bonus = 0;
-	}
-	if( Int >= 10 && Int < 15 ){
-		Bonus = 1;
-	}
-	if( Int >= 6 && Int < 10 ){
-		Bonus = 2;
-	}
-	Bonus -= 0;
-
-	//	火スキルありの場合
-	if( SkillList[7] != 0 ){
-		for( var i = 0; i <= 6; ++i ){
-			StabTable[0][i] -= 0;
-			StabTable[0][i] += Bonus;
-			RiseTable[0][i] -= 0;
-			RiseTable[0][i] += Bonus;
-			Per = ( Lv - ( RiseTable[0][i] - 1 ) ) / ( StabTable[0][i] - ( RiseTable[0][i] - 1 ) ) * 100;
-			Per = AdjustPercent( Per );
-			MagicPerTable[0][i] = Per.toFixed( 1 );
-		}
-	}
-
-	//	氷スキルありの場合
-	if( SkillList[8] != 0 ){
-		for( var i = 0; i <= 6; ++i ){
-			StabTable[1][i] -= 0;
-			StabTable[1][i] += Bonus;
-			RiseTable[1][i] -= 0;
-			RiseTable[1][i] += Bonus;
-			Per = ( Lv - ( RiseTable[1][i] - 1 ) ) / ( StabTable[1][i] - ( RiseTable[1][i] - 1 ) ) * 100;
-			Per = AdjustPercent( Per );
-			MagicPerTable[1][i] = Per.toFixed( 1 );
-		}
-	}
-
-	//	援護スキルありの場合
-	if( SkillList[9] != 0 ){
-		for( var i = 0; i <= 6; ++i ){
-			StabTable[2][i] -= 0;
-			StabTable[2][i] += Bonus;
-			RiseTable[2][i] -= 0;
-			RiseTable[2][i] += Bonus;
-			Per = ( Lv - ( RiseTable[2][i] - 1 ) ) / ( StabTable[2][i] - ( RiseTable[2][i] - 1 ) ) * 100;
-			Per = AdjustPercent( Per );
-			MagicPerTable[2][i] = Per.toFixed( 1 );
-		}
-	}
-
-	//	聖スキルありの場合
-	if( SkillList[10] != 0 ){
-		for( var i = 0; i <= 8; ++i ){
-			StabTable[3][i] -= 0;
-			StabTable[3][i] += Bonus;
-			RiseTable[3][i] -= 0;
-			RiseTable[3][i] += Bonus;
-			Per = ( Lv - ( RiseTable[3][i] - 1 ) ) / ( StabTable[3][i] - ( RiseTable[3][i] - 1 ) ) * 100;
-			Per = AdjustPercent( Per );
-			MagicPerTable[3][i] = Per.toFixed( 1 );
-		}
-
-		//	聖リリース発動率取得
-		SkillList[10] -= 0;
-		var ReleasePercent = GetExtraReleasePercent( Lv, Int, SkillList[10] );
-		MagicPerTable[3][9] = ReleasePercent;
-	}
-}
-//------------------------------------------------------------------------------
-//	関数名		：	聖リリース発動率取得処理
-//	機能説明	：	聖リリースの発動率を返す。
-//	パラメータ	：	Lv		レベル
-//					Int		INT
-//					Skill	聖スキル
-//	戻り値		：	聖リリース発動率
-//	備考		：	なし
-//------------------------------------------------------------------------------
-function GetExtraReleasePercent( Lv, Int, Skill )
-{
-	//	聖リリース発動率
-	var Percent = 0;
-
-	//	INT / 5 切り捨て
-	Int = Math.floor( Int / 5 );
-
-	//	発動率設定
-	//	Godius community 質問掲示板No.1444 リリース(魔法)の発動LVについて
-	//	http://gc.e-hobby.net/bbs/help/bbs.cgi?mode=view&Code=1444&R=1
-	Percent = Lv * 2.5 + ( Skill + Int ) * 10 - 360;
-
-	//	発動率修正
-	Percent = AdjustPercent( Percent );
-
-	return Percent.toFixed(1);
-}
-//------------------------------------------------------------------------------
-//	関数名		：	減少ＭＰ取得処理
-//	機能説明	：	各魔法の減少ＭＰを取得する
-//	パラメータ	：	Lv				Lv
-//					MagicMpTable	消費ＭＰテーブル
-//	戻り値		：	なし
-//	備考		：	なし
-//------------------------------------------------------------------------------
-function GetExtraMpCost( Lv, MagicMpTable)
-{
-	var DiscountMp = 0;								//	減少ＭＰ
-	var MpCost = [									//	消費ＭＰ定義テーブル
-			[10,15,18,30,24,20,25],					//	[0]火
-			[10,15,18,30,24,23,25],					//	[1]氷
-			[18,26,15,28,12,40,30],					//	[2]援護
-			[10,10,12,6,14,20,15,25,40,50]			//	[3]聖
-		];
-
-	var LvDiscountMp = 0;							//	Lv減少ＭＰ
-	var EquipmentDiscountMp = 0;					//	装備減少ＭＰ
-	var Weapon = document.chara.weapon.value - 0;	//	武器
+	//	変数宣言
+	var Weapon = Number( document.chara.weapon.value );	//	武器
 	var WeaponList = new Array();					//	武器リスト
 
-	// 武器リスト取得
-	GetWeaponList(WeaponList);
+	//	武器リスト取得
+	GetWeaponList( WeaponList );
 
-	// 装備減少率取得
-
-	var EquipmentMpPercent = WeaponList[Weapon][9] / 100;
-
-	//	火スキル
-	for( var i = 0; i <= 6; ++i ){
-		MpCost[0][i] -= 0;
-		LvDiscountMp = Math.floor(MpCost[0][i] * (Lv / 3) / 100);
-		EquipmentDiscountMp = Math.floor(MpCost[0][i] * EquipmentMpPercent);
-		DiscountMp = MpCost[0][i] - LvDiscountMp - EquipmentDiscountMp;
-		MagicMpTable[0][i] = DiscountMp;
-	}
-
-	//	氷スキル
-	for( var i = 0; i <= 6; ++i ){
-		MpCost[1][i] -= 0;
-		LvDiscountMp = Math.floor(MpCost[1][i] * (Lv / 3) / 100);
-		EquipmentDiscountMp = Math.floor(MpCost[1][i] * EquipmentMpPercent);
-		DiscountMp = MpCost[1][i] - LvDiscountMp - EquipmentDiscountMp;
-		MagicMpTable[1][i] = DiscountMp;
-	}
-
-	//	援護スキル
-	for( var i = 0; i <= 6; ++i ){
-		MpCost[2][i] -= 0;
-		LvDiscountMp = Math.floor(MpCost[2][i] * (Lv / 3) / 100);
-		EquipmentDiscountMp = Math.floor(MpCost[2][i] * EquipmentMpPercent);
-		DiscountMp = MpCost[2][i] - LvDiscountMp - EquipmentDiscountMp;
-		MagicMpTable[2][i] = DiscountMp;
-	}
-
-	//	聖スキル
-	for( var i = 0; i <= 9; ++i ){
-		MpCost[3][i] -= 0;
-		LvDiscountMp = Math.floor(MpCost[3][i] * (Lv / 3) / 100);
-		EquipmentDiscountMp = Math.floor(MpCost[3][i] * EquipmentMpPercent);
-		DiscountMp = MpCost[3][i] - LvDiscountMp - EquipmentDiscountMp;
-		MagicMpTable[3][i] = DiscountMp;
-	}
+	return WeaponList[ Weapon ][ 9 ] / 100;
 }
 //------------------------------------------------------------------------------
 //	関数名		：	歌発動率取得処理
@@ -900,7 +391,7 @@ function GetExtraSongPercent( Skill, Men, SongPer )
 		//	成功率設定
 		//	歌発動率の予想式（正式版）　ドルクロア様
 		//	http://resist.main.jp/topic/hatudosiki.html
-		Skill -= 0;
+		Skill = Number( Skill );
 		Percent = ( Skill + Men - SongPer[i][0] ) * 4.4;
 
 		//	発動率修正
@@ -928,7 +419,7 @@ function GetSongTimeSecond( String )
 	var Time = String.split( ":" );
 
 	//	秒数へ変換
-	return ( Time[0] - 0 ) * 60 + ( Time[1] - 0 );
+	return Number( Time[0] ) * 60 + Number( Time[1] );
 }
 //------------------------------------------------------------------------------
 //	関数名		：	歌持続時間取得処理
@@ -1006,7 +497,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 
 	//	回復アクセありの場合
 	if( Accessory >= 1 && Accessory <= 3 ){
-		MpUp += ( Accessory - 0 ) * 3;
+		MpUp += Number( Accessory ) * 3;
 	}
 
 	//	MP、SPの回復量が30より大きい場合、30とする

@@ -24,6 +24,7 @@
 					"./js/select.js",
 					"./js/disp.js",
 					"./js/calc.js",
+					"./js/magic.js",
 					"./js/extra.js",
 					"./js/storage.js",
 					"./js/realtime.js",
@@ -128,7 +129,7 @@
 					<td>
 						<form name="chara">
 							<div class="title">
-								<span>■Godius Eternal War キャラクターシミュレーター v1.14</span>
+								<span>■Godius Eternal War キャラクターシミュレーター v1.15</span>
 								<span><input type="button" name="share" value="共有URL" onclick="CreateShareUrl()" /></span>
 								<span id="counter"></span>
 							</div>
@@ -2053,7 +2054,7 @@
 													<input type="text" name="firemp05" value="0" disabled="disabled" readonly />
 												</div>
 												<div class="magic_item">
-													<img src="./img/fire_005.png" alt="ファイアショック 発動Lv24 安定Lv33 消費MP20" title="ファイアショック 発動Lv24 安定Lv33 消費MP23" />
+													<img src="./img/fire_005.png" alt="ファイアショック 発動Lv24 安定Lv33 消費MP20" title="ファイアショック 発動Lv24 安定Lv33 消費MP20" />
 													<input type="text" name="fireper06" value="0.0" disabled="disabled" readonly />%
 													<input type="text" name="firemp06" value="0" disabled="disabled" readonly />
 												</div>
@@ -2061,6 +2062,11 @@
 													<img src="./img/fire_006.png" alt="ファイアストライク 発動Lv32 安定Lv44 消費MP25" title="ファイアストライク 発動Lv32 安定Lv44 消費MP25" />
 													<input type="text" name="fireper07" value="0.0" disabled="disabled" readonly />%
 													<input type="text" name="firemp07" value="0" disabled="disabled" readonly />
+												</div>
+												<div class="magic_item">
+													<img src="./img/fire_009.png" alt="ファイアストーム 発動Lv39 安定Lv47 消費MP30" title="ファイアストーム 発動Lv39 安定Lv47 消費MP30" />
+													<input type="text" name="fireper08" value="0.0" disabled="disabled" readonly />%
+													<input type="text" name="firemp08" value="0" disabled="disabled" readonly />
 												</div>
 											</div>
 										</div>
@@ -2095,7 +2101,7 @@
 													<input type="text" name="icemp05" value="0" disabled="disabled" readonly />
 												</div>
 												<div class="magic_item">
-													<img src="./img/ice_005.png" alt="アイスウェーブ 発動Lv27 安定Lv37 消費MP23" title="アイスウェーブ 発動Lv27 安定Lv37 消費MP20" />
+													<img src="./img/ice_005.png" alt="アイスウェーブ 発動Lv27 安定Lv37 消費MP23" title="アイスウェーブ 発動Lv27 安定Lv37 消費MP23" />
 													<input type="text" name="iceper06" value="0.0" disabled="disabled" readonly />%
 													<input type="text" name="icemp06" value="0" disabled="disabled" readonly />
 												</div>
@@ -2576,11 +2582,11 @@
 												<img src="./img/hitem_005.png" alt="SPカプセル" title="SPカプセル" />
 												<input type="text" name="alchemy05" value="0.0" disabled="disabled" />%
 											</div>
+											<div class="magicbreak"></div>
 											<div class="magic_item">
 												<img src="./img/hitem_004.png" alt="ソードオイル" title="ソードオイル" />
 												<input type="text" name="alchemy06" value="0.0" disabled="disabled" />%
 											</div>
-											<div class="magicbreak"></div>
 											<div class="magic_item">
 												<img src="./img/hitem_008.png" alt="アーマーオイル" title="アーマーオイル" />
 												<input type="text" name="alchemy07" value="0.0" disabled="disabled" />%
@@ -2597,6 +2603,7 @@
 												<img src="./img/hitem_010.png" alt="力の薬" title="力の薬" />
 												<input type="text" name="alchemy10" value="0.0" disabled="disabled" />%
 											</div>
+											<div class="magicbreak"></div>
 											<div class="magic_item">
 												<img src="./img/hitem_011.png" alt="炎の結晶" title="炎の結晶" />
 												<input type="text" name="alchemy11" value="0.0" disabled="disabled" />%
@@ -2605,7 +2612,6 @@
 												<img src="./img/hitem_012.png" alt="氷の結晶" title="氷の結晶" />
 												<input type="text" name="alchemy12" value="0.0" disabled="disabled" />%
 											</div>
-											<div class="magicbreak"></div>
 											<div class="magic_item">
 												<img src="./img/hitem_007.png" alt="復活の薬" title="復活の薬" />
 												<input type="text" name="alchemy13" value="0.0" disabled="disabled" />%
@@ -2964,7 +2970,8 @@
 
 							<li>スキル情報</li>
 							<ul>
-								<li>キャラ診断時、選択した職業に応じて関連スキルの成功率を表示します。</li>
+								<li>選択した職業に応じて関連スキルの成功率を表示します。</li>
+								<li>魔法のツールチップ表記はINT15時の値です。</li>
 								<li>歌の持続時間はラグや環境により実際の時間と異なる場合があります。<br />
 									歌の発動後３秒間は持続のための消費は発生しません。<br />
 									本作ではＨＰ・ＭＰ・ＳＰに小数以下の値が存在するため、実際の値とは誤差が生じる場合があります。

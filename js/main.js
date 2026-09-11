@@ -708,7 +708,6 @@ function GetTotalTama(Lv)
 
 	// 現在のレベルまでループ
 	for (var i = 0; i <= Lv; ++i) {
-		TotalTama -= 0;
 		if (i >= 100) {
 			TotalTama += 9;
 		}
