@@ -4,21 +4,47 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Godius キャラシミュレーター</title>
-
 		<script>
-			var APP_VERSION = "v1.17";
+			var APP_VERSION = "v1.18";
 		</script>
-
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Cache-Control" content="no-cache" />
 		<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT" />
-		<!-- CSS/JS は毎回タイムスタンプを付けて読み込み、ブラウザキャッシュを無効化する -->
+		<!-- CSS/JS は APP_VERSION をクエリに付けて読み込む。
+			普段はブラウザキャッシュが効き、APP_VERSION を上げた時だけ確実に取り直される -->
 		<script>
 			(function () {
-				var v = "?_=" + Date.now();
-				var css = ["./css/main.css"];
+				var v = "?v=" + APP_VERSION;
+				//	css は [href, media] の組で指定する (media 省略時は全環境に適用)
+				var css = [["./css/main.css"]];
+				//	表示モードの決定
+				//	 ?pc        : 強制PC表示 (sp.css を読み込まない)
+				//	 ?sp        : 強制スマホ表示 (画面幅に関係なく sp.css を適用し、幅は 800px に制限)
+				//	 指定なし    : UA が Mobile なら強制スマホ表示、
+				//	              PC ならメディアクエリ (max-width:800px) で画面幅に応じて切り替え
+				var forceSp = /[?&]sp(=|&|$)/.test(location.search);
+				var forcePc = /[?&]pc(=|&|$)/.test(location.search);
+				var isSpUA = /Mobile/.test(navigator.userAgent);
+				if (forceSp || (isSpUA && !forcePc)) {
+					//	スマホ表示 (画面幅に関係なく適用する)
+					document.write('<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">');
+					css.push(["./css/sp.css", "all"]);
+					css.push(["./css/sp-narrow.css", "screen and (max-width: 413px)"]);
+					if (!isSpUA) {
+						//	PC の広い画面で確認する時に横へ伸びきらないよう、スマホ相当の幅に制限する
+						document.write("<style>body{max-width:800px;margin:0 auto;}</style>");
+					}
+				} else {
+					//	PC表示。table.layout の 850px + 余白。指定しないと端末幅で折り返されて崩れる
+					document.write('<meta name="viewport" content="width=880">');
+					if (!forcePc) {
+						//	自動判定のPCは、ウィンドウを狭めた時だけスマホ表示に切り替える
+						css.push(["./css/sp.css", "screen and (max-width: 800px)"]);
+						css.push(["./css/sp-narrow.css", "screen and (max-width: 413px)"]);
+					}
+				}
 				// 依存関係があるため読み込み順は変更しないこと
 				var js = [
 					"./js/const.js",
@@ -36,7 +62,13 @@
 				];
 				var html = "";
 				for (var i = 0; i < css.length; i++) {
-					html += '<link rel="stylesheet" type="text/css" href="' + css[i] + v + '">';
+					html +=
+						'<link rel="stylesheet" type="text/css" href="' +
+						css[i][0] +
+						v +
+						'"' +
+						(css[i][1] ? ' media="' + css[i][1] + '"' : "") +
+						">";
 				}
 				for (var j = 0; j < js.length; j++) {
 					// document.write で出力した外部スクリプトは記述順に同期実行される
@@ -78,12 +110,65 @@
 				color: #c00;
 				font-weight: bold;
 			}
+
+			#splink {
+				margin-top: 8px;
+				text-align: right;
+			}
+
+			#splink a,
+			#splink b {
+				font-size: 12px;
+			}
 		</style>
 		<script>
 			function renderVersion() {
 				var el = document.getElementById("version");
 				if (el) {
 					el.textContent = APP_VERSION;
+				}
+			}
+
+			//	デバッグ用の表示切り替えリンク
+			//	 ?pc = 強制PC表示 / ?sp = 強制スマホ表示 / 指定なし = UA 判定。
+			//	他のクエリパラメータは維持し、現在のモードは太字で示す
+			function renderSpLink() {
+				var el = document.getElementById("splink");
+				if (!el) {
+					return;
+				}
+				var isSp = /[?&]sp(=|&|$)/.test(location.search);
+				var isPc = !isSp && /[?&]pc(=|&|$)/.test(location.search);
+				//	sp / pc 以外のパラメータは引き継ぐ
+				var params = location.search
+					.replace(/^\?/, "")
+					.split("&")
+					.filter(function (v) {
+						return v !== "" && !/^(sp|pc)(=|$)/.test(v);
+					});
+				function makeUrl(mode) {
+					var p = mode ? params.concat([mode]) : params;
+					return location.pathname + (p.length ? "?" + p.join("&") : "") + location.hash;
+				}
+				var modes = [
+					{ mode: "", text: "自動判定", current: !isPc && !isSp },
+					{ mode: "pc", text: "PC版表示", current: isPc },
+					{ mode: "sp", text: "スマホ表示", current: isSp },
+				];
+				for (var i = 0; i < modes.length; i++) {
+					if (i > 0) {
+						el.appendChild(document.createTextNode(" / "));
+					}
+					if (modes[i].current) {
+						var cur = document.createElement("b");
+						cur.textContent = modes[i].text;
+						el.appendChild(cur);
+					} else {
+						var a = document.createElement("a");
+						a.href = makeUrl(modes[i].mode);
+						a.textContent = modes[i].text;
+						el.appendChild(a);
+					}
 				}
 			}
 
@@ -201,11 +286,12 @@
 			InitShare();
 			RestoreCharaName();
 			renderVersion();
+			renderSpLink();
 			StartUpdateCheck();
 		"
 		class="vsc-initialized"
 	>
-		<table width="850">
+		<table class="layout">
 			<tbody>
 				<tr>
 					<td>
@@ -276,21 +362,22 @@
 									</select>
 									<input type="button" value="－" class="stepbtn" onclick="StepSelect('lv', -1)" />
 									<input type="button" value="＋" class="stepbtn" onclick="StepSelect('lv', 1)" />
-									　 主職業
-									<select name="job" onchange="ChangeSkillMenuByJob()">
+									<span class="jobgroup">　 主職業
+										<select name="job" onchange="ChangeSkillMenuByJob()">
 										<option value="戦">戦士</option>
 										<option value="剣">剣闘士</option>
 										<option value="盗">盗賊</option>
 										<option value="魔">魔法使い</option>
 										<option value="聖">聖職者</option>
-									</select>
+										</select>
 									　 副業
-									<select name="sidejob" onchange="ChangeSkillMenuByJob()">
+										<select name="sidejob" onchange="ChangeSkillMenuByJob()">
 										<option value="錬">錬金術士</option>
 										<option value="裁">裁縫士</option>
 										<option value="鍛">鍛治屋</option>
 										<option value="鳥">バード</option>
-									</select>
+										</select>
+									</span>
 								</div>
 
 								<hr noshade="" size="1" color="#cccccc" />
@@ -327,7 +414,7 @@
 
 								<div id="paramblock">
 									<div class="statrow">
-										ＳＴＲ
+										<span class="statlabel" data-abbr="STR">ＳＴＲ</span>
 										<select name="str" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -345,7 +432,7 @@
 									</div>
 
 									<div class="statrow">
-										ＡＧＲ
+										<span class="statlabel" data-abbr="AGR">ＡＧＲ</span>
 										<select name="agr" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -363,7 +450,7 @@
 									</div>
 
 									<div class="statrow">
-										ＤＥＸ
+										<span class="statlabel" data-abbr="DEX">ＤＥＸ</span>
 										<select name="dex" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -382,7 +469,7 @@
 									<div class="statbreak"></div>
 
 									<div class="statrow">
-										ＩＮＴ
+										<span class="statlabel" data-abbr="INT">ＩＮＴ</span>
 										<select name="int" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -400,7 +487,7 @@
 									</div>
 
 									<div class="statrow">
-										ＶＩＴ
+										<span class="statlabel" data-abbr="VIT">ＶＩＴ</span>
 										<select name="vit" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -418,7 +505,7 @@
 									</div>
 
 									<div class="statrow">
-										ＭＥＮ
+										<span class="statlabel" data-abbr="MEN">ＭＥＮ</span>
 										<select name="men" onfocus="FocusParameter(this)" onchange="ChangeParameter(this)">
 											<option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15" selected>15</option>
 											<option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option>
@@ -1820,7 +1907,7 @@
 												<img src="./img/hitem_005.png" alt="SPカプセル" title="SPカプセル" />
 												<input type="text" name="alchemy05" value="0.0" disabled="disabled" />%
 											</div>
-											<div class="magicbreak"></div>
+											<div class="magicbreak" id="alchemybreak_sword"></div>
 											<div class="magic_item">
 												<img src="./img/hitem_004.png" alt="ソードオイル" title="ソードオイル" />
 												<input type="text" name="alchemy06" value="0.0" disabled="disabled" />%
@@ -1873,8 +1960,10 @@
 							</div>
 						</form>
 
-						<hr noshade="" color="#cccccccc" size="1" />
-
+						
+						<div id="splink"></div>
+						<div id="info">
+							<hr noshade="" color="#cccccccc" size="1" />
 						＜使用方法＞
 						<ul>
 							<li>項目を入力すると、自動的に診断結果が更新されます。</li>
@@ -2247,6 +2336,8 @@
 						　　ガディウスキャラ診断機　キャラ診断ツール ver2.03
 						<br />
 						　　<a href="https://hanpen.x0.to/godius/tool/g_godicharacheck.html" target="_blank">https://hanpen.x0.to/godius/tool/g_godicharacheck.html</a>
+						</div>
+
 					</td>
 				</tr>
 			</tbody>

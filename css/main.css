@@ -1,3 +1,7 @@
+:root{
+	--font-gothic:ui-monospace,"SF Mono",Menlo,"ＭＳ ゴシック","MS Gothic","Hiragino Sans","ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN","Noto Sans JP",メイリオ,Meiryo,sans-serif;
+}
+
 body,td{
 	font-size:15px;
 	line-height:1.5em;
@@ -75,7 +79,7 @@ div.main{
 	border-right:1px solid #888888;
 	border-bottom:1px solid #888888;
 	padding:12px 16px;
-	font-family:"ＭＳ ゴシック";
+	font-family:var(--font-gothic);
 }
 div.sub{
 	background-color:#eeeeee;
@@ -84,7 +88,7 @@ div.sub{
 	border-right:1px solid #888888;
 	border-bottom:1px solid #888888;
 	padding:4px 8px;
-	font-family:"ＭＳ ゴシック";
+	font-family:var(--font-gothic);
 }
 div.sub input[type="button"]{
 	margin:2px 4px;
@@ -109,6 +113,12 @@ div.sub input[type="button"].slotmove{
 #basicblock select{
 	width:90px;
 	margin-left:8px;
+}
+/*	主職業・副業はラベルとセレクトの間で折り返さないようまとめる	*/
+.jobgroup{
+	display:inline-flex;
+	align-items:center;
+	white-space:nowrap;
 }
 
 #resourceblock input[type="text"]{
@@ -164,7 +174,7 @@ div.set{
 	border-bottom:1px solid #888888;
 	padding:8px;
 	font-size:14px;
-	font-family:"ＭＳ ゴシック";
+	font-family:var(--font-gothic);
 }
 a:link{
 	color:#0066ff;
@@ -278,12 +288,12 @@ input[type="checkbox"][name="gladiator"] {
 	flex-wrap: wrap;
 	align-items: center;
 	row-gap: 2px;
+	column-gap: 18px;	/* スキルブロック間の間隔 */
 }
 .skillrow {
 	display: flex;
 	align-items: center;
 	line-height: 20px;
-	margin-left: 18px;	/* スキルブロック間の間隔 */
 }
 /* スキルアイコン（16×16）とLvセレクトの間隔 */
 .skillrow img {
@@ -291,11 +301,6 @@ input[type="checkbox"][name="gladiator"] {
 	height: 16px;
 	margin-right: 8px;
 	vertical-align: middle;
-}
-/* 行頭のスキル（先頭・改行直後）は間隔を適用しない */
-.skillrow:first-child,
-.skillbreak + .skillrow {
-	margin-left: 0;
 }
 /* flex内で強制改行するためのダミー要素 */
 .skillbreak {
@@ -437,4 +442,22 @@ input[name^="songper"] {
 
 ul{
 	margin-bottom: 10px;
+}
+
+/* ===================================================================
+   レイアウト共通（PC/スマホ兼用）
+   =================================================================== */
+/*	全体を包むテーブル。PCでは従来どおり850px、
+	画面が狭い場合は画面幅まで縮める	*/
+table.layout{
+	width:850px;
+	max-width:100%;
+	border-collapse:collapse;
+}
+table.layout > tbody > tr > td{
+	padding:0;
+}
+/*	長い選択肢を持つセレクトが画面外へはみ出さないようにする	*/
+select{
+	max-width:100%;
 }

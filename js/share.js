@@ -203,6 +203,21 @@ function UpdateShareUrl()
 	}
 }
 //------------------------------------------------------------------------------
+//	関数名		：	共有URL基底部取得処理
+//	機能説明	：	現在のURLからハッシュ部と表示切り替え用パラメータを除いた文字列を返す。
+//	パラメータ	：	なし
+//	戻り値		：	共有URLの基底部（ハッシュ無し）
+//	備考		：	?pc / ?sp は表示確認用のデバッグ指定なので共有URLには含めない。
+//------------------------------------------------------------------------------
+function BuildShareBaseUrl()
+{
+	var Params = location.search.replace( /^\?/, "" ).split( "&" ).filter( function( v ){
+		return v != "" && /^(sp|pc)(=|$)/.test( v ) == false;
+	} );
+
+	return location.origin + location.pathname + ( Params.length ? "?" + Params.join( "&" ) : "" );
+}
+//------------------------------------------------------------------------------
 //	関数名		：	共有URL発行処理
 //	機能説明	：	フォームの現在値から共有URLを生成し、クリップボードへコピーする。
 //	パラメータ	：	なし
@@ -212,7 +227,7 @@ function UpdateShareUrl()
 function CreateShareUrl()
 {
 	//	共有URL生成（ハッシュ部へ格納）
-	var Url = location.href.split( "#" )[0] + "#d=" + BuildSharePairs().join( "," );
+	var Url = BuildShareBaseUrl() + "#d=" + BuildSharePairs().join( "," );
 
 	//	クリップボードへコピー
 	if( navigator.clipboard && navigator.clipboard.writeText ){

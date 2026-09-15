@@ -1,0 +1,46 @@
+/*	狭い端末向けの追い込み (幅413px以下・iPhone SE〜標準サイズ)
+	パラメーター2列・スキル2列を保つため、
+	セレクトの幅は残したまま増減ボタンと列間隔を詰める。
+	sp.css と同じ条件で、さらに幅413px以下の時だけ読み込まれる	*/
+
+#paramblock{
+	column-gap:6px;
+}
+#paramblock select{
+	width:64px;
+}
+/*	全角のＳＴＲ等は3文字で約48px使うため、
+	data-abbr の半角表記に差し替えて約27pxに縮める。
+	半角英字はプロポーショナルで STR / MEN / VIT の幅が揃わず
+	2列のセレクト位置がずれるため、固定幅の枠に左詰めで入れる	*/
+#paramblock .statlabel{
+	font-size:0;
+}
+#paramblock .statlabel::before{
+	content:attr(data-abbr);
+	display:inline-block;
+	/*	等幅フォントなので 3ch でちょうど3文字分	*/
+	width:3ch;
+	font-size:14px;
+	text-align:left;
+	white-space:nowrap;
+}
+#paramblock input[type="button"].stepbtn{
+	width:24px;
+	height:24px;
+}
+/*	3列だと1項目が潰れてしまうためスキルは2列にする。
+	列に余裕ができる分、Lvセレクトは広げる	*/
+#skillarea{
+	grid-template-columns:repeat(2, max-content);
+	column-gap:8px;
+}
+/*	2列に収めるため、スキル行の各パーツを詰める	*/
+.skillrow img{
+	margin-right:6px;
+	flex:none;
+}
+#skillarea select[name^="skill"]{
+	width:56px;
+}
+

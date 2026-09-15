@@ -1,0 +1,313 @@
+/*	スマートフォン向けレイアウト
+	index.html 側から <link media> 付きで読み込まれる。
+	 ・UA がスマートフォン    : media="screen and (max-width: 800px)"
+	 ・?sp (強制スマホ表示)   : media="all" (画面幅に関係なく適用)
+	 ・?pc (強制PC表示)       : 読み込まない
+	メディアクエリをこのファイル内に書かないこと (適用条件は index.html 側で決める)。
+	共通レイアウト (table.layout 等) は main.css 側にある	*/
+
+html{
+	/* 横向き時などに文字が自動拡大されるのを防ぐ */
+	-webkit-text-size-adjust:100%;
+}
+body{
+	margin:0;
+}
+/*	テーブル幅を画面幅に固定する。
+	table-layout:fixed にしないと中身の最小幅に引っ張られて
+	画面外へはみ出す（横スクロールが発生する）	*/
+table.layout{
+	width:100%;
+	table-layout:fixed;
+}
+body,td{
+	font-size:14px;
+}
+
+/*	枠の余白を詰めて表示領域を稼ぐ	*/
+div.main{
+	padding:6px;
+}
+div.sub{
+	padding:4px;
+}
+div.set{
+	padding:6px;
+}
+div.title{
+	flex-wrap:wrap;
+	row-gap:2px;
+}
+/*	アクセス数カウンタはスマホでは省略	*/
+div.title #counter{
+	display:none;
+}
+
+/*	iOSで入力時に画面が自動ズームするのを防ぐため、
+	フォーム部品の文字サイズを16px以上にする	*/
+input[type="text"],
+input[type="button"],
+select,
+textarea{
+	font-size:16px;
+}
+/*	文字を大きくした分、高さも広げてタップしやすくする	*/
+select{
+	height:28px;
+}
+/*	PC用の幅はPCの文字サイズ前提のため、16pxにすると
+	iOSのドロップダウン矢印と内側余白に押されて
+	2桁の値が表示しきれない。SPでは幅も広げる	*/
+#paramblock select{
+	width:48px;
+}
+input[type="text"]{
+	height:28px;
+	box-sizing:border-box;
+}
+input[type="button"]:not(.stepbtn){
+	min-height:28px;
+	padding:2px 8px;
+}
+/*	増減ボタンはタップしやすい正方形にする。
+	input[type="button"] より詳細度を上げないと
+	上のフォント・余白指定に負けて文字が中央からずれる。
+	iOS Safari はネイティブのボタン描画のとき内部の余白を
+	優先するため、幅を狭めると文字がはみ出して中央からずれる。
+	appearance:none で描画を自前に切り替えて見た目を指定する	*/
+input[type="button"].stepbtn{
+	-webkit-appearance:none;
+	appearance:none;
+	width:28px;
+	height:28px;
+	padding:0;
+	border:1px solid #999;
+	border-radius:4px;
+	background:#f2f2f2;
+	color:#333;
+	font-size:14px;
+	line-height:1;
+	text-align:center;
+	/*	全角の－＋が狭い幅でもはみ出さないようにする	*/
+	overflow:hidden;
+}
+input[type="button"].stepbtn:active{
+	background:#ddd;
+}
+/*	チェックボックスもタップしやすく拡大	*/
+input[type="checkbox"]{
+	width:18px;
+	height:18px;
+}
+label.costume input[type="checkbox"],
+input[type="checkbox"][name="fire"],
+input[type="checkbox"][name="ice"],
+input[type="checkbox"][name="magical"],
+input[type="checkbox"][name="holy"],
+input[type="checkbox"][name="warrior"],
+input[type="checkbox"][name="gladiator"]{
+	width:18px;
+	height:18px;
+}
+
+/*	キャラスロット・ボタン類は折り返して表示
+	(#equipment / #extra も class=sub のため、id無しのものだけを対象にする)	*/
+div.sub:not([id]){
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	row-gap:4px;
+}
+#slotcontainer{
+	margin:0;
+}
+span.slotgroup span.slotlabel{
+	padding:4px 8px;
+}
+span.slotbuttons > input[type="button"]:not(.slotmove){
+	margin-left:6px;
+}
+
+/*	キャラ名の行は縦積みにする	*/
+div.charanamerow{
+	flex-wrap:wrap;
+	justify-content:flex-start;
+	row-gap:4px;
+}
+div.charanamerow input[type="text"]{
+	width:8em;
+}
+
+/*	Lv・職業は折り返す	*/
+#basicblock{
+	flex-wrap:wrap;
+	align-items:center;
+	row-gap:4px;
+}
+#basicblock select{
+	margin-left:4px;
+	width:auto;
+	min-width:90px;
+}
+
+/*	HP/MP/SP は1行に1項目	*/
+#resourceblock{
+	display:block;
+}
+#resourceblock .statrow{
+	margin-right:0;
+	line-height:28px;
+}
+#resourceblock .statrow input[type="text"]{
+	width:70px;
+}
+label.costume{
+	margin-left:0;
+	height:auto;
+}
+
+/*	パラメーターは2列で並べる。
+	1fr だと列幅が均等になって右側に余白ができるため、
+	内容幅の列を左詰めで並べる	*/
+#paramblock{
+	display:grid;
+	grid-template-columns:repeat(2, max-content);
+	justify-content:start;
+	column-gap:12px;
+	row-gap:2px;
+}
+#paramblock .statrow{
+	margin-right:0;
+	line-height:28px;
+}
+/*	グリッド化したため強制改行用のダミーは無効化	*/
+#paramblock .statbreak{
+	display:none;
+}
+
+/*	スキルは3列で並べる。
+	内容幅の列を左詰めで並べる	*/
+#skillarea{
+	display:grid;
+	grid-template-columns:repeat(3, max-content);
+	justify-content:start;
+	column-gap:12px;
+	row-gap:2px;
+}
+/*	スキルLvは2桁（最大27）が表示できる幅を確保する	*/
+select[name^="skill"]{
+	width:48px;
+	flex:none;
+}
+#skillarea input[type="button"].stepbtn{
+	width:24px;
+	height:24px;
+}
+#skillarea .skillrow{
+	line-height:28px;
+}
+.skillbreak{
+	display:none;
+}
+/*	残玉は改行せず、最後のスキルの右へ残り2列分で並べる。
+	幅が狭いのでラベル・入力欄・注記を詰めて1行に収める	*/
+#skillrow_balance{
+	grid-column:span 2;
+	white-space:nowrap;
+}
+#skillrow_balance input[type="text"]{
+	width:50px;
+	flex:none;
+}
+#skillrow_balance .avgval{
+	font-size:72%;
+	margin-left:2px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+/*	魔法アイコンは折り返しつつ、1項目の幅を揃える	*/
+.magic_item{
+	margin-right:6px;
+}
+.magicbreak{
+	display:none;
+}
+#alchemybreak_sword{
+	display:block;
+}
+
+/*	装備・診断結果のテキストエリアは画面幅いっぱいに	*/
+textarea{
+	width:100%;
+	box-sizing:border-box;
+}
+
+/*	歌は横スクロールで閲覧する	*/
+#extra_song{
+	-webkit-overflow-scrolling:touch;
+}
+#extra_song_sec{
+	overflow:hidden;
+}
+/*	文字を大きくした分、歌名・成功率の列幅を広げる	*/
+.song_head{
+	width:88px;
+}
+.song_kaihuku{
+	float:none;
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	padding-top:4px;
+}
+
+/*	説明文中の表は画面に収まらない場合だけ横スクロールさせる	*/
+ul table[border="1"],
+ol table[border="1"],
+td > table[border="1"]{
+	display:block;
+	overflow-x:auto;
+	margin-left:0 !important;
+}
+
+/*	長いURLは折り返して画面外へはみ出さないようにする。
+	overflow-wrap:anywhere は iOS Safari 15.4 未満が非対応で、
+	それ以前では折り返されずページ最下部のURLがはみ出す。
+	古い環境でも効く break-word / break-all を併記しておく	*/
+a{
+	overflow-wrap:break-word;
+	word-wrap:break-word;
+	word-break:break-all;
+	overflow-wrap:anywhere;
+}
+
+/*	説明文リストのインデントを詰める	*/
+ul,ol{
+	padding-left:20px;
+}
+
+/*	使用方法は文字が詰まって読みづらいため、
+	行間と項目間・左右の余白を確保する	*/
+#info{
+	padding:0 8px;
+	line-height:1.7;
+}
+#info ul,
+#info ol{
+	margin-top:4px;
+	margin-bottom:12px;
+	padding-left:18px;
+}
+/*	入れ子のリストは親項目の直下に続けるため下余白を詰める	*/
+#info li > ul,
+#info li + ul{
+	margin-bottom:8px;
+}
+#info li{
+	margin-bottom:6px;
+}
+/*	表は前後に余白を空け、左端は詰める	*/
+#info table[border="1"]{
+	margin:6px 0 10px 0 !important;
+}
