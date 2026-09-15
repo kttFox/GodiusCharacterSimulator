@@ -124,6 +124,23 @@ function CalcNeedTama()
 	};
 }
 
+//	不足玉数からの必要Lv算出処理
+//	機能説明	：	現在Lvから何Lvまで上げれば不足玉数を補えるかを算出する。
+//	パラメータ	：	Lv	現在Lv　Shortage	不足玉数（正の値）　MaxLv	最大Lv
+//	戻り値		：	必要Lv（最大Lvまでで補えない場合は0）
+function GetNeedLvByShortage( Lv, Shortage, MaxLv )
+{
+	var BaseTama = GetTotalTama( Lv );
+
+	for( var i = Lv + 1; i <= MaxLv; i++ ) {
+		if( GetTotalTama( i ) - BaseTama >= Shortage ) {
+			return i;
+		}
+	}
+
+	return 0;
+}
+
 //	必要玉数表示更新処理
 //	戻り値：なし
 function UpdateNeedTama()
@@ -149,14 +166,41 @@ function UpdateNeedTama()
 		ExpectBalance.innerHTML = "(保有想定：約" + r.diff.toFixed( 1 ) + "玉)";
 	}
 
-	//	残玉が入力されている場合は、保有想定との差分で損得を表示する
+	//	残玉の入力値（前後の空白を除去）
 	var BalanceVal = ( document.chara && document.chara.balance ) ? String( document.chara.balance.value ).replace( /^\s+|\s+$/g, "" ) : "";
-	var DiffMsg = "平均的にLv" + r.reachLv + "以上で実現可能です";
-	if( BalanceVal != "" && !isNaN( BalanceVal ) ) {
+	//	残玉が入力済みかどうか（入力済みの場合は損得の文章が続く）
+	var BalanceInputed = ( BalanceVal != "" && !isNaN( BalanceVal ) );
+
+	//	到達可能Lv（最大Lvまででも必要玉数に届かない場合は0）
+	var DiffMsg;
+	if( r.reachLv <= 0 ) {
+		DiffMsg = "平均的には実現できません。";
+	} else if( BalanceInputed ) {
+		DiffMsg = "平均的にLv" + r.reachLv + "以上で実現可能で、";
+	} else {
+		DiffMsg = "平均的にLv" + r.reachLv + "以上で実現可能です。";
+	}
+
+	//	残玉が入力されている場合は、保有想定との差分で損得を表示する
+	if( BalanceInputed ) {
 		var SonToku = Number( BalanceVal ) - r.diff;
-		DiffMsg = ( SonToku >= 0 )
-			? "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + SonToku.toFixed( 1 ) + "玉得をしています"
-			: "平均的にLv" + r.reachLv + "以上で実現可能で、現在の状態では" + ( SonToku * -1 ).toFixed( 1 ) + "玉損をしています";
+		if( SonToku >= 0 ) {
+			DiffMsg += "現在の状態では" + SonToku.toFixed( 1 ) + "玉得をしています";
+		} else {
+			DiffMsg += "現在の状態では" + ( SonToku * -1 ).toFixed( 1 ) + "玉損をしています";
+		}
+
+		//	残玉がマイナスの場合は、不足分を補うのに必要なLvを追記する
+		var Balance = Number( BalanceVal );
+		if( Balance < 0 ) {
+			var Shortage = Balance * -1;
+			var NeedLv = GetNeedLvByShortage( r.lv, Shortage, r.maxLv );
+			if( NeedLv > 0 ) {
+				DiffMsg += "<br>残玉が" + Shortage.toFixed( 1 ) + "玉不足しています。<b>Lv" + NeedLv + "</b>が必要です";
+			} else {
+				DiffMsg += "<br>残玉が" + Shortage.toFixed( 1 ) + "玉不足しています。Lv" + r.maxLv + "まで上げても不足は解消されません";
+			}
+		}
 	}
 
 	Area.innerHTML =
