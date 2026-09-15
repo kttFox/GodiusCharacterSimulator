@@ -45,6 +45,35 @@ var SKILL_UP_TABLE = [
 //	スキル上限
 var SKILL_MAX = 30;
 
+//	スキルLv到達に必要なキャラLv
+//	Lv25までは「スキルLv×2」。26以降は別テーブル
+//	28〜30は未判明のため、判明している直近の値を暫定的に流用する
+var SKILL_NEED_CHARA_LV = {
+	26: 75,
+	27: 80,
+	28: null,	//	未判明
+	29: null,	//	未判明
+	30: null	//	未判明
+};
+
+//	スキルLvに必要なキャラLv取得処理
+//	戻り値：必要キャラLv
+function GetNeedCharaLvBySkill( SkillLv )
+{
+	if( SkillLv <= 25 ) {
+		return SkillLv * 2;
+	}
+
+	//	未判明のLvは、判明している直近の下位Lvの値を使用する
+	var Need = 25 * 2;
+	for( var i = 26; i <= SkillLv; i++ ) {
+		if( SKILL_NEED_CHARA_LV[ i ] != null ) {
+			Need = SKILL_NEED_CHARA_LV[ i ];
+		}
+	}
+	return Need;
+}
+
 //	スキル１から３０までの固定スキルアップに必要な力の玉（累計）
 //	および確率スキルアップの期待玉数（累計、1回1玉消費・期待値=100/成功率）
 var SKILL_BASE_TAMA = new Array( SKILL_MAX );

@@ -96,8 +96,8 @@ function CalcNeedTama()
 	var NeedTotal = ParaNeedTama + SkillNeedTama + MagicNeedTama;
 	var JobBonus = GetJobBonusTama( Job );
 
-	//	スキルLvはキャラLvの半分までのため、最大スキルLv×2以上のLvが必要
-	var MinLvBySkill = MaxSkill * 2;
+	//	スキルLvごとの必要キャラLv（Lv26までは×2、27以降は別テーブル）
+	var MinLvBySkill = ( MaxSkill > 0 ) ? GetNeedCharaLvBySkill( MaxSkill ) : 1;
 
 	//	ステータス26以上はLv75以上が必要
 	var MaxPara = Math.max( Str, Int, Agr, Dex, Vit, Men );
