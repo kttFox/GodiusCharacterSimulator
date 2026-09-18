@@ -195,9 +195,10 @@ function ChangeHpMpSpByLv()
 			continue;
 		}
 
-		//	平均値の差分（課金衣装ONの場合はボーナス込みで比較）
-		var Dif = Number( ApplyCostumeBonus( Targets[i].Func( Job, Lv ) ) )
-				- Number( ApplyCostumeBonus( Targets[i].Func( Job, Before ) ) );
+		//	平均値の差分（課金衣装ONの場合はボーナス込みで比較。
+		//	それぞれ切り捨ててから差分を取る）
+		var Dif = TruncateStatus( ApplyCostumeBonus( Targets[i].Func( Job, Lv ) ) )
+				- TruncateStatus( ApplyCostumeBonus( Targets[i].Func( Job, Before ) ) );
 
 		Value += Dif;
 		if( Value < 0 ) {

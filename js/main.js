@@ -101,19 +101,19 @@ function CharaMain( Silent )
 	var SpInputed = ( Sp != "" );	//	SPが入力済みかどうか
 
 	if( Hp == "" ) {
-		Hp = ApplyCostumeBonus( GetAverageHp( Job, Lv ) );
+		Hp = TruncateStatus( ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) );
 		if( !Silent ) {
 			document.chara.hp.value = Hp;
 		}
 	}
 	if( Mp == "" ) {
-		Mp = ApplyCostumeBonus( GetAverageMp( Job, Lv ) );
+		Mp = TruncateStatus( ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) );
 		if( !Silent ) {
 			document.chara.mp.value = Mp;
 		}
 	}
 	if( Sp == "" ) {
-		Sp = ApplyCostumeBonus( GetAverageSp( Job, Lv ) );
+		Sp = TruncateStatus( ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) );
 		if( !Silent ) {
 			document.chara.sp.value = Sp;
 		}
@@ -540,13 +540,13 @@ function GetAverageDiffMessage( Job, Lv, Hp, Mp, Sp, HpInputed, MpInputed, SpInp
 	var Lines = [];
 
 	if( HpInputed ) {
-		Lines.push( "HP" + GetAverageDiffText( Hp, ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) ) );
+		Lines.push( "HP" + GetAverageDiffText( Hp, TruncateStatus( ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) ) ) );
 	}
 	if( MpInputed ) {
-		Lines.push( "MP" + GetAverageDiffText( Mp, ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) ) );
+		Lines.push( "MP" + GetAverageDiffText( Mp, TruncateStatus( ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) ) ) );
 	}
 	if( SpInputed ) {
-		Lines.push( "SP" + GetAverageDiffText( Sp, ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) ) );
+		Lines.push( "SP" + GetAverageDiffText( Sp, TruncateStatus( ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) ) ) );
 	}
 
 	//	入力なしの場合は出力しない
@@ -621,6 +621,40 @@ function AdjustDecimalPoint( InValue )
 	return OutValue;
 }
 //------------------------------------------------------------------------------
+//	関数名		：	平均ステータス算出処理
+//	機能説明	：	Lvと上昇率から平均のHP/MP/SPを算出する。
+//	パラメータ	：	Rate	1Lvあたりの平均上昇率
+//					Lv		レベル
+//	戻り値		：	平均値（小数のまま。切り捨ては行わない）
+//	備考		：	ステータスに小数点が入ったことで、上昇値の
+//					最大値をきっかり引く確率がほぼゼロになった。
+//					このため微小値を引いた値を返す。
+//					ステータスは切り捨てだが、衣装ボーナスの乗算で
+//					端数が失われないよう、切り捨ては表示直前に
+//					TruncateStatus() で１度だけ行う。
+//------------------------------------------------------------------------------
+function GetAverageStatus( Rate, Lv )
+{
+	//	Lv1以下は初期値のまま
+	if( Lv <= 1 ){
+		return 30;
+	}
+
+	return ( Lv - 1 ) * Rate + 30 - AVERAGE_STATUS_EPSILON;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	ステータス切り捨て処理
+//	機能説明	：	ステータスの小数部を切り捨てる。
+//	パラメータ	：	Value	切り捨て前の値
+//	戻り値		：	切り捨て後の値
+//	備考		：	計算途中は小数を保ち、画面表示や入力欄への
+//					設定の直前にこれを１度だけ呼ぶこと。
+//------------------------------------------------------------------------------
+function TruncateStatus( Value )
+{
+	return Math.floor( Number( Value ) );
+}
+//------------------------------------------------------------------------------
 //	関数名		：	平均HP取得処理
 //	機能説明	：	平均HPを取得する。
 //	パラメータ	：	Job		主職業
@@ -631,7 +665,9 @@ function AdjustDecimalPoint( InValue )
 //	関数名		：	課金衣装ボーナス適用処理
 //	機能説明	：	課金衣装チェックボックスがONの場合、最大HP/MP/SPを５％増加させる。
 //	パラメータ	：	Value	元の値
-//	戻り値		：	補正後の値（小数点以下切り上げ）
+//	戻り値		：	補正後の値（小数のまま。切り捨ては行わない）
+//	備考		：	二重に切り捨てないよう、切り捨ては呼び出し元で
+//					TruncateStatus() を使って表示直前に行う。
 function ApplyCostumeBonus( Value )
 {
 	var Costume = document.chara.costume;
@@ -639,7 +675,7 @@ function ApplyCostumeBonus( Value )
 		return Value;
 	}
 
-	return Math.ceil( Number( Value ) * COSTUME_RATE );
+	return Number( Value ) * COSTUME_RATE;
 }
 //------------------------------------------------------------------------------
 function GetAverageHp( Job, Lv )
@@ -648,11 +684,11 @@ function GetAverageHp( Job, Lv )
 	var Hp = 0;
 
 	if( Job == "戦" || Job == "剣" ) {
-		Hp = ( ( Lv - 1 ) * 2.5 + 30 ).toFixed( 0 );
+		Hp = GetAverageStatus( 2.5, Lv );
 	} else if( Job == "盗" || Job == "聖" ) {
-		Hp = ( ( Lv - 1 ) * 2.0 + 30 ).toFixed( 0 );
+		Hp = GetAverageStatus( 2.0, Lv );
 	} else if( Job == "魔" ) {
-		Hp = ( ( Lv - 1 ) * 1.5 + 30 ).toFixed( 0 );
+		Hp = GetAverageStatus( 1.5, Lv );
 	}
 
 	return Hp;
@@ -671,11 +707,11 @@ function GetAverageMp( Job, Lv )
 	var Mp = 0;
 
 	if( Job == "戦" || Job == "剣" ) {
-		Mp = ( ( Lv - 1 ) * 1.5 + 30 ).toFixed( 0 );
+		Mp = GetAverageStatus( 1.5, Lv );
 	} else if( Job == "盗" || Job == "聖" ) {
-		Mp = ( ( Lv - 1 ) * 2.0 + 30 ).toFixed( 0 );
+		Mp = GetAverageStatus( 2.0, Lv );
 	} else if( Job == "魔" ) {
-		Mp = ( ( Lv - 1 ) * 2.5 + 30 ).toFixed( 0 );
+		Mp = GetAverageStatus( 2.5, Lv );
 	}
 
 	return Mp;
@@ -694,9 +730,9 @@ function GetAverageSp( Job, Lv )
 	var Sp = 0;
 
 	if( Job == "戦" || Job == "剣" ||  Job == "盗" || Job == "聖" ) {
-		Sp = ( ( Lv - 1 ) * 2.0 + 30 ).toFixed( 0 );
+		Sp = GetAverageStatus( 2.0, Lv );
 	} else if( Job == "魔" ) {
-		Sp = ( ( Lv - 1 ) * 1.5 + 30 ).toFixed( 0 );
+		Sp = GetAverageStatus( 1.5, Lv );
 	}
 
 	return Sp;

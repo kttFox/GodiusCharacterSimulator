@@ -294,7 +294,7 @@ function GetStepBaseValue( Name )
 		return 0;
 	}
 
-	return Number( ApplyCostumeBonus( Average ) );
+	return TruncateStatus( ApplyCostumeBonus( Average ) );
 }
 
 //	HP/MP/SP平均値表示更新処理
@@ -321,9 +321,9 @@ function UpdateAverageHpMpSp()
 	}
 
 	//	（課金衣装がONの場合、平均値にも＋５％を反映する）
-	AvgHp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) + ")";
-	AvgMp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) + ")";
-	AvgSp.innerHTML = "(平均" + ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) + ")";
+	AvgHp.innerHTML = "(平均" + TruncateStatus( ApplyCostumeBonus( GetAverageHp( Job, Lv ) ) ) + ")";
+	AvgMp.innerHTML = "(平均" + TruncateStatus( ApplyCostumeBonus( GetAverageMp( Job, Lv ) ) ) + ")";
+	AvgSp.innerHTML = "(平均" + TruncateStatus( ApplyCostumeBonus( GetAverageSp( Job, Lv ) ) ) + ")";
 }
 
 //	課金衣装ON/OFF時のHP/MP/SP増減処理
@@ -351,11 +351,11 @@ function ApplyCostumeToHpMpSp()
 		}
 
 		//	ONの場合は＋５％、OFFの場合は元の値へ戻す
-		//	（切り上げの逆算は切り捨てとなるため、ON/OFFを繰り返しても値はずれない）
+		//	（ステータスは切り捨て。逆算は切り上げとなるため、ON/OFFを繰り返しても値はずれない）
 		if( Costume.checked ) {
-			Target.value = Math.ceil( Value * COSTUME_RATE );
+			Target.value = Math.floor( Value * COSTUME_RATE );
 		} else {
-			Target.value = Math.floor( Value / COSTUME_RATE );
+			Target.value = Math.ceil( Value / COSTUME_RATE );
 		}
 	}
 }

@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Godius キャラシミュレーター</title>
 		<script>
-			var APP_VERSION = "v1.18";
+			var APP_VERSION = "v1.19";
 		</script>
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
@@ -1976,8 +1976,11 @@
 								<li>入力欄の右側に、現在の職業・Lvにおける平均値を表示します。</li>
 								<li>値を入力していると、診断結果に平均値との差分を表示します。<br />
 									レベルを変更すると、平均値の増減分だけ自動で調整されます。</li>
+								<li>平均値は「（Lv－1）×1Lvあたりの平均上昇量＋30」で計算していますが、<br />
+									本作は上昇量に小数以下の値が存在し、上昇量の最大値をきっかり引く確率がほぼゼロです。<br />
+									このためLv2以降の表示は旧仕様より-1されている状態になります。</li>
 								<li>「課金衣装+X%」を有効にすると、最大ＨＰ／ＭＰ／ＳＰが増加します。<br />
-									本作ではＨＰ・ＭＰ・ＳＰに小数以下の値が存在するため、実際の値とは誤差が生じる場合があります。
+									実際は小数以下の値を含むため、誤差が生じる場合があります。
 								</li>
 							</ul>
 
