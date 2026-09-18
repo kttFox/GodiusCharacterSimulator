@@ -170,7 +170,7 @@ var MAGIC_SYSTEMS = [
 		new Magic( "ホーリーブレード",					17,		26,		14 ),
 		new Magic( "カース",							23,		31,		20 ),
 		new Magic( "キュアシック",						27,		36,		15 ),
-		new Magic( "ホーリーボール",					39,		47,		25 ),
+		new Magic( "ホーリーボール",					38,		47,		25 ),
 		new Magic( "リザレクト",						58,		67,		40 ),
 		new ReleaseMagic( "リリース",					56,		92,		50 )
 	] )
