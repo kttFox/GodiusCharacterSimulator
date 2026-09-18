@@ -222,9 +222,6 @@ function ReadSaveData( Key )
 //------------------------------------------------------------------------------
 function SaveChara( SaveKey )
 {
-	//	変数宣言
-	var SaveString = "";				//	セーブデータ設定文字列
-
 	//	キャラ名取得
 	var CharaName = document.chara.charaname ? document.chara.charaname.value : "";
 
@@ -237,6 +234,27 @@ function SaveChara( SaveKey )
 		return;
 	}
 
+	//	セーブ書き込み処理
+	if( WriteCharaToSlot( SaveKey ) == false ){
+		alert( "セーブに失敗しました。\n" );
+		return;
+	}
+
+	//	スロットラベル更新処理
+	UpdateSlotLabels();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	セーブ書き込み処理
+//	機能説明	：	フォームの値を取得し、確認なしでlocalStorageへ書き込む。
+//	パラメータ	：	SaveKey	セーブデータキー名
+//	戻り値		：	true：成功／false：失敗
+//	備考		：	セーブボタン・オートセーブの共通処理。
+//------------------------------------------------------------------------------
+function WriteCharaToSlot( SaveKey )
+{
+	//	キャラ名取得
+	var CharaName = document.chara.charaname ? document.chara.charaname.value : "";
+
 	//	キャラ名設定（インデックス111）
 	//	セーブ配列を再取得し、キャラ名を格納したうえで結合し直す
 	//	（後続インデックス112以降の追加取得魔法を維持するため、
@@ -244,18 +262,15 @@ function SaveChara( SaveKey )
 	var SaveValue = new Array();
 	GetFormValue( SaveValue );
 	SaveValue[111] = CharaName;
-	SaveString = JoinSaveValue( SaveValue );
+	var SaveString = JoinSaveValue( SaveValue );
 
 	//	localStorageへの書き込み
 	try {
 		localStorage.setItem( SaveKey, SaveString );
 	} catch( e ) {
-		alert( "セーブに失敗しました。\n" );
-		return;
+		return false;
 	}
-
-	//	スロットラベル更新処理
-	UpdateSlotLabels();
+	return true;
 }
 //------------------------------------------------------------------------------
 //	関数名		：	スロットラベル更新処理
@@ -855,4 +870,162 @@ function RestoreCharaName()
 	} catch( e ) {
 		;
 	}
+}
+
+//------------------------------------------------------------------------------
+//	オートセーブ用定数・変数
+//------------------------------------------------------------------------------
+var AutoSaveKey		= "godichara_autosave";	//	オートセーブ設定保存キー
+var AutoSaveTimer	= null;					//	オートセーブ遅延タイマー
+var AutoSaveDelay	= 500;					//	オートセーブ遅延時間（ミリ秒）
+var AutoSaveReady	= false;				//	初期化完了フラグ（ページ読込中の保存を抑止）
+
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ設定取得処理
+//	機能説明	：	localStorageからオートセーブの有効／無効を取得する。
+//	戻り値		：	true：有効／false：無効
+//------------------------------------------------------------------------------
+function IsAutoSaveEnabled()
+{
+	try {
+		return ( localStorage.getItem( AutoSaveKey ) == "1" );
+	} catch( e ) {
+		return false;
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ設定保存処理
+//	機能説明	：	オートセーブの有効／無効をlocalStorageへ保存する。
+//	パラメータ	：	Enabled		true：有効／false：無効
+//------------------------------------------------------------------------------
+function SetAutoSaveEnabled( Enabled )
+{
+	try {
+		if( Enabled ){
+			localStorage.setItem( AutoSaveKey, "1" );
+		} else {
+			localStorage.removeItem( AutoSaveKey );
+		}
+	} catch( e ) {
+		;
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ切替処理
+//	機能説明	：	チェックボックスの状態をオートセーブ設定へ反映する。
+//					有効にした時点の内容を即座に使用中スロットへ保存する。
+//	備考		：	オートセーブチェックボックスの onchange から呼び出す。
+//------------------------------------------------------------------------------
+function ToggleAutoSave()
+{
+	var Check = document.getElementById( "autosave" );
+	if( !Check ){
+		return;
+	}
+
+	SetAutoSaveEnabled( Check.checked );
+	UpdateAutoSaveUI();
+
+	//	有効にした時点の内容を保存しておく
+	if( Check.checked ){
+		AutoSaveCurrentChara();
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ表示更新処理
+//	機能説明	：	オートセーブ中はセーブボタンを操作不可とする。
+//------------------------------------------------------------------------------
+function UpdateAutoSaveUI()
+{
+	var Enabled	= IsAutoSaveEnabled();
+	var Button	= document.getElementById( "savebutton" );
+
+	if( Button ){
+		Button.disabled = Enabled;
+		Button.title = Enabled ? "オートセーブ中は自動で保存されます" : "";
+	}
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ予約処理
+//	機能説明	：	オートセーブが有効な場合、一定時間後に使用中スロットへ
+//					保存する。連続した変更は最後の1回にまとめる。
+//------------------------------------------------------------------------------
+function ReserveAutoSave()
+{
+	//	初期化前・無効時は何もしない
+	if( !AutoSaveReady || !IsAutoSaveEnabled() ){
+		return;
+	}
+
+	if( AutoSaveTimer != null ){
+		clearTimeout( AutoSaveTimer );
+	}
+	AutoSaveTimer = setTimeout( AutoSaveCurrentChara, AutoSaveDelay );
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ実行処理
+//	機能説明	：	確認なしで使用中スロットへセーブする。
+//------------------------------------------------------------------------------
+function AutoSaveCurrentChara()
+{
+	if( AutoSaveTimer != null ){
+		clearTimeout( AutoSaveTimer );
+		AutoSaveTimer = null;
+	}
+
+	if( !IsAutoSaveEnabled() ){
+		return;
+	}
+
+	//	セーブ書き込み処理（失敗しても入力の妨げにならないよう通知しない）
+	if( WriteCharaToSlot( SlotKeyPrefix + GetCurrentSlot() ) == false ){
+		return;
+	}
+
+	//	スロットラベル更新処理
+	UpdateSlotLabels();
+}
+//------------------------------------------------------------------------------
+//	関数名		：	オートセーブ初期化処理
+//	機能説明	：	保存済みの設定をチェックボックスへ復元し、
+//					フォームの変更を監視してオートセーブを予約する。
+//	備考		：	body onload から RestoreCurrentSlot() の後に呼び出すこと。
+//------------------------------------------------------------------------------
+function InitAutoSave()
+{
+	//	チェックボックスへ設定を復元
+	var Check = document.getElementById( "autosave" );
+	if( Check ){
+		Check.checked = IsAutoSaveEnabled();
+	}
+	UpdateAutoSaveUI();
+
+	//	フォーム内の入力・選択変更を監視する
+	//	（チェックボックス、セレクト、テキストのいずれもバブリングで拾える）
+	if( document.chara ){
+		document.chara.addEventListener( "change", ReserveAutoSave );
+		document.chara.addEventListener( "input", ReserveAutoSave );
+	}
+
+	//	プログラムから値を書き換える関数をラップし、実行後にオートセーブを予約する
+	//	（初期化、リセット、セット装備はchangeイベントが発生しないため）
+	var WrapFuncs = [ "CharaSub", "FormReset",
+		"SelectBaronSet", "SelectDiamondSet", "SelectFightingGodSet", "SelectLightPrince",
+		"SelectOnslaughtSet", "SelectRaydanSet", "SelectSkandaSet", "SelectSolidSet", "SelectSteelSet" ];
+	for( var i = 0; i < WrapFuncs.length; i++ ) {
+		( function( Name ) {
+			var Org = window[ Name ];
+			if( typeof Org != "function" ) {
+				return;
+			}
+			window[ Name ] = function() {
+				var Ret = Org.apply( this, arguments );
+				ReserveAutoSave();
+				return Ret;
+			};
+		} )( WrapFuncs[i] );
+	}
+
+	//	ページ読み込み時の復元では保存しないよう、最後に監視を開始する
+	AutoSaveReady = true;
 }

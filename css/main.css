@@ -167,6 +167,18 @@ div.charanamerow{
 	justify-content:space-between;
 }
 
+label.autosavelabel{
+	margin-left:6px;
+	cursor:pointer;
+	white-space:nowrap;
+	vertical-align:middle;
+}
+
+label.autosavelabel input[type="checkbox"]{
+	vertical-align:middle;
+	margin-right:2px;
+}
+
 div.set{
 	background-color:#fafafa;
 	border-left:1px solid #aaaaaa;

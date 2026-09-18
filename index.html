@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Godius キャラシミュレーター</title>
 		<script>
-			var APP_VERSION = "v1.19";
+			var APP_VERSION = "v1.20";
 		</script>
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
@@ -285,6 +285,7 @@
 			RestoreCurrentSlot();
 			InitShare();
 			RestoreCharaName();
+			InitAutoSave();
 			renderVersion();
 			renderSpLink();
 			StartUpdateCheck();
@@ -320,7 +321,8 @@
 									<span class="charanameleft">
 										キャラ名
 										<input type="text" name="charaname" maxlength="16" size="20" placeholder="キャラ名を入力" oninput="SaveCharaName()" />
-										<input type="button" value="セーブ" onclick="SaveCurrentChara()" />
+										<input type="button" id="savebutton" value="セーブ" onclick="SaveCurrentChara()" />
+										<label class="autosavelabel" title="変更するたびに使用中のキャラスロットへ自動保存します"><input type="checkbox" id="autosave" onchange="ToggleAutoSave()" />オートセーブ</label>
 									</span>
 									<span class="charanameright">
 										<input type="button" value="URLからロード" onclick="LoadFromUrlInput()" />
