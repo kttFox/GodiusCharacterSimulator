@@ -40,14 +40,22 @@ var SHARE_SCALAR_KEYS = [
 ];
 
 //	共有対象チェックボックス群定義（キー名：フォーム項目名）
+//	※スキル名と重複するキー名は使用しないこと。
 var SHARE_GROUP_KEYS = {
-	"火炎"	: "fire",
-	"冷凍"	: "ice",
-	"援護"	: "magical",
-	"聖"	: "holy",
-	"戦技"	: "warrior",
-	"剣技"	: "gladiator",
-	"強化"	: "doping"
+	"火炎"		: "fire",
+	"冷凍"		: "ice",
+	"援護魔法"	: "magical",
+	"聖魔法"	: "holy",
+	"戦技"		: "warrior",
+	"剣技"		: "gladiator",
+	"強化"		: "doping"
+};
+
+//	チェックボックス群の旧キー名定義（現キー名：旧キー名）
+//	※旧データはスキル「援護」「聖」と同名のキーで保持している。
+var SHARE_LEGACY_GROUP_KEYS = {
+	"援護魔法"	: "援護",
+	"聖魔法"	: "聖"
 };
 
 //	課金衣装の共有キー名
@@ -118,6 +126,58 @@ function GroupToDecimal( Elements )
 		}
 	}
 	return Decimal;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	選択肢存在判定処理
+//	機能説明	：	セレクトボックスに指定値の選択肢が存在するか判定する。
+//	パラメータ	：	Select	セレクトボックス
+//					Value	値
+//	戻り値		：	true：存在する／false：存在しない
+//	備考		：	なし
+//------------------------------------------------------------------------------
+function HasSelectOption( Select, Value )
+{
+	for( var i = 0; i < Select.options.length; ++i ){
+		if( Select.options[i].value == String( Value ) ){
+			return true;
+		}
+	}
+	return false;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	旧形式重複キー振り分け処理
+//	機能説明	：	旧データでスキルと魔法が同名キーとなっている値を
+//					現キー名へ振り分ける。
+//	パラメータ	：	Map			キー：値配列（出現順）の連想配列
+//					SkillNames	現職業のスキル名配列
+//	戻り値		：	なし
+//	備考		：	旧データの出力順はスキル→魔法のため、２つある場合は
+//					先頭をスキル、末尾を魔法とする。
+//					１つのみの場合は、スキルLvとして有効な値ならスキル、
+//					それ以外は魔法として扱う。
+//------------------------------------------------------------------------------
+function ResolveLegacyGroupKeys( Map, SkillNames )
+{
+	for( var Key in SHARE_LEGACY_GROUP_KEYS ){
+		var Legacy = SHARE_LEGACY_GROUP_KEYS[ Key ];
+		var Values = Map[ Legacy ];
+
+		//	現キー名がある（新形式）、または旧キー名がない場合は処理しない
+		if( Map[ Key ] != undefined || Values == undefined ){
+			continue;
+		}
+
+		if( Values.length >= 2 ){
+			Map[ Key ] = [ Values[ Values.length - 1 ] ];
+			Map[ Legacy ] = [ Values[0] ];
+		} else {
+			var Index = SkillNames.indexOf( Legacy );
+			if( Index < 0 || !HasSelectOption( document.chara[ "skill" + ( Index + 1 ) ], Values[0] ) ){
+				Map[ Key ] = Values;
+				delete Map[ Legacy ];
+			}
+		}
+	}
 }
 //------------------------------------------------------------------------------
 //	関数名		：	共有パラメータ作成処理
@@ -293,7 +353,8 @@ function LoadFromUrlText( Text )
 
 	try {
 		//	キー:値 の組を連想配列へ解析（ブラウザによる%エンコードを考慮）
-		var Map = {};
+		//	※旧データは同名キーが重複するため、値を出現順に配列で保持する
+		var MultiMap = {};
 		var JobPair = "";
 		var Pairs = Hash.substr( 3 ).split( "," );
 		for( var i = 0; i < Pairs.length; ++i ){
@@ -305,7 +366,11 @@ function LoadFromUrlText( Text )
 				JobPair = Item;
 				continue;
 			}
-			Map[ Item.substr( 0, Pos ) ] = Item.substr( Pos + 1 );
+			var Key = Item.substr( 0, Pos );
+			if( MultiMap[ Key ] == undefined ){
+				MultiMap[ Key ] = new Array();
+			}
+			MultiMap[ Key ].push( Item.substr( Pos + 1 ) );
 		}
 
 		//	職業・副業を先に設定し、スキルメニュー等を切り替える
@@ -314,6 +379,14 @@ function LoadFromUrlText( Text )
 			document.chara.sidejob.value = JobPair.charAt( 1 );
 		}
 		ChangeSkillMenuByJob();
+
+		//	旧形式の重複キーを振り分けた上で、キー：値の連想配列へ変換
+		var SkillNames = GetShareSkillNames();
+		ResolveLegacyGroupKeys( MultiMap, SkillNames );
+		var Map = {};
+		for( var Key in MultiMap ){
+			Map[ Key ] = MultiMap[ Key ][ MultiMap[ Key ].length - 1 ];
+		}
 
 		//	スカラー項目の設定
 		for( var i = 0; i < SHARE_SCALAR_KEYS.length; ++i ){
@@ -325,14 +398,15 @@ function LoadFromUrlText( Text )
 
 		//	スキル項目の設定（スキル名からskill番号を特定）
 		//	※旧データは「歌」を「呪文」で保持しているため読み替える
-		var SkillNames = GetShareSkillNames();
+		//	※選択肢にない値（空欄含む）の場合はLv1とする
 		for( var i = 0; i < SkillNames.length; ++i ){
 			var SkillValue = Map[ SkillNames[i] ];
 			if( SkillValue == undefined && SkillNames[i] == "歌" ){
 				SkillValue = Map[ "呪文" ];
 			}
 			if( SkillValue != undefined ){
-				document.chara[ "skill" + ( i + 1 ) ].value = SkillValue;
+				var Skill = document.chara[ "skill" + ( i + 1 ) ];
+				Skill.value = HasSelectOption( Skill, SkillValue ) ? SkillValue : "1";
 			}
 		}
 
