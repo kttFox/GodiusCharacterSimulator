@@ -131,7 +131,7 @@ class MagicSystem
 	}
 }
 
-//	魔法系統定義テーブル
+//	魔法系統定義テーブル(INT 15)
 var MAGIC_SYSTEMS = [
 	new MagicSystem( "fire", "extra_fire_sec", 7, [
 		//						名称					発動Lv	安定Lv	消費MP
@@ -172,6 +172,7 @@ var MAGIC_SYSTEMS = [
 		new Magic( "キュアシック",						27,		36,		15 ),
 		new Magic( "ホーリーボール",					38,		47,		25 ),
 		new Magic( "リザレクト",						58,		67,		40 ),
-		new ReleaseMagic( "リリース",					56,		92,		50 )
+		new ReleaseMagic( "リリース",					56,		92,		50 ),
+		new Magic( "パワーシールド",					38,		47,		50 )
 	] )
 ];
