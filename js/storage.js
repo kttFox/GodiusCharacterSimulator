@@ -168,12 +168,23 @@ function RenderSlots()
 //------------------------------------------------------------------------------
 function AddSlot()
 {
-	var Count = GetSlotCount();
+	var Count	= GetSlotCount();
+	var NewKey	= SlotKeyPrefix + ( Count + 1 );
 	SetSlotCount( Count + 1 );
+
+	//	追加スロットに残っている古いデータを削除
+	try {
+		localStorage.removeItem( NewKey );
+	} catch( e ) {
+		;
+	}
 
 	//	追加したスロットを使用中スロットとする
 	SetCurrentSlot( Count + 1 );
 	RenderSlots();
+
+	//	追加スロットを読み込み、フォームを初期値へ戻す
+	LoadChara( NewKey );
 }
 
 //------------------------------------------------------------------------------
