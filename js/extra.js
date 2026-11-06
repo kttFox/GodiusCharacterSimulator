@@ -528,11 +528,14 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 		var MpUpCount = 1;			//	次回が何回目のMP回復か
 		var SpUpCount = 1;			//	次回が何回目のSP回復か
 		//	次回MP回復時刻(回復なしの場合はInfinityで発生しない)
-		var NextMpTime = GetRegenerationTime( MpUpStep, MpUpCount );
+		var NextMpTime = GetSongRegenerationTime( MpUpStep, MpUpCount );
 		//	次回SP回復時刻(回復なしの場合はInfinityで発生しない)
-		var NextSpTime = GetRegenerationTime( SpUpStep, SpUpCount );
+		var NextSpTime = GetSongRegenerationTime( SpUpStep, SpUpCount );
 		var NextUpkeepTime = SONG_FIRST_UPKEEP_SECOND;	//	次回維持MP、SP消費時刻
 		var NextAqTime = 15;		//	次回AQ判定時刻
+		//	1秒あたりの回復量が維持消費以上か（永久判定用）
+		var MpKeep = GetRegenerationPerSecond( MpUp, MpUpStep ) >= SongTable[i][2] / SONG_UPKEEP_SECOND;
+		var SpKeep = GetRegenerationPerSecond( SpUp, SpUpStep ) >= SongTable[i][3] / SONG_UPKEEP_SECOND;
 		var MpEnd = 0;				//	MP切れ確定フラグ
 		var SpEnd = 0;				//	SP切れ確定フラグ
 
@@ -587,7 +590,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 					}
 				}
 				MpUpCount++;
-				NextMpTime = GetRegenerationTime( MpUpStep, MpUpCount );
+				NextMpTime = GetSongRegenerationTime( MpUpStep, MpUpCount );
 			}
 
 			//	SP回復
@@ -601,7 +604,7 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 					}
 				}
 				SpUpCount++;
-				NextSpTime = GetRegenerationTime( SpUpStep, SpUpCount );
+				NextSpTime = GetSongRegenerationTime( SpUpStep, SpUpCount );
 			}
 
 			//	維持MP、SP消費(確定済のものは計算対象外)
@@ -637,14 +640,14 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 			if( NextAqTime <= Second ){
 				NextAqTime += 15;
 
-				//	現在MPが歌発動直後のMP以上の場合、永久とする
-				if( MpEnd == 0 && Mp >= MpOrg - SongTable[i][0] ){
+				//	現在MPが歌発動直後のMP以上で、1秒あたりの回復量が維持消費以上の場合、永久とする
+				if( MpEnd == 0 && Mp >= MpOrg - SongTable[i][0] && MpKeep ){
 					SongTimeMp[i] = "永久";
 					MpEnd = 1;
 				}
 
-				//	現在SPが歌発動直後のSP以上の場合、永久とする
-				if( SpEnd == 0 && Sp >= SpOrg - SongTable[i][1] ){
+				//	現在SPが歌発動直後のSP以上で、1秒あたりの回復量が維持消費以上の場合、永久とする
+				if( SpEnd == 0 && Sp >= SpOrg - SongTable[i][1] && SpKeep ){
 					SongTimeSp[i] = "永久";
 					SpEnd = 1;
 				}
@@ -754,6 +757,35 @@ var REGENERATION_TICK_SECOND = GetServerLoopSecond( 600 );
 
 //	歌の維持MP/SP消費の間隔（設定 1000ms → 63ループ → 約1.0234秒）
 var SONG_UPKEEP_SECOND = GetServerLoopSecond( 1000 );
+
+//	攻撃の始まりから歌の発動までの秒数（実測：約0.45秒）
+//	回復の刻みは攻撃の始まりで数え直されるため、演奏中の回復はこの分だけ早く来る
+var SONG_REGENERATION_SHIFT_SECOND = 0.45;
+
+//------------------------------------------------------------------------------
+//	関数名		：	1秒あたりの回復量取得処理
+//	機能説明	：	1回の回復量と回復段階から、1秒あたりの平均の回復量を返す。
+//	パラメータ	：	Up		1回の回復量
+//					Step	回復段階（GetRegenerationStepの戻り値）
+//	戻り値		：	1秒あたりの回復量
+//------------------------------------------------------------------------------
+function GetRegenerationPerSecond( Up, Step )
+{
+	return Up * Step / ( REGENERATION_TICK_COUNT * REGENERATION_TICK_SECOND );
+}
+
+//------------------------------------------------------------------------------
+//	関数名		：	歌の演奏中の回復時刻取得処理
+//	機能説明	：	歌の発動を0秒として、Count回目の回復の時刻（秒）を返す。
+//					回復の刻みは攻撃の始まりで数え直されるため、その分だけ早める。
+//	パラメータ	：	Step	回復段階（GetRegenerationStepの戻り値）
+//					Count	何回目の回復か（1以上）
+//	戻り値		：	回復の時刻（秒）。回復なしの場合は Infinity
+//------------------------------------------------------------------------------
+function GetSongRegenerationTime( Step, Count )
+{
+	return GetRegenerationTime( Step, Count ) - SONG_REGENERATION_SHIFT_SECOND;
+}
 
 //	歌の発動から初回の維持MP/SP消費までの秒数（実際の時刻で数える：5秒）
 var SONG_FIRST_UPKEEP_SECOND = 5;
