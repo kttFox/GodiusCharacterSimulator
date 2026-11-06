@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>回復間隔と検証結果 - Godius キャラシミュレーター</title>
+		<style>
+			body { font-family: sans-serif; font-size: 14px; line-height: 1.6; margin: 16px; }
+			table { border-collapse: collapse; margin: 6px 0 12px; text-align: center; }
+			th, td { border: 1px solid #888; padding: 3px 8px; }
+			th { background: #eee; }
+			code { background: #f4f4f4; padding: 0 3px; }
+		</style>
+	</head>
+	<body>
+		<h1>回復間隔と検証結果</h1>
+		<p>HP・SP は VIT、MP は MEN で回復間隔が決まります。1回の回復量は最大値の10%です。</p>
+
+		<h2>1刻みの長さ</h2>
+		<ul>
+			<li>サーバーはくり返すタイマーを「ループの回数」で数えています。ループ1回を 16ms とみなし、設定時間 T を ceil(T ÷ 16) 回のループで数えます。</li>
+			<li>実際のループ1回は平均 16 + 0.245 = 16.245ms かかるため、設定時間より少し長くなります。</li>
+			<li>回復の1刻み：設定 600ms → 38ループ × 16.245ms ＝ <b>約0.6173秒</b></li>
+			<li>1周期は25刻み ＝ <b>約15.43秒</b></li>
+		</ul>
+
+		<h2>回復のタイミング</h2>
+		<ul>
+			<li>回復段階 n ＝ パラメーター ÷ 5（切り捨て）</li>
+			<li>k 回目の回復は floor(25 × k ÷ n) 刻み目に起きます。</li>
+			<li>25 が n で割り切れない場合、1周期の中に1刻み長い間隔が混ざります。</li>
+		</ul>
+
+		<table>
+			<tr>
+				<th>パラメータ</th>
+				<th>回復段階</th>
+				<th>刻み</th>
+				<th>回復間隔（秒）</th>
+				<th>平均（秒）</th>
+			</tr>
+			<tr><td>6～9</td><td>1</td><td>25</td><td>15.43</td><td>15.43</td></tr>
+			<tr><td>10～14</td><td>2</td><td>12, 13</td><td>7.41, 8.03</td><td>7.72</td></tr>
+			<tr><td>15～19</td><td>3</td><td>8, 8, 9</td><td>4.94, 4.94, 5.56</td><td>5.14</td></tr>
+			<tr><td>20～24</td><td>4</td><td>6, 6, 6, 7</td><td>3.70×3, 4.32</td><td>3.86</td></tr>
+			<tr><td>25～29</td><td>5</td><td>5</td><td>3.09</td><td>3.09</td></tr>
+			<tr><td>30</td><td>6</td><td>4×5, 5</td><td>2.47×5, 3.09</td><td>2.57</td></tr>
+		</table>
+
+		<h2>回復量</h2>
+		<ul>
+			<li>HP・MP・SP は 0.01 単位まで値を持っています。</li>
+			<li>1回の回復量 ＝ 最大値 × 10%（0.01 単位で四捨五入）</li>
+			<li>例：最大値 224.58 → 22.458 → <b>22.46</b>、最大値 172.62 → 17.262 → <b>17.26</b></li>
+			<li>歌の演奏中は、回復量が半分になります。</li>
+		</ul>
+
+		<h2>歌の消費</h2>
+		<ul>
+			<li>発動から最初の維持消費まで：<b>5秒</b></li>
+			<li>以降の維持消費の間隔：設定 1000ms → 63ループ × 16.245ms ＝ <b>約1.0234秒</b></li>
+		</ul>
+
+		<h2>毒・病気のダメージ</h2>
+		<ul>
+			<li>間隔 ＝ (floor(能力値 ÷ 5) + 1) 刻み × 約0.6173秒（毒は STR、病気は VIT）</li>
+			<li>HP が満タンになった直後の回だけ、1刻み長くなります。</li>
+		</ul>
+		<table>
+			<tr><th>STR（毒）／VIT（病気）</th><th>刻み</th><th>間隔（秒）</th><th>満タン直後（秒）</th></tr>
+			<tr><td>6～9</td><td>2</td><td>1.23</td><td>1.85</td></tr>
+			<tr><td>10～14</td><td>3</td><td>1.85</td><td>2.47</td></tr>
+			<tr><td>15～19</td><td>4</td><td>2.47</td><td>3.09</td></tr>
+			<tr><td>20～24</td><td>5</td><td>3.09</td><td>3.70</td></tr>
+			<tr><td>25～29</td><td>6</td><td>3.70</td><td>4.32</td></tr>
+			<tr><td>30</td><td>7</td><td>4.32</td><td>4.94</td></tr>
+		</table>
+
+		<p><a href="./index.html">シミュレーターに戻る</a></p>
+	</body>
+</html>

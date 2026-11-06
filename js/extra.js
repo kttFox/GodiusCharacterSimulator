@@ -442,10 +442,10 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 	var Mp = 0;											//	MP(計算用)
 	var Sp = 0;											//	SP(計算用)
 	var Second = 0;										//	経過秒
-	var MpUp = MpOrg / 10;								//	1回あたりのMP回復量
-	var SpUp = SpOrg / 10;								//	1回あたりのSP回復量
-	var MpUpSec = GetRegenerationSecond( Men );			//	MP自動回復秒数取得
-	var SpUpSec = GetRegenerationSecond( Vit );			//	SP自動回復秒数取得
+	var MpUp = RoundCenti( MpOrg / 10 );				//	1回あたりのMP回復量（最大値の10%、0.01単位で四捨五入）
+	var SpUp = RoundCenti( SpOrg / 10 );				//	1回あたりのSP回復量（最大値の10%、0.01単位で四捨五入）
+	var MpUpStep = GetRegenerationStep( Men );			//	MP自動回復段階取得
+	var SpUpStep = GetRegenerationStep( Vit );			//	SP自動回復段階取得
 
 	var SongTable = [									//	MPSP管理テーブル
 		//初期MP	SP		維持MP	SP
@@ -515,8 +515,8 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 	}
 
 	//	歌の持続中は回復量が半分になる
-	MpUp = MpUp / 2;
-	SpUp = SpUp / 2;
+	MpUp = RoundCenti( MpUp / 2 );
+	SpUp = RoundCenti( SpUp / 2 );
 
 	//	歌数分ループ
 	for( var i = 0; i <= 6; ++i ){
@@ -525,8 +525,14 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 		Second = 0;
 		Mp = MpOrg;
 		Sp = SpOrg;
-		var NextMpTime = MpUpSec;	//	次回MP回復時刻
-		var NextSpTime = SpUpSec;	//	次回SP回復時刻
+		var MpUpCount = 1;			//	次回が何回目のMP回復か
+		var SpUpCount = 1;			//	次回が何回目のSP回復か
+		//	次回MP回復時刻(回復なしの場合はInfinityで発生しない)
+		var NextMpTime = GetRegenerationTime( MpUpStep, MpUpCount );
+		//	次回SP回復時刻(回復なしの場合はInfinityで発生しない)
+		var NextSpTime = GetRegenerationTime( SpUpStep, SpUpCount );
+		var NextUpkeepTime = SONG_FIRST_UPKEEP_SECOND;	//	次回維持MP、SP消費時刻
+		var NextAqTime = 15;		//	次回AQ判定時刻
 		var MpEnd = 0;				//	MP切れ確定フラグ
 		var SpEnd = 0;				//	SP切れ確定フラグ
 
@@ -553,32 +559,73 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 			continue;
 		}
 
-		//	時間刻みループ(1秒を1/64で分割。2進数で正確に表せる値のため剰余判定も誤差なし)
+		//	イベント駆動ループ(次の回復・維持消費・AQ判定のうち最も早い時刻へ進める)
 		while( 1 ){
-			//	1刻み経過
-			Second += 1 / 64;
+			//	次のイベント時刻へ進める
+			Second = Math.min( NextUpkeepTime, NextMpTime, NextSpTime, NextAqTime );
 
-			//	1秒経過(発動後3秒間は維持MP、SPを消費しない)
-			if( Second % 1 == 0 && 3 < Second){
-				//	維持MP、SP消費(確定済のものは計算対象外)
+			//	永久ループ対策
+			if( Second >= 10000 ){
+				//	10000秒＝約3時間ループしたら永久とする
 				if( MpEnd == 0 ){
-					Mp -= SongTable[i][2];
+					SongTimeMp[i] = "永久";
 				}
 				if( SpEnd == 0 ){
-					Sp -= SongTable[i][3];
+					SongTimeSp[i] = "永久";
 				}
+				break;
 			}
 
-			//	MPが切れた場合
-			if( MpEnd == 0 && Mp <= 0 ){
-				SongTimeMp[i] = FormatTime( Second );
-				MpEnd = 1;
+			//	MP回復
+			if( NextMpTime <= Second ){
+				if( MpEnd == 0 ){
+					Mp = RoundCenti( Mp + MpUp );
+
+					//	上限超過時は最大を設定
+					if( Mp >= MpOrg ){
+						Mp = MpOrg;
+					}
+				}
+				MpUpCount++;
+				NextMpTime = GetRegenerationTime( MpUpStep, MpUpCount );
 			}
 
-			//	SPが切れた場合
-			if( SpEnd == 0 && Sp <= 0 ){
-				SongTimeSp[i] = FormatTime( Second );
-				SpEnd = 1;
+			//	SP回復
+			if( NextSpTime <= Second ){
+				if( SpEnd == 0 ){
+					Sp = RoundCenti( Sp + SpUp );
+
+					//	上限超過時は最大を設定
+					if( Sp >= SpOrg ){
+						Sp = SpOrg;
+					}
+				}
+				SpUpCount++;
+				NextSpTime = GetRegenerationTime( SpUpStep, SpUpCount );
+			}
+
+			//	維持MP、SP消費(確定済のものは計算対象外)
+			//	維持分が足りない場合は消費せず、その時点で演奏終了とする
+			if( NextUpkeepTime <= Second ){
+				if( MpEnd == 0 ){
+					if( Mp < SongTable[i][2] ){
+						SongTimeMp[i] = FormatTime( Second );
+						MpEnd = 1;
+					}
+					else{
+						Mp = RoundCenti( Mp - SongTable[i][2] );
+					}
+				}
+				if( SpEnd == 0 ){
+					if( Sp < SongTable[i][3] ){
+						SongTimeSp[i] = FormatTime( Second );
+						SpEnd = 1;
+					}
+					else{
+						Sp = RoundCenti( Sp - SongTable[i][3] );
+					}
+				}
+				NextUpkeepTime += SONG_UPKEEP_SECOND;
 			}
 
 			//	MP、SPともに確定した場合
@@ -586,40 +633,9 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 				break;
 			}
 
-			//	MP回復
-			//	(時間刻みとの剰余判定では回復周期が割り切れず判定漏れするため、
-			//	 次回回復時刻を累積して経過分をまとめて回復する)
-			if( MpUpSec > 0 ){
-				while( Second + 0.0001 >= NextMpTime ){
-					if( MpEnd == 0 ){
-						Mp += MpUp;
-
-						//	上限超過時は最大を設定
-						if( Mp >= MpOrg ){
-							Mp = MpOrg;
-						}
-					}
-					NextMpTime += MpUpSec;
-				}
-			}
-
-			//	SP回復
-			if( SpUpSec > 0 ){
-				while( Second + 0.0001 >= NextSpTime ){
-					if( SpEnd == 0 ){
-						Sp += SpUp;
-
-						//	上限超過時は最大を設定
-						if( Sp >= SpOrg ){
-							Sp = SpOrg;
-						}
-					}
-					NextSpTime += SpUpSec;
-				}
-			}
-
 			//	AQ判定(15秒単位経過時点)
-			if( Second % 15 == 0 && 3 < Second ){
+			if( NextAqTime <= Second ){
+				NextAqTime += 15;
 
 				//	現在MPが歌発動直後のMP以上の場合、永久とする
 				if( MpEnd == 0 && Mp >= MpOrg - SongTable[i][0] ){
@@ -637,18 +653,6 @@ function GetExtraSongTime( Skill, MpOrg, SpOrg, Men, Vit, SongTimeMp, SongTimeSp
 				if( MpEnd == 1 && SpEnd == 1 ){
 					break;
 				}
-			}
-
-			//	永久ループ対策
-			if( Second == 10000 ){
-				//	10000秒＝約3時間ループしたら永久とする
-				if( MpEnd == 0 ){
-					SongTimeMp[i] = "永久";
-				}
-				if( SpEnd == 0 ){
-					SongTimeSp[i] = "永久";
-				}
-				break;
 			}
 		}
 	}
@@ -724,78 +728,81 @@ function AdjustPercent( InValue )
 }
 
 
-//	MP/SP自然回復の基準秒数（回復段階で割って1回の回復間隔[秒]を得る）
-var REGENERATION_BASE_SECOND = 15.5;
+//	MP/SP自然回復の1周期の刻み数
+//	1周期（25刻み）の中に回復段階（パラメータ / 5 切り捨て）回の回復が均等に入る
+var REGENERATION_TICK_COUNT = 25;
+
+//	HP/MP/SPは0.01単位で値を持つため、0.01単位で四捨五入する
+function RoundCenti( Value )
+{
+	return Math.round( Value * 100 + 1e-7 ) / 100;
+}
+
+//	サーバーのループ1回とみなす時間（ms）と、実際のループ1回の平均（ms、実測）
+//	くり返すタイマーは 設定時間 T を ceil(T / 16) ループで数えるため少し伸びる
+var SERVER_LOOP_MS = 16;
+var SERVER_LOOP_ACTUAL_MS = 16 + 0.245;
+
+//	くり返すタイマーの実際の秒数（設定時間 Ms をループで数えたときの長さ）
+function GetServerLoopSecond( Ms )
+{
+	return Math.ceil( Ms / SERVER_LOOP_MS ) * SERVER_LOOP_ACTUAL_MS / 1000;
+}
+
+//	MP/SP自然回復の1刻みの秒数（設定 600ms → 38ループ → 約0.6173秒）
+var REGENERATION_TICK_SECOND = GetServerLoopSecond( 600 );
+
+//	歌の維持MP/SP消費の間隔（設定 1000ms → 63ループ → 約1.0234秒）
+var SONG_UPKEEP_SECOND = GetServerLoopSecond( 1000 );
+
+//	歌の発動から初回の維持MP/SP消費までの秒数（実際の時刻で数える：5秒）
+var SONG_FIRST_UPKEEP_SECOND = 5;
 
 //------------------------------------------------------------------------------
-//	関数名		：	自動回復秒数取得処理
-//	機能説明	：	MEN、またはVITから自然回復までの秒数を返す。
+//	関数名		：	自動回復段階取得処理
+//	機能説明	：	MEN、またはVITから1周期（25刻み）あたりの回復回数を返す。
 //	パラメータ	：	Para	MEN、またはVIT
-//	戻り値		：	Sec		秒数
-//	備考		：	なし
+//	戻り値		：	Step	回復段階（パラメータ / 5 切り捨て。範囲外は0）
+//	備考		：	HP・SPはVIT、MPはMENで決まる
+//------------------------------------------------------------------------------
+function GetRegenerationStep( Para )
+{
+	if( Para < 6 || Para >= 100 ){
+		return 0;
+	}
+	return Math.floor( Para / 5 );
+}
+//------------------------------------------------------------------------------
+//	関数名		：	自動回復時刻取得処理
+//	機能説明	：	回復段階から、Count回目の自然回復が起きる秒数を返す。
+//	パラメータ	：	Step	回復段階（GetRegenerationStepの戻り値）
+//					Count	何回目の回復か（1以上）
+//	戻り値		：	秒数（回復なしの場合はInfinity）
+//	備考		：	Count回目の回復は floor( 25 × Count / Step ) 刻み目に起きる。
+//					25が割り切れない段階では、1周期に1回だけ1刻み長い間隔が入る
+//					（例：段階3は 8, 8, 9 刻み、段階4は 6, 6, 6, 7 刻み）
+//------------------------------------------------------------------------------
+function GetRegenerationTime( Step, Count )
+{
+	if( Step <= 0 ){
+		return Infinity;
+	}
+	return Math.floor( REGENERATION_TICK_COUNT * Count / Step ) * REGENERATION_TICK_SECOND;
+}
+//------------------------------------------------------------------------------
+//	関数名		：	自動回復秒数取得処理
+//	機能説明	：	MEN、またはVITから自然回復の平均間隔（秒）を返す。
+//	パラメータ	：	Para	MEN、またはVIT
+//	戻り値		：	Sec		平均の秒数（回復なしの場合は0）
+//	備考		：	25刻み × 1刻みの秒数 ÷ 回復段階
 //------------------------------------------------------------------------------
 function GetRegenerationSecond( Para )
 {
-	var Sec = 0;
+	var Step = GetRegenerationStep( Para );
 
-	if( Para >= 95 && Para < 100 ){
-		Sec = REGENERATION_BASE_SECOND / 19;				//	0.74秒
+	if( Step <= 0 ){
+		return 0;
 	}
-	if( Para >= 90 && Para < 95 ){
-		Sec = REGENERATION_BASE_SECOND / 18;				//	0.78秒
-	}
-	if( Para >= 85 && Para < 90 ){
-		Sec = REGENERATION_BASE_SECOND / 17;				//	0.82秒
-	}
-	if( Para >= 80 && Para < 85 ){
-		Sec = REGENERATION_BASE_SECOND / 16;				//	0.88秒
-	}
-	if( Para >= 75 && Para < 80 ){
-		Sec = REGENERATION_BASE_SECOND / 15;				//	0.93秒
-	}
-	if( Para >= 70 && Para < 75 ){
-		Sec = REGENERATION_BASE_SECOND / 14;				//	1秒
-	}
-	if( Para >= 65 && Para < 70 ){
-		Sec = REGENERATION_BASE_SECOND / 13;				//	1.08秒
-	}
-	if( Para >= 60 && Para < 65 ){
-		Sec = REGENERATION_BASE_SECOND / 12;				//	1.17秒
-	}
-	if( Para >= 55 && Para < 60 ){
-		Sec = REGENERATION_BASE_SECOND / 11;				//	1.27秒
-	}
-	if( Para >= 50 && Para < 55 ){
-		Sec = REGENERATION_BASE_SECOND / 10;				//	1.4秒
-	}
-	if( Para >= 45 && Para < 50 ){
-		Sec = REGENERATION_BASE_SECOND / 9;				//	1.56秒
-	}
-	if( Para >= 40 && Para < 45 ){
-		Sec = REGENERATION_BASE_SECOND / 8;				//	1.75秒
-	}
-	if( Para >= 35 && Para < 40 ){
-		Sec = REGENERATION_BASE_SECOND / 7;				//	2秒
-	}
-	if( Para >= 30 && Para < 35 ){
-		Sec = REGENERATION_BASE_SECOND / 6;				//	2.33秒
-	}
-	if( Para >= 25 && Para < 30 ){
-		Sec = REGENERATION_BASE_SECOND / 5;				//	2.8秒
-	}
-	if( Para >= 20 && Para < 25 ){
-		Sec = REGENERATION_BASE_SECOND / 4;				//	3.5秒
-	}
-	if( Para >= 15 && Para < 20 ){
-		Sec = REGENERATION_BASE_SECOND / 3;				//	4.66秒
-	}
-	if( Para >= 10 && Para < 15 ){
-		Sec = REGENERATION_BASE_SECOND / 2;				//	7秒
-	}
-	if( Para >= 6 && Para < 10 ){
-		Sec = REGENERATION_BASE_SECOND / 1;				//	14.0秒
-	}
-
-	return Sec;
+	return REGENERATION_TICK_COUNT * REGENERATION_TICK_SECOND / Step;
 }
 

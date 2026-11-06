@@ -2,11 +2,12 @@
 <!-- saved from url=(0053)https://hanpen.x0.to/godius/tool/godichara/chara.html -->
 <html lang="ja">
 	<head>
+		<meta name="google-site-verification" content="Ur9oZ3DlkgKxHzMo7ViLmpdiop_ehPH6i9e9CpwuGjc" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Godius キャラシミュレーター</title>
 		<link rel="canonical" href="/">
 		<script>
-			var APP_VERSION = "v1.24";
+			var APP_VERSION = "v2.0";
 		</script>
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
@@ -1981,7 +1982,7 @@
 									</tr>
 								</table>
 								<li>例：15→16に上げる場合は3個、25→26に上げる場合は5個が必要です。</li>
-								<li>パラメーター（ＶＩＴ／ＭＥＮ）による回復間隔は次の値で計算しています。</li>
+								<li>パラメーター（ＶＩＴ／ＭＥＮ）による回復間隔は次の値で計算しています。<a href="./timing.html" target="_blank">回復間隔と検証結果</a></li>
 								<table border="1" cellspacing="0" cellpadding="3" style="border-collapse: collapse; margin: 3px 0 3px 20px; text-align: center">
 									<tr>
 										<th width="80">パラメータ</th>
@@ -1989,27 +1990,27 @@
 									</tr>
 									<tr>
 										<td>6</td>
-										<td>15.50</td>
+										<td>15.43</td>
 									</tr>
 									<tr>
 										<td>10</td>
-										<td>7.75</td>
+										<td>7.72</td>
 									</tr>
 									<tr>
 										<td>15</td>
-										<td>5.17</td>
+										<td>5.14</td>
 									</tr>
 									<tr>
 										<td>20</td>
-										<td>3.88</td>
+										<td>3.86</td>
 									</tr>
 									<tr>
 										<td>25</td>
-										<td>3.10</td>
+										<td>3.09</td>
 									</tr>
 									<tr>
 										<td>30</td>
-										<td>2.58</td>
+										<td>2.57</td>
 									</tr>
 								</table>
 							</ul>
@@ -2264,8 +2265,8 @@
 								<li>選択した職業に応じて関連スキルの成功率を表示します。</li>
 								<li>魔法のツールチップ表記はINT15時の値です。</li>
 								<li>歌の持続時間はラグや環境により実際の時間と異なる場合があります。<br />
-									歌の発動後３秒間は持続のための消費は発生しません。<br />
-									本作ではＨＰ・ＭＰ・ＳＰに小数以下の値が存在するため、実際の値とは誤差が生じる場合があります。
+									歌の発動後５秒間は持続のための消費は発生しません。<br />
+									本作ではＨＰ・ＭＰ・ＳＰに0.01まで存在するため、実際の値とは誤差が生じる場合があります。
 								</li>
 								<li>今作では錬金成功率にキャラレベルも関係しているようです。<br />実際は表記の確率より少し低いです。（要検証）</li>
 							</ul>
