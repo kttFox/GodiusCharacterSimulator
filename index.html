@@ -238,6 +238,12 @@
 			}
 		</script>
 		<script>
+			// 末尾スラッシュの有無で別ページとしてカウントされないようパスを正規化する
+			// (/GodiusCharacterSimulator, /GodiusCharacterSimulator/, /GodiusCharacterSimulator/index.html を "/" に統一)
+			var gcPath = location.pathname;
+			if (/^\/GodiusCharacterSimulator(\/|\/index\.html)?$/i.test(gcPath) || gcPath === "/index.html") gcPath = "/";
+			window.goatcounter = { path: gcPath };
+
 			function renderBadge(views) {
 				var el = document.getElementById("counter");
 				if (!el) {
@@ -264,7 +270,7 @@
 
 				// counter JSON API から直接値を取得する
 				// (type:"html" はクロスオリジン iframe になるため JS から値を読めない)
-				fetch("https://kttfox.goatcounter.com/counter/" + encodeURIComponent(location.pathname) + ".json")
+				fetch("https://kttfox.goatcounter.com/counter/" + encodeURIComponent(gcPath) + ".json")
 					.then(function (r) {
 						return r.json();
 					})
