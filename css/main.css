@@ -473,3 +473,29 @@ table.layout > tbody > tr > td{
 select{
 	max-width:100%;
 }
+
+/*	タッチ端末向けツールチップ (js/tooltip.js)
+	title 属性が表示されないタッチ端末で、タップ・長押し時に出す吹き出し	*/
+div.touchtip{
+	display:none;
+	position:absolute;
+	z-index:1000;
+	max-width:260px;
+	padding:4px 8px;
+	border:1px solid #999;
+	border-radius:4px;
+	background:#ffffe1;
+	color:#000;
+	font-size:13px;
+	line-height:1.4;
+	box-shadow:0 2px 6px rgba(0,0,0,0.25);
+	pointer-events:none;
+}
+@media (hover:none){
+	/*	長押しで iOS 標準のメニュー・文字選択が出ないようにする	*/
+	[title]{
+		-webkit-touch-callout:none;
+		-webkit-user-select:none;
+		user-select:none;
+	}
+}

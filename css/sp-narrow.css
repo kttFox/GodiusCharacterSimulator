@@ -36,9 +36,8 @@
 	column-gap:8px;
 }
 /*	2列に収めるため、スキル行の各パーツを詰める	*/
-.skillrow img{
-	margin-right:6px;
-	flex:none;
+#skillarea .skillrow img{
+	margin-right:2px;
 }
 #skillarea select[name^="skill"]{
 	width:56px;

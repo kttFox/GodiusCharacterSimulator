@@ -12,6 +12,20 @@ html{
 }
 body{
 	margin:0;
+	/*	iPhone の横向き時にノッチ・ホームバーへ内容が隠れないよう、
+		viewport-fit=cover と合わせて安全領域ぶんの余白を空ける	*/
+	padding-left:env(safe-area-inset-left);
+	padding-right:env(safe-area-inset-right);
+	padding-bottom:env(safe-area-inset-bottom);
+	/*	タップ時の灰色のハイライトを消す	*/
+	-webkit-tap-highlight-color:transparent;
+}
+/*	増減ボタン等を素早く連打した時に iOS がダブルタップズームするのを防ぐ	*/
+input,
+select,
+label,
+img{
+	touch-action:manipulation;
 }
 /*	テーブル幅を画面幅に固定する。
 	table-layout:fixed にしないと中身の最小幅に引っ張られて
@@ -206,6 +220,26 @@ select[name^="skill"]{
 #skillarea .skillrow{
 	line-height:28px;
 }
+/*	アイコン画像 (全て 16px) は指でタップしにくいため 24px に拡大する。
+	ドット絵なのでぼやけないよう pixelated で拡大する	*/
+img[src*="img/"]{
+	width:24px;
+	height:24px;
+	image-rendering:pixelated;
+}
+/*	スキルアイコンは 16px のままだと指でタップできない (ツールチップが出せない) ため、
+	表示を 24px に拡大し、さらに透明な余白でタップ範囲を 28px 四方まで広げる。
+	余白ぶんは負のマージンで打ち消して行の高さ・列幅を増やさない	*/
+#skillarea .skillrow img{
+	width:24px;
+	height:24px;
+	padding:2px;
+	margin:-2px 4px -2px -2px;
+	box-sizing:content-box;
+	flex:none;
+	/*	ドット絵を拡大してもぼやけないようにする	*/
+	image-rendering:pixelated;
+}
 .skillbreak{
 	display:none;
 }
@@ -249,6 +283,25 @@ textarea{
 }
 #extra_song_sec{
 	overflow:hidden;
+}
+/*	歌の成功率・持続時間は表示専用 (disabled + readonly) で入力時ズームが起きないため、
+	フォーム部品の 16px 指定を外して PC と同程度の文字サイズに戻す。
+	16px のままだと成功率の「100.0」が欄に収まらず、持続時間は逆に大きくなりすぎる	*/
+input[name^="songper"]{
+	width:52px;
+	font-size:14px;
+	padding:1px 2px;
+}
+#extra_song textarea[name^="songtime"]{
+	font-size:13px;
+	width:64px;
+}
+/*	iOS Safari は disabled の部品を薄く描画するため、通常の濃さで表示する	*/
+input[name^="songper"],
+#extra_song textarea[name^="songtime"]{
+	opacity:1;
+	color:#000;
+	-webkit-text-fill-color:#000;
 }
 /*	文字を大きくした分、歌名・成功率の列幅を広げる	*/
 .song_head{

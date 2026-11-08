@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>魔法・スキル・歌の一覧 - Godius キャラシミュレーター</title>
+		<style>
+			body { font-family: sans-serif; font-size: 14px; line-height: 1.6; margin: 16px; }
+			table { border-collapse: collapse; margin: 6px 0 12px; text-align: center; }
+			th, td { border: 1px solid #888; padding: 3px 8px; }
+			th { background: #eee; }
+			td.name { text-align: left; }
+			table.magic img { width: 16px; height: 16px; vertical-align: middle; }
+			code { background: #f4f4f4; padding: 0 3px; }
+		</style>
+	</head>
+	<body>
+		<h1 id="magic">魔法</h1>
+		<p>火炎・冷凍・援護・聖の各系統の魔法について、発動Lv・安定Lv・基本消費MPと計算式をまとめています。</p>
+
+		<h2>成功率</h2>
+		<ul>
+			<li>INT補正：補正後Lv ＝ 表のLv（INT15時）＋ 3 − floor(INT ÷ 5)</li>
+			<li>成功率 ＝ (Lv − (補正後発動Lv − 1)) ÷ (補正後安定Lv − (補正後発動Lv − 1)) × 100</li>
+			<li>0%未満は0%、100%を超える場合は100%として扱います。</li>
+			<li>INT が5上がるごとに、発動Lv・安定Lvはそれぞれ1下がります（INT15で表の値、INT30で3下がる）。</li>
+		</ul>
+
+		<h3>リリース（聖）</h3>
+		<ul>
+			<li>リリースのみ専用の計算式です。</li>
+			<li>成功率 ＝ Lv × 2.5 ＋ (聖スキル ＋ floor(INT ÷ 5)) × 10 − 360</li>
+			<li>出典：Godius community 質問掲示板 No.1444「リリース(魔法)の発動LVについて」</li>
+		</ul>
+
+		<h2>消費MP</h2>
+		<ul>
+			<li>Lv減少 ＝ floor(基本消費MP × (Lv ÷ 3) ÷ 100)</li>
+			<li>装備減少 ＝ floor(基本消費MP × 武器の消費MP減少率)</li>
+			<li>消費MP ＝ 基本消費MP − Lv減少 − 装備減少</li>
+		</ul>
+
+		<h2>魔法一覧</h2>
+		<p>
+			INT：<select id="int"></select>
+			（INT を変えると発動Lv・安定Lvが補正後の値に変わります。「取得」はスキル玉の必要数（0玉は最初から使える魔法）。<br/>
+			リリースの値は参考値で、実際は上の専用式で計算します。
+		</p>
+		<h3>火炎魔法</h3>
+		<table class="magic">
+			<tr><th></th><th>魔法</th><th>取得</th><th>費用</th><th>発動Lv</th><th>安定Lv</th><th>基本消費MP</th></tr>
+			<tr><td><img src="./img/fire_000.png" alt="ファイアミサイル" /></td><td class="name">ファイアミサイル</td><td>0玉</td><td class="cost">100</td><td class="lv" data-lv="1">1</td><td class="lv" data-lv="11">11</td><td>10</td></tr>
+			<tr><td><img src="./img/fire_001.png" alt="ファイアブレード" /></td><td class="name">ファイアブレード</td><td>0玉</td><td class="cost">2,000</td><td class="lv" data-lv="4">4</td><td class="lv" data-lv="14">14</td><td>15</td></tr>
+			<tr><td><img src="./img/fire_002.png" alt="ファイアソード" /></td><td class="name">ファイアソード</td><td>0玉</td><td class="cost">5,000</td><td class="lv" data-lv="5">5</td><td class="lv" data-lv="17">17</td><td>18</td></tr>
+			<tr><td><img src="./img/fire_003.png" alt="ファイアボール" /></td><td class="name">ファイアボール</td><td>2玉</td><td class="cost">50,000</td><td class="lv" data-lv="10">10</td><td class="lv" data-lv="23">23</td><td>30</td></tr>
+			<tr><td><img src="./img/fire_004.png" alt="ファイアシールド" /></td><td class="name">ファイアシールド</td><td>1玉</td><td class="cost">10,000</td><td class="lv" data-lv="11">11</td><td class="lv" data-lv="25">25</td><td>24</td></tr>
+			<tr><td><img src="./img/fire_005.png" alt="ファイアショック" /></td><td class="name">ファイアショック</td><td>3玉</td><td class="cost">100,000</td><td class="lv" data-lv="24">24</td><td class="lv" data-lv="33">33</td><td>20</td></tr>
+			<tr><td><img src="./img/fire_006.png" alt="ファイアストライク" /></td><td class="name">ファイアストライク</td><td>2玉</td><td class="cost">70,000</td><td class="lv" data-lv="32">32</td><td class="lv" data-lv="44">44</td><td>25</td></tr>
+			<tr><td><img src="./img/fire_009.png" alt="ファイアストーム" /></td><td class="name">ファイアストーム</td><td>5玉</td><td class="cost">500,000</td><td class="lv" data-lv="39">39</td><td class="lv" data-lv="47">47</td><td>30</td></tr>
+		</table>
+		<h3>冷凍魔法</h3>
+		<table class="magic">
+			<tr><th></th><th>魔法</th><th>取得</th><th>費用</th><th>発動Lv</th><th>安定Lv</th><th>基本消費MP</th></tr>
+			<tr><td><img src="./img/ice_000.png" alt="アイスミサイル" /></td><td class="name">アイスミサイル</td><td>0玉</td><td class="cost">150</td><td class="lv" data-lv="1">1</td><td class="lv" data-lv="11">11</td><td>10</td></tr>
+			<tr><td><img src="./img/ice_001.png" alt="アイスブレード" /></td><td class="name">アイスブレード</td><td>0玉</td><td class="cost">3,000</td><td class="lv" data-lv="5">5</td><td class="lv" data-lv="15">15</td><td>15</td></tr>
+			<tr><td><img src="./img/ice_002.png" alt="アイスソード" /></td><td class="name">アイスソード</td><td>0玉</td><td class="cost">7,500</td><td class="lv" data-lv="6">6</td><td class="lv" data-lv="18">18</td><td>18</td></tr>
+			<tr><td><img src="./img/ice_003.png" alt="アイスボール" /></td><td class="name">アイスボール</td><td>2玉</td><td class="cost">75,000</td><td class="lv" data-lv="7">7</td><td class="lv" data-lv="26">26</td><td>30</td></tr>
+			<tr><td><img src="./img/ice_004.png" alt="アイスシールド" /></td><td class="name">アイスシールド</td><td>1玉</td><td class="cost">15,000</td><td class="lv" data-lv="22">22</td><td class="lv" data-lv="31">31</td><td>24</td></tr>
+			<tr><td><img src="./img/ice_005.png" alt="アイスウェーブ" /></td><td class="name">アイスウェーブ</td><td>3玉</td><td class="cost">150,000</td><td class="lv" data-lv="27">27</td><td class="lv" data-lv="37">37</td><td>23</td></tr>
+			<tr><td><img src="./img/ice_006.png" alt="アイスストライク" /></td><td class="name">アイスストライク</td><td>2玉</td><td class="cost">100,000</td><td class="lv" data-lv="33">33</td><td class="lv" data-lv="45">45</td><td>25</td></tr>
+		</table>
+		<h3>援護魔法</h3>
+		<table class="magic">
+			<tr><th></th><th>魔法</th><th>取得</th><th>費用</th><th>発動Lv</th><th>安定Lv</th><th>基本消費MP</th></tr>
+			<tr><td><img src="./img/magical_000.png" alt="マジカルブレード" /></td><td class="name">マジカルブレード</td><td>0玉</td><td class="cost">2,000</td><td class="lv" data-lv="5">5</td><td class="lv" data-lv="14">14</td><td>18</td></tr>
+			<tr><td><img src="./img/magical_001.png" alt="ホールド" /></td><td class="name">ホールド</td><td>3玉</td><td class="cost">50,000</td><td class="lv" data-lv="17">17</td><td class="lv" data-lv="25">25</td><td>26</td></tr>
+			<tr><td><img src="./img/magical_002.png" alt="マジカルグロース" /></td><td class="name">マジカルグロース</td><td>1玉</td><td class="cost">10,000</td><td class="lv" data-lv="22">22</td><td class="lv" data-lv="31">31</td><td>15</td></tr>
+			<tr><td><img src="./img/magical_003.png" alt="マジカルシールド" /></td><td class="name">マジカルシールド</td><td>1玉</td><td class="cost">15,000</td><td class="lv" data-lv="30">30</td><td class="lv" data-lv="40">40</td><td>28</td></tr>
+			<tr><td><img src="./img/magical_004.png" alt="ウィークネス" /></td><td class="name">ウィークネス</td><td>1玉</td><td class="cost">10,000</td><td class="lv" data-lv="37">37</td><td class="lv" data-lv="47">47</td><td>12</td></tr>
+			<tr><td><img src="./img/magical_005.png" alt="アシッドクラウド" /></td><td class="name">アシッドクラウド</td><td>2玉</td><td class="cost">30,000</td><td class="lv" data-lv="47">47</td><td class="lv" data-lv="57">57</td><td>40</td></tr>
+			<tr><td><img src="./img/magical_006.png" alt="バインド" /></td><td class="name">バインド</td><td>4玉</td><td class="cost">100,000</td><td class="lv" data-lv="68">68</td><td class="lv" data-lv="77">77</td><td>30</td></tr>
+			<tr><td><img src="./img/magical_007.png" alt="メイジアーマー" /></td><td class="name">メイジアーマー</td><td>3玉</td><td class="cost">150,000</td><td>67？</td><td>－</td><td>－</td></tr>
+		</table>
+		<h3>聖魔法</h3>
+		<table class="magic">
+			<tr><th></th><th>魔法</th><th>取得</th><th>費用</th><th>発動Lv</th><th>安定Lv</th><th>基本消費MP</th></tr>
+			<tr><td><img src="./img/holy0_000.png" alt="キュア" /></td><td class="name">キュア</td><td>1玉</td><td class="cost">5,000</td><td class="lv" data-lv="1">1</td><td class="lv" data-lv="9">9</td><td>10</td></tr>
+			<tr><td><img src="./img/holy0_001.png" alt="キュアポイズン" /></td><td class="name">キュアポイズン</td><td>1玉</td><td class="cost">2,000</td><td class="lv" data-lv="10">10</td><td class="lv" data-lv="19">19</td><td>10</td></tr>
+			<tr><td><img src="./img/holy0_002.png" alt="ブレス" /></td><td class="name">ブレス</td><td>1玉</td><td class="cost">5,000</td><td class="lv" data-lv="14">14</td><td class="lv" data-lv="25">25</td><td>12</td></tr>
+			<tr><td><img src="./img/holy0_003.png" alt="ホーリーミサイル" /></td><td class="name">ホーリーミサイル</td><td>0玉</td><td class="cost">100</td><td class="lv" data-lv="1">1</td><td class="lv" data-lv="15">15</td><td>6</td></tr>
+			<tr><td><img src="./img/holy0_004.png" alt="ホーリーブレード" /></td><td class="name">ホーリーブレード</td><td>0玉</td><td class="cost">2,000</td><td class="lv" data-lv="17">17</td><td class="lv" data-lv="26">26</td><td>14</td></tr>
+			<tr><td><img src="./img/holy0_005.png" alt="カース" /></td><td class="name">カース</td><td>1玉</td><td class="cost">5,000</td><td class="lv" data-lv="23">23</td><td class="lv" data-lv="31">31</td><td>20</td></tr>
+			<tr><td><img src="./img/holy0_006.png" alt="キュアシック" /></td><td class="name">キュアシック</td><td>1玉</td><td class="cost">10,000</td><td class="lv" data-lv="27">27</td><td class="lv" data-lv="36">36</td><td>15</td></tr>
+			<tr><td><img src="./img/holy0_007.png" alt="ホーリーボール" /></td><td class="name">ホーリーボール</td><td>2玉</td><td class="cost">30,000</td><td class="lv" data-lv="38">38</td><td class="lv" data-lv="47">47</td><td>25</td></tr>
+			<tr><td><img src="./img/holy0_008.png" alt="リザレクト" /></td><td class="name">リザレクト</td><td>4玉</td><td class="cost">200,000</td><td class="lv" data-lv="58">58</td><td class="lv" data-lv="67">67</td><td>40</td></tr>
+			<tr><td><img src="./img/holy0_009.png" alt="リリース" /></td><td class="name">リリース※</td><td>－</td><td class="cost">200,000</td><td class="lv" data-lv="56">56</td><td class="lv" data-lv="92">92</td><td>50</td></tr>
+			<tr><td><img src="./img/holy0_011.png" alt="パワーシールド" /></td><td class="name">パワーシールド</td><td>5玉</td><td class="cost">150,000</td><td class="lv" data-lv="38">38</td><td class="lv" data-lv="47">47</td><td>50</td></tr>
+			<tr><td><img src="./img/holy0_010.png" alt="キュアパルス" /></td><td class="name">キュアパルス</td><td>3玉</td><td class="cost">500,000</td><td>？</td><td>75？</td><td>40</td></tr>
+		</table>
+
+		<h1 id="skill">スキル</h1>
+		<table class="magic">
+			<tr><th></th><th>スキル</th><th>職業</th><th>取得</th><th>費用</th></tr>
+			<tr><td><img src="./img/jopskill_032.png" alt="シールドブロック" /></td><td class="name">シールドブロック</td><td>戦士</td><td>5玉</td><td class="cost">500,000</td></tr>
+			<tr><td><img src="./img/jopskill_031.png" alt="狂暴化" /></td><td class="name">狂暴化</td><td>剣闘士</td><td>5玉</td><td class="cost">500,000</td></tr>
+		</table>
+
+		<h1 id="song">歌</h1>
+		<table class="magic">
+			<tr><th></th><th>歌</th><th>取得</th><th>費用</th><th>初期MP</th><th>初期SP</th><th>維持MP</th><th>維持SP</th></tr>
+			<tr><td><img src="./img/songskill_000.png" alt="勇気の歌" /></td><td class="name">勇気の歌</td><td>－</td><td class="cost">100,000</td><td>5</td><td>10</td><td>4</td><td>4</td></tr>
+			<tr><td><img src="./img/songskill_001.png" alt="卑怯者の歌" /></td><td class="name">卑怯者の歌</td><td>－</td><td class="cost">100,000</td><td>6</td><td>11</td><td>4</td><td>5</td></tr>
+			<tr><td><img src="./img/songskill_002.png" alt="恐怖の歌" /></td><td class="name">恐怖の歌</td><td>－</td><td class="cost">100,000</td><td>7</td><td>15</td><td>4</td><td>4</td></tr>
+			<tr><td><img src="./img/songskill_003.png" alt="盲目の歌" /></td><td class="name">盲目の歌</td><td>－</td><td class="cost">200,000</td><td>20</td><td>25</td><td>6</td><td>6</td></tr>
+			<tr><td><img src="./img/songskill_004.png" alt="回復の歌" /></td><td class="name">回復の歌</td><td>－</td><td class="cost">200,000</td><td>10</td><td>15</td><td>5</td><td>4</td></tr>
+			<tr><td><img src="./img/songskill_005.png" alt="不治の歌" /></td><td class="name">不治の歌</td><td>－</td><td class="cost">200,000</td><td>12</td><td>17</td><td>5</td><td>4</td></tr>
+			<tr><td><img src="./img/songskill_006.png" alt="沈黙の歌" /></td><td class="name">沈黙の歌</td><td>－</td><td class="cost">300,000</td><td>20</td><td>20</td><td>6</td><td>7</td></tr>
+		</table>
+
+		<p><a href="./index.html">シミュレーターに戻る</a></p>
+
+		<script>
+			var IntSelect = document.getElementById( "int" );
+			for( var i = 6; i <= 30; i++ ){
+				IntSelect.add( new Option( i, i, i === 15, i === 15 ) );
+			}
+			IntSelect.addEventListener( "change", function() {
+				var Diff = 3 - Math.floor( Number( IntSelect.value ) / 5 );
+				document.querySelectorAll( "td.lv" ).forEach( function( Cell ) {
+					Cell.textContent = Math.max( 1, Number( Cell.dataset.lv ) + Diff );
+				} );
+			} );
+		</script>
+	</body>
+</html>

@@ -9,6 +9,8 @@
 		<script>
 			var APP_VERSION = "v2.0.1";
 		</script>
+		<!-- iOS Safari が計算結果の数字を電話番号と誤認してリンク化するのを防ぐ -->
+		<meta name="format-detection" content="telephone=no" />
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -31,7 +33,7 @@
 				var isSpUA = /Mobile/.test(navigator.userAgent);
 				if (forceSp || (isSpUA && !forcePc)) {
 					//	スマホ表示 (画面幅に関係なく適用する)
-					document.write('<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">');
+					document.write('<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">');
 					css.push(["./css/sp.css", "all"]);
 					css.push(["./css/sp-narrow.css", "screen and (max-width: 413px)"]);
 					if (!isSpUA) {
@@ -61,6 +63,7 @@
 					"./js/storage.js",
 					"./js/realtime.js",
 					"./js/share.js",
+					"./js/tooltip.js",
 				];
 				var html = "";
 				for (var i = 0; i < css.length; i++) {
@@ -1988,7 +1991,7 @@
 									</tr>
 								</table>
 								<li>例：15→16に上げる場合は3個、25→26に上げる場合は5個が必要です。</li>
-								<li>パラメーター（ＶＩＴ／ＭＥＮ）による回復間隔は次の値で計算しています。<a href="./timing.html" target="_blank">回復間隔と検証結果</a></li>
+								<li>パラメーター（ＶＩＴ／ＭＥＮ）による回復間隔の平均は以下になります。</li>
 								<table border="1" cellspacing="0" cellpadding="3" style="border-collapse: collapse; margin: 3px 0 3px 20px; text-align: center">
 									<tr>
 										<th width="80">パラメータ</th>
@@ -2294,19 +2297,18 @@
 						</ol>
 
 						<hr noshade="" color="#cccccccc" size="1" />
-						＜更新情報＞
+						＜情報＞<br />
+						　　<a href="./timing.html" target="_blank">回復と消費のタイミング</a><br />
+						　　<a href="./skill.html" target="_blank">魔法・スキル・歌の一覧</a></li><br />
 						<br />
-						　　<a href="https://github.com/kttFox/GodiusCharacterSimulator" target="_blank">https://github.com/kttFox/GodiusCharacterSimulator</a>
+						<hr noshade="" color="#cccccccc" size="1" />
+						＜更新情報＞<br />
+						　　<a href="https://github.com/kttFox/GodiusCharacterSimulator" target="_blank">https://github.com/kttFox/GodiusCharacterSimulator</a><br />
 						<br />
-
-						<br />
-
 						<hr noshade="" color="#cccccccc" size="1" />
 
-						＜参考＞
-						<br />
-						　　ガディウスキャラ診断機　キャラ診断ツール ver2.03
-						<br />
+						＜参考＞<br />
+						　　ガディウスキャラ診断機　キャラ診断ツール ver2.03<br />
 						　　<a href="https://hanpen.x0.to/godius/tool/g_godicharacheck.html" target="_blank">https://hanpen.x0.to/godius/tool/g_godicharacheck.html</a>
 						</div>
 
